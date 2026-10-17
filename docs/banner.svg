@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 290" width="900" height="290" role="img" aria-labelledby="t d">
   <title id="t">Unisa+ — Tutto il campus UNISA in un'unica app</title>
-  <desc id="d">Banner di Unisa+: il logo ufficiale con la U dorata, la colonna accademica e il segno + centrale, affiancato dalle schede animate di Libretto, Orario, Presenze QR e Mensa ADISURC.</desc>
+  <desc id="d">Banner di Unisa+: il monogramma architettonico U+ nei colori mare di Salerno e ambra, affiancato dalle schede animate di Libretto, Orario, Presenze QR e Mensa ADISURC.</desc>
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0D262A"/>
@@ -8,12 +8,12 @@
       <stop offset="100%" stop-color="#16474D"/>
     </linearGradient>
     <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#17444A"/>
-      <stop offset="100%" stop-color="#0F3136"/>
+      <stop offset="0%" stop-color="#1A555C"/>
+      <stop offset="100%" stop-color="#0E2E33"/>
     </linearGradient>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#EDA842"/>
-      <stop offset="100%" stop-color="#DF9830"/>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5B952"/>
+      <stop offset="100%" stop-color="#E8A33D"/>
     </linearGradient>
     <filter id="softShadow" x="-15%" y="-15%" width="130%" height="135%">
       <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#051315" flood-opacity="0.45"/>
@@ -29,7 +29,7 @@
     .card-num { font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-weight: 800; font-size: 22px; fill: #E8A33D; }
     .float1 { animation: floatA 6s ease-in-out infinite; }
     .float2 { animation: floatB 6s ease-in-out infinite; }
-    .pulse { transform-box: fill-box; transform-origin: center; animation: pulseCross 4s ease-in-out infinite; }
+    .pulse { transform-box: fill-box; transform-origin: center; animation: pulseStar 4s ease-in-out infinite; }
     .scanline { animation: scan 3.6s ease-in-out infinite; }
     @keyframes floatA {
       0%, 100% { transform: translateY(0px); }
@@ -39,9 +39,9 @@
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(5px); }
     }
-    @keyframes pulseCross {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
+    @keyframes pulseStar {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.08) rotate(8deg); opacity: 0.92; }
     }
     @keyframes scan {
       0%, 100% { transform: translateY(0px); opacity: 0.85; }
@@ -61,41 +61,24 @@
     <line x1="600" y1="8" x2="600" y2="282"/>
   </g>
 
-  <!-- Official Unisa+ App Icon Emblem (Left) -->
-  <g transform="translate(36, 67)" filter="url(#softShadow)">
-    <rect x="0" y="0" width="156" height="156" rx="34" fill="url(#iconGrad)" stroke="#E8A33D" stroke-opacity="0.4" stroke-width="1.5"/>
-
-    <!-- Academic Column Capital (Top Center) -->
-    <rect x="54" y="25" width="48" height="5.5" rx="1" fill="url(#goldGrad)"/>
-    <path d="M 57 33.5 L 99 33.5 L 96 38.5 L 60 38.5 Z" fill="url(#goldGrad)"/>
-
-    <!-- Column Upper Fluted Shafts -->
-    <path d="M 63 42 L 93 42 L 93 70 L 86 70 L 86 52 A 4.5 4.5 0 0 0 77 52 L 77 56 L 79 56 L 79 56 L 75 56 L 75 52 A 4.5 4.5 0 0 0 66 52 L 66 70 L 63 70 Z" fill="url(#goldGrad)"/>
-    <!-- Symmetrical Column Upper Shafts -->
-    <rect x="63" y="42" width="30" height="5" fill="url(#goldGrad)"/>
-    <rect x="63" y="46" width="6.5" height="24" fill="url(#goldGrad)"/>
-    <rect x="74.75" y="46" width="6.5" height="10" fill="url(#goldGrad)"/>
-    <rect x="86.5" y="46" width="6.5" height="24" fill="url(#goldGrad)"/>
-
-    <!-- Column Lower Fluted Shafts -->
-    <rect x="63" y="90" width="6.5" height="28" fill="url(#goldGrad)"/>
-    <rect x="74.75" y="102" width="6.5" height="19" fill="url(#goldGrad)"/>
-    <rect x="86.5" y="90" width="6.5" height="26" fill="url(#goldGrad)"/>
-
-    <!-- Golden Serif "U" Framing the Column -->
-    <path d="M 35 43 L 56 43 L 56 91 C 56 106 65.5 116 78 116 C 90.5 116 100 106 100 91 L 100 43 L 121 43 L 121 47.5 C 115.5 47.5 113.5 50 113.5 55 L 113.5 91 C 113.5 114 98.5 129.5 78 129.5 C 57.5 129.5 42.5 114 42.5 91 L 42.5 55 C 42.5 50 40.5 47.5 35 47.5 Z" fill="url(#goldGrad)"/>
-
-    <!-- Central Warm Stone "+" Cross -->
-    <g transform="translate(78, 80)">
+  <!-- App Icon Emblem (Left): Minimalist U+ with golden curve -->
+  <g transform="translate(38, 68)" filter="url(#softShadow)">
+    <rect x="0" y="0" width="150" height="150" rx="34" fill="url(#iconGrad)" stroke="#E8A33D" stroke-opacity="0.38" stroke-width="1.5"/>
+    <!-- Stylized U -->
+    <path d="M 39 43 L 39 86 C 39 106 53.5 118 75 118 C 96.5 118 111 106 111 86 L 111 64" fill="none" stroke="#ECEAE2" stroke-width="15.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Golden Academic "+" Accent (nested <g> so CSS transform never resets translate!) -->
+    <g transform="translate(111, 41)">
       <g class="pulse">
-        <rect x="-20.5" y="-5.5" width="41" height="11" rx="1.5" fill="#ECEAE2"/>
-        <rect x="-5.5" y="-20.5" width="11" height="41" rx="1.5" fill="#ECEAE2"/>
+        <rect x="-15.5" y="-4.75" width="31" height="9.5" rx="4.75" fill="url(#goldGrad)"/>
+        <rect x="-4.75" y="-15.5" width="9.5" height="31" rx="4.75" fill="url(#goldGrad)"/>
       </g>
     </g>
+    <!-- Subtle golden wave / book base line -->
+    <path d="M 49 131.5 Q 75 137.5 101 131.5" fill="none" stroke="#E8A33D" stroke-width="3.8" stroke-linecap="round" opacity="0.82"/>
   </g>
 
   <!-- Brand Title & Subtitle (Center) -->
-  <g transform="translate(216, 0)">
+  <g transform="translate(214, 0)">
     <text x="0" y="112" class="word">Unisa<tspan class="plus">+</tspan></text>
     <text x="2" y="146" class="tag">L'ecosistema digitale per gli studenti UNISA.</text>
     <text x="2" y="172" class="tag">Carriera, orari, presenze e mensa in un solo posto.</text>
@@ -116,7 +99,7 @@
     </g>
   </g>
 
-  <!-- Right Interactive UI Preview Cards (Nested <g> so CSS transform never overrides position!) -->
+  <!-- Right Interactive UI Preview Cards -->
   <!-- Card 1: Libretto & Previsione Laurea -->
   <g transform="translate(622, 34)" filter="url(#softShadow)">
     <g class="float1">
