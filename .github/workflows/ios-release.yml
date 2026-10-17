@@ -1,0 +1,179 @@
+name: "iOS Build & Release (TestFlight)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload_to_testflight:
+        description: "Carica anche su TestFlight (oltre a produrre l'IPA)"
+        type: boolean
+        default: true
+
+jobs:
+  build_ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Apple Certificate and Provisioning Profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.CERTIFICATE_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.CERTIFICATE_P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: "temporary_password"
+        run: |
+          # Crea i path
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          # Importa il certificato P12 e il Provisioning Profile dai segreti Base64
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o "$CERTIFICATE_PATH"
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o "$PP_PATH"
+
+          # Crea un keychain temporaneo per la firma
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # Importa il certificato nel keychain
+          security import "$CERTIFICATE_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH"
+
+          # Estrae UUID, Nome, Team ID e Bundle ID dal Provisioning Profile
+          security cms -D -i "$PP_PATH" > "$RUNNER_TEMP/profile.plist"
+          PP_UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" "$RUNNER_TEMP/profile.plist")
+          PP_NAME=$(/usr/libexec/PlistBuddy -c "Print Name" "$RUNNER_TEMP/profile.plist")
+          TEAM_ID=$(/usr/libexec/PlistBuddy -c "Print TeamIdentifier:0" "$RUNNER_TEMP/profile.plist")
+          APP_ID=$(/usr/libexec/PlistBuddy -c "Print Entitlements:application-identifier" "$RUNNER_TEMP/profile.plist")
+          BUNDLE_ID="${APP_ID#${TEAM_ID}.}"
+
+          echo "Provisioning Profile: $PP_NAME ($PP_UUID) - Team: $TEAM_ID - Bundle ID: $BUNDLE_ID"
+
+          # Applica il provisioning profile (sia per UUID che per nome)
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/"$PP_UUID.mobileprovision"
+          cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+
+          # Configura la firma manuale SOLO sul target Runner in project.pbxproj e in ExportOptions.plist
+          python3 - <<EOF
+          import pathlib, re
+
+          pbx_path = pathlib.Path("ios/Runner.xcodeproj/project.pbxproj")
+          text = pbx_path.read_text(encoding="utf-8")
+
+          def patch_runner_config(block_id: str, src: str) -> str:
+              pattern = rf"({re.escape(block_id)} /\* (?:Release|Profile) \*/ = \{{\s*isa = XCBuildConfiguration;.*?buildSettings = \{{)(.*?)(\n\t\t\t\}};\s*\n\t\t\tname = (?:Release|Profile);)"
+              def repl(m):
+                  header, body, footer = m.group(1), m.group(2), m.group(3)
+                  body = re.sub(r"\n\t\t\t\tCODE_SIGN_STYLE = [^;]+;", "", body)
+                  body = re.sub(r"\n\t\t\t\tDEVELOPMENT_TEAM = [^;]+;", "", body)
+                  body = re.sub(r"\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = [^;]+;", "", body)
+                  body = re.sub(r'\n\t\t\t\t"CODE_SIGN_IDENTITY\[sdk=iphoneos\*\]" = [^;]+;', "", body)
+                  body = re.sub(r"\n\t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = [^;]+;", "", body)
+                  extra = (
+                      f'\n\t\t\t\tCODE_SIGN_STYLE = Manual;'
+                      f'\n\t\t\t\tDEVELOPMENT_TEAM = "{ "$TEAM_ID" }";'
+                      f'\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "{ "$PP_NAME" }";'
+                      f'\n\t\t\t\t"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";'
+                      f'\n\t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = "{ "$BUNDLE_ID" }";'
+                  )
+                  return header + body + extra + footer
+              return re.sub(pattern, repl, src, flags=re.DOTALL)
+
+          # 97C147071CF9000F007C117D = Runner Release, 249021D4217E4FDB00AE95B9 = Runner Profile
+          text = patch_runner_config("97C147071CF9000F007C117D", text)
+          text = patch_runner_config("249021D4217E4FDB00AE95B9", text)
+          pbx_path.write_text(text, encoding="utf-8")
+
+          export_plist = f'''<?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store-connect</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>teamID</key>
+              <string>{ "$TEAM_ID" }</string>
+              <key>signingCertificate</key>
+              <string>iPhone Distribution</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>{ "$BUNDLE_ID" }</key>
+                  <string>{ "$PP_NAME" }</string>
+              </dict>
+              <key>uploadSymbols</key>
+              <true/>
+              <key>compileBitcode</key>
+              <false/>
+          </dict>
+          </plist>
+          '''
+          pathlib.Path("ios/ExportOptions.plist").write_text(export_plist.strip() + "\n", encoding="utf-8")
+          EOF
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      # ===== Build, archiviazione ed esportazione: firma manuale esplicita =====
+      # La firma manuale (team, identity, provisioning profile) è impostata
+      # direttamente nel progetto Xcode, solo sul target Runner (vedi
+      # ios/Runner.xcodeproj/project.pbxproj, configurazione Release). NON va
+      # passata come override da riga di comando a xcodebuild: gli override
+      # CODE_SIGN_STYLE/PROVISIONING_PROFILE_SPECIFIER si applicano a *tutti*
+      # i target della build, compresi i target dei Pods e dei pacchetti SPM,
+      # che sono librerie e non possono avere un provisioning profile assegnato.
+      - name: Build Flutter iOS app (unsigned)
+        run: flutter build ios --release --no-codesign
+
+      - name: Archive with manual signing
+        run: |
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' \
+            -archivePath $RUNNER_TEMP/Runner.xcarchive \
+            clean archive
+
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath $RUNNER_TEMP/Runner.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist ios/ExportOptions.plist
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: unisaplus-ios-ipa
+          path: build/ios/ipa/*.ipa
+
+      # ===== Da qui in poi: caricamento diretto su TestFlight =====
+      # Si usa fastlane pilot con una chiave API di App Store Connect,
+      # che evita del tutto il problema della 2FA in un ambiente CI.
+      - name: Install Fastlane
+        if: ${{ inputs.upload_to_testflight }}
+        run: gem install fastlane -N
+
+      - name: Prepare App Store Connect API key
+        if: ${{ inputs.upload_to_testflight }}
+        env:
+          ASC_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+        run: |
+          echo -n "$ASC_API_KEY_BASE64" | base64 --decode -o "$RUNNER_TEMP/AuthKey.p8"
+
+      - name: Upload to TestFlight
+        if: ${{ inputs.upload_to_testflight }}
+        env:
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: |
+          export ASC_KEY_FILEPATH="$RUNNER_TEMP/AuthKey.p8"
+          export IPA_PATH=$(ls build/ios/ipa/*.ipa | head -n 1)
+          fastlane ios upload_testflight
