@@ -895,6 +895,257 @@ class AdisurcService {
         ).firstMatch(text);
     return _daStringaImporto(m?.group(1));
   }
+
+  static const String mensaMenuPageUrl =
+      'https://www.adisurcampania.it/ristorazione/mense-ed-esercizi-convenzionati/mensa-di-fisciano-e-baronissi#toc-il-men-';
+  static const String _adisurcSiteOrigin = 'https://www.adisurcampania.it';
+
+  /// Scarica l'elenco aggiornato dei menù giornalieri (Pranzo e Cena) della
+  /// settimana dalla pagina ufficiale ADiSURC di Fisciano e Baronissi.
+  Future<List<MensaMenuGiorno>> getMenuSettimana() async {
+    final resp = await http
+        .get(
+          Uri.parse(
+            '$_adisurcSiteOrigin/ristorazione/mense-ed-esercizi-convenzionati/mensa-di-fisciano-e-baronissi',
+          ),
+        )
+        .timeout(_timeout);
+    if (resp.statusCode < 200 || resp.statusCode >= 300) {
+      throw AdisurcException(
+        'Impossibile caricare il menù della mensa (${resp.statusCode}).',
+      );
+    }
+
+    final html = utf8.decode(resp.bodyBytes, allowMalformed: true);
+    return _parseMenuHtml(html);
+  }
+
+  List<MensaMenuGiorno> _parseMenuHtml(String html) {
+    // Divide la pagina nei blocchi "Menu pranzo" e "Menu cena"
+    final sectionRegex = RegExp(
+      r'field--name-field-titolo[^>]*>\s*([^<]+?)\s*</div>([\s\S]*?)(?=field--name-field-titolo|<h2>Come pagare</h2>|$)',
+      caseSensitive: false,
+    );
+
+    final pranzoItems = <_ParsedMenuLink>[];
+    final cenaItems = <_ParsedMenuLink>[];
+
+    for (final secMatch in sectionRegex.allMatches(html)) {
+      final titolo = (secMatch.group(1) ?? '').trim().toLowerCase();
+      final content = secMatch.group(2) ?? '';
+      final isCena = titolo.contains('cena');
+      final isPranzo = titolo.contains('pranzo') || !isCena;
+
+      final itemRegex = RegExp(
+        r'<div\s+class="block-scadenze">\s*<a\s+href="([^"]+)"[^>]*>\s*'
+        r'<div\s+class="block-scadenze-day">\s*([^<]*?)\s*</div>\s*'
+        r'<div\s+class="block-scadenze-month">\s*([^<]*?)\s*</div>\s*'
+        r'<div\s+class="block-scadenze-year">\s*([^<]*?)\s*</div>',
+        caseSensitive: false,
+      );
+
+      var idx = 0;
+      for (final m in itemRegex.allMatches(content)) {
+        final rawHref = (m.group(1) ?? '').trim();
+        if (rawHref.isEmpty) continue;
+        final fullUrl = rawHref.startsWith('http')
+            ? rawHref
+            : '$_adisurcSiteOrigin${rawHref.startsWith('/') ? '' : '/'}$rawHref';
+        final day = (m.group(2) ?? '').trim();
+        final month = (m.group(3) ?? '').trim();
+        final year = (m.group(4) ?? '').trim();
+        final weekday = _inferWeekday(fullUrl, idx);
+        final settimana = _inferSettimana(fullUrl);
+        final link = _ParsedMenuLink(
+          url: fullUrl,
+          day: day,
+          month: month,
+          year: year,
+          weekday: weekday,
+          settimanaLabel: settimana,
+        );
+        if (isCena) {
+          cenaItems.add(link);
+        } else if (isPranzo) {
+          pranzoItems.add(link);
+        }
+        idx++;
+      }
+    }
+
+    // Combina pranzo e cena per giorno della settimana / data
+    final byKey = <String, MensaMenuGiorno>{};
+    for (var i = 0; i < pranzoItems.length; i++) {
+      final p = pranzoItems[i];
+      final key = '${p.weekday}_${p.day}_${p.month}';
+      byKey[key] = MensaMenuGiorno(
+        weekday: p.weekday,
+        nomeGiorno: _nomeGiorno(p.weekday),
+        nomeGiornoBreve: _nomeGiornoBreve(p.weekday),
+        giornoNumero: p.day,
+        meseNome: p.month,
+        anno: p.year,
+        settimanaLabel: p.settimanaLabel,
+        pranzoPdfUrl: p.url,
+        cenaPdfUrl: null,
+      );
+    }
+
+    for (var i = 0; i < cenaItems.length; i++) {
+      final c = cenaItems[i];
+      final key = '${c.weekday}_${c.day}_${c.month}';
+      final existing = byKey[key];
+      if (existing != null) {
+        byKey[key] = existing.copyWith(cenaPdfUrl: c.url);
+      } else {
+        byKey[key] = MensaMenuGiorno(
+          weekday: c.weekday,
+          nomeGiorno: _nomeGiorno(c.weekday),
+          nomeGiornoBreve: _nomeGiornoBreve(c.weekday),
+          giornoNumero: c.day,
+          meseNome: c.month,
+          anno: c.year,
+          settimanaLabel: c.settimanaLabel,
+          pranzoPdfUrl: null,
+          cenaPdfUrl: c.url,
+        );
+      }
+    }
+
+    final result = byKey.values.toList()
+      ..sort((a, b) => a.weekday.compareTo(b.weekday));
+    return result;
+  }
+
+  static int _inferWeekday(String url, int fallbackIndex) {
+    final file = url.split('/').last.toLowerCase();
+    if (file.contains('lun')) return DateTime.monday;
+    if (file.contains('mar')) return DateTime.tuesday;
+    if (file.contains('mer')) return DateTime.wednesday;
+    if (file.contains('gio')) return DateTime.thursday;
+    if (file.contains('ven')) return DateTime.friday;
+    if (file.contains('sab')) return DateTime.saturday;
+    if (file.contains('dom')) return DateTime.sunday;
+    return (fallbackIndex + 1).clamp(1, 7);
+  }
+
+  static String _inferSettimana(String url) {
+    final file = url.split('/').last;
+    final m = RegExp(r'^([1-5])a', caseSensitive: false).firstMatch(file);
+    final stag = file.toLowerCase().contains('inv')
+        ? 'Invernale'
+        : (file.toLowerCase().contains('est') ? 'Estivo' : '');
+    if (m != null) {
+      final numSett = m.group(1);
+      return stag.isNotEmpty
+          ? '$numSettª settimana · Menù $stag'
+          : '$numSettª settimana';
+    }
+    return stag.isNotEmpty ? 'Menù $stag' : 'Menù settimanale';
+  }
+
+  static String _nomeGiorno(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return 'Lunedì';
+      case DateTime.tuesday:
+        return 'Martedì';
+      case DateTime.wednesday:
+        return 'Mercoledì';
+      case DateTime.thursday:
+        return 'Giovedì';
+      case DateTime.friday:
+        return 'Venerdì';
+      case DateTime.saturday:
+        return 'Sabato';
+      case DateTime.sunday:
+        return 'Domenica';
+      default:
+        return 'Giorno $weekday';
+    }
+  }
+
+  static String _nomeGiornoBreve(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return 'LUN';
+      case DateTime.tuesday:
+        return 'MAR';
+      case DateTime.wednesday:
+        return 'MER';
+      case DateTime.thursday:
+        return 'GIO';
+      case DateTime.friday:
+        return 'VEN';
+      case DateTime.saturday:
+        return 'SAB';
+      case DateTime.sunday:
+        return 'DOM';
+      default:
+        return 'GG';
+    }
+  }
+}
+
+class _ParsedMenuLink {
+  const _ParsedMenuLink({
+    required this.url,
+    required this.day,
+    required this.month,
+    required this.year,
+    required this.weekday,
+    required this.settimanaLabel,
+  });
+
+  final String url;
+  final String day;
+  final String month;
+  final String year;
+  final int weekday;
+  final String settimanaLabel;
+}
+
+class MensaMenuGiorno {
+  const MensaMenuGiorno({
+    required this.weekday,
+    required this.nomeGiorno,
+    required this.nomeGiornoBreve,
+    required this.giornoNumero,
+    required this.meseNome,
+    required this.anno,
+    required this.settimanaLabel,
+    this.pranzoPdfUrl,
+    this.cenaPdfUrl,
+  });
+
+  final int weekday;
+  final String nomeGiorno;
+  final String nomeGiornoBreve;
+  final String giornoNumero;
+  final String meseNome;
+  final String anno;
+  final String settimanaLabel;
+  final String? pranzoPdfUrl;
+  final String? cenaPdfUrl;
+
+  String get dataLabel => '$giornoNumero $meseNome $anno'.trim();
+  String get dataBreve =>
+      '$giornoNumero ${meseNome.length > 3 ? meseNome.substring(0, 3) : meseNome}'
+          .trim();
+
+  MensaMenuGiorno copyWith({String? pranzoPdfUrl, String? cenaPdfUrl}) {
+    return MensaMenuGiorno(
+      weekday: weekday,
+      nomeGiorno: nomeGiorno,
+      nomeGiornoBreve: nomeGiornoBreve,
+      giornoNumero: giornoNumero,
+      meseNome: meseNome,
+      anno: anno,
+      settimanaLabel: settimanaLabel,
+      pranzoPdfUrl: pranzoPdfUrl ?? this.pranzoPdfUrl,
+      cenaPdfUrl: cenaPdfUrl ?? this.cenaPdfUrl,
+    );
+  }
 }
 
 class _AdisurcActivation {
