@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
 /// Nome ufficiale dell'app dedicata agli studenti dell'Università di Salerno.
-const String kAppName = 'Unisa+';
+const String kAppName = 'Unisa Plus';
 const String kAppTagline = 'Il campus di Salerno in tasca';
 
-/// Logo di Unisa+: mostra l'icona ufficiale con la "U" dorata di UNISA,
-/// la colonna accademica e il simbolo "+" su fondo verde mare profondo.
+/// Logo di Unisa Plus: mostra l'icona ufficiale con la "U" e il simbolo "+"
+/// dorato su fondo verde mare profondo.
 class AppLogo extends StatelessWidget {
   const AppLogo({
     super.key,

@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <application
-        android:label="Unisa+"
+        android:label="Unisa Plus"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -29,14 +29,14 @@
             </intent-filter>
             <!-- Deep link di ritorno per il login SPID/CIE quando esce verso
                  il browser di sistema o l'app CieID: il backend deve
-                 reindirizzare qui (it.studenti.uniapp://auth-callback) a
+                 reindirizzare qui (it.unisaplus.app://auth-callback) a
                  login completato, invece che alla pagina https, perche'
                  il sistema sappia riportare l'utente in questa app. -->
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="it.studenti.uniapp" android:host="auth-callback"/>
+                <data android:scheme="it.unisaplus.app" android:host="auth-callback"/>
             </intent-filter>
             <intent-filter android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW"/>

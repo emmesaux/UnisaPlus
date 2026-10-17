@@ -104,6 +104,7 @@ class CinecaLoginService {
     return (uri != null &&
             (uri.scheme == 'myunisalerno' ||
                 uri.scheme == 'unisa-prod' ||
+                uri.scheme == 'it.unisaplus.app' ||
                 uri.scheme == 'it.studenti.uniapp')) ||
         normalized.startsWith('unisa-prod://') ||
         normalized.startsWith('myunisalerno://');

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="Unisa+: tutto l'ecosistema universitario di Salerno in un'unica applicazione" width="820">
+  <img src="docs/banner.svg" alt="Unisa Plus: tutto l'ecosistema universitario di Salerno in un'unica applicazione" width="820">
 </p>
 
 <p align="center">
@@ -12,17 +12,19 @@
   <a href="#avvio-rapido">Avvio rapido</a>
   ·
   <a href="#build-automatiche-github-actions">Build CI / CD (Android &amp; iOS)</a>
+  ·
+  <a href="#licenza-e-copyright">Licenza</a>
 </p>
 
-# Unisa+
+# Unisa Plus
 
 Applicazione mobile pensata per gli studenti dell'**Università degli Studi di Salerno (UNISA)**: raccoglie in un'unica interfaccia rapida, coerente e priva di fronzoli tutto ciò che nella quotidianità del campus è diviso tra tre o quattro portali e applicazioni differenti.
 
-Orario delle lezioni, rilevazione e consultazione delle presenze in aula (**EasyBadge**), libretto universitario con simulatore del voto di laurea, appelli d'esame, bacheca esiti, situazione tasse (**Esse3**), aule libere in tempo reale (**EasyRoom**), avvisi ufficiali di Ateneo e Dipartimento e tesserino mensa con saldo e QR dinamico (**ADISURC**).
+Orario delle lezioni, rilevazione e consultazione delle presenze in aula (**EasyBadge**), libretto universitario con simulatore del voto di laurea, appelli d'esame, bacheca esiti, situazione tasse (**Esse3**), aule libere in tempo reale con timeline giornaliera (**EasyRoom**), avvisi ufficiali di Ateneo e Dipartimento e tesserino mensa con saldo, QR dinamico e menù del giorno (**ADISURC**).
 
 Nessun server intermedio, nessun tracciamento: l'app dialoga direttamente dal tuo telefono con gli endpoint ufficiali di Ateneo, CINECA e ADISURC.
 
-> Progetto indipendente sviluppato per gli studenti. Non è affiliato all'Università degli Studi di Salerno, al consorzio CINECA, a EasyStaff o ad ADISURC.
+> **Disclaimer:** *Unisa Plus* è un progetto indipendente sviluppato per gli studenti e **non** è affiliato ufficialmente con l'Università degli Studi di Salerno (UNISA), il consorzio CINECA, EasyStaff o ADISURC Campania.
 
 ## Funzionalità
 
@@ -119,3 +121,10 @@ Il repository include due workflow CI/CD in `.github/workflows/`:
 | `APP_STORE_CONNECT_API_KEY_BASE64` | File `AuthKey_XXXXXX.p8` di App Store Connect codificato in Base64 |
 | `APP_STORE_CONNECT_KEY_ID` | Key ID della chiave API di App Store Connect |
 | `APP_STORE_CONNECT_ISSUER_ID` | Issuer ID di App Store Connect |
+
+## Licenza e Copyright
+
+Copyright © 2026 **emmesaux**. Tutti i diritti riservati — consulta il file [LICENSE](LICENSE).
+
+Il codice sorgente è reso visibile in modalità *Source-Available* esclusivamente a scopo di trasparenza per gli studenti utilizzatori. **È severamente vietata la copia, la modifica, la redistribuzione o la pubblicazione non autorizzata su store di terze parti (App Store, Google Play Store o siti esterni).**
+

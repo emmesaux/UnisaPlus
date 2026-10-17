@@ -29,7 +29,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "it.studenti.uniapp"
+        applicationId = "it.unisaplus.app"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 290" width="900" height="290" role="img" aria-labelledby="t d">
-  <title id="t">Unisa+ — Tutto il campus UNISA in un'unica app</title>
-  <desc id="d">Banner di Unisa+: il monogramma architettonico U+ nei colori mare di Salerno e ambra, affiancato dalle schede animate di Libretto, Orario, Presenze QR e Mensa ADISURC.</desc>
+  <title id="t">Unisa Plus — Tutto il campus UNISA in un'unica app</title>
+  <desc id="d">Banner di Unisa Plus: il monogramma architettonico U+ nei colori mare di Salerno e ambra, affiancato dalle schede animate di Libretto, Orario, Presenze QR e Mensa ADISURC.</desc>
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0D262A"/>
@@ -20,7 +20,7 @@
     </filter>
   </defs>
   <style>
-    .word { font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-weight: 800; font-size: 62px; fill: #ECEAE2; letter-spacing: -1.8px; }
+    .word { font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-weight: 800; font-size: 56px; fill: #ECEAE2; letter-spacing: -1.5px; }
     .plus { fill: #E8A33D; }
     .tag { font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-weight: 500; font-size: 18px; fill: #B7C7C9; }
     .pill-txt { font-family: "SF Mono", "JetBrains Mono", "Consolas", monospace; font-weight: 700; font-size: 11.5px; fill: #ECEAE2; letter-spacing: 0.6px; }
@@ -79,7 +79,7 @@
 
   <!-- Brand Title & Subtitle (Center) -->
   <g transform="translate(214, 0)">
-    <text x="0" y="112" class="word">Unisa<tspan class="plus">+</tspan></text>
+    <text x="0" y="112" class="word">Unisa <tspan class="plus">Plus</tspan></text>
     <text x="2" y="146" class="tag">L'ecosistema digitale per gli studenti UNISA.</text>
     <text x="2" y="172" class="tag">Carriera, orari, presenze e mensa in un solo posto.</text>
 

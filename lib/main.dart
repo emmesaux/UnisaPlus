@@ -95,7 +95,7 @@ class _UniAppState extends State<UniApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Unisa+',
+      title: 'Unisa Plus',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),

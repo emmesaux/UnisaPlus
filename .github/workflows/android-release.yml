@@ -76,13 +76,13 @@ jobs:
           fi
           echo "version=${PUB_VER}" >> $GITHUB_OUTPUT
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
-          echo "Building Unisa+ version ${PUB_VER} (tag: ${TAG})"
+          echo "Building Unisa Plus version ${PUB_VER} (tag: ${TAG})"
 
-      - name: Build Universal APK (Release)
-        run: flutter build apk --release
+      - name: Build Universal APK (Release, Obfuscated)
+        run: flutter build apk --release --obfuscate --split-debug-info=build/debug-info/universal
 
-      - name: Build Split-per-ABI APKs (arm64-v8a / armeabi-v7a)
-        run: flutter build apk --release --split-per-abi
+      - name: Build Split-per-ABI APKs (arm64-v8a / armeabi-v7a, Obfuscated)
+        run: flutter build apk --release --split-per-abi --obfuscate --split-debug-info=build/debug-info/abi
 
       - name: Prepare Release Files
         run: |
@@ -104,20 +104,20 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.meta.outputs.tag }}
-          name: "Unisa+ ${{ steps.meta.outputs.tag }}"
+          name: "Unisa Plus ${{ steps.meta.outputs.tag }}"
           body: |
-            ## Unisa+ ${{ steps.meta.outputs.tag }} (Android)
+            ## Unisa Plus ${{ steps.meta.outputs.tag }} (Android)
 
             Scarica e installa direttamente l'app sul tuo smartphone Android:
             - **`UnisaPlus-${{ steps.meta.outputs.tag }}.apk`** — Versione universale (consigliata, compatibile con tutti i dispositivi Android)
             - **`UnisaPlus-${{ steps.meta.outputs.tag }}-arm64-v8a.apk`** — Versione leggera ottimizzata per smartphone moderni a 64-bit
 
             ### Funzionalità incluse
-            - Orario delle lezioni, Aule libere, Avvisi di Ateneo e Dipartimento
+            - Orario delle lezioni, Aule libere (con dettaglio fascia oraria giornaliera), Avvisi di Ateneo e Dipartimento
             - Libretto universitario con statistiche, grafici e simulatore voto di laurea
             - Appelli d'esame, Bacheca esiti e Situazione Tasse (Esse3)
             - Tesserino digitale e Rilevazione/Consultazione Presenze EasyBadge (con e senza accesso)
-            - Mensa ADISURC con saldo e QR code dinamico
+            - Mensa ADISURC con saldo, QR code dinamico e menù del giorno/settimana (Pranzo e Cena)
           files: |
             dist/UnisaPlus-${{ steps.meta.outputs.tag }}.apk
             dist/UnisaPlus-${{ steps.meta.outputs.tag }}-arm64-v8a.apk
