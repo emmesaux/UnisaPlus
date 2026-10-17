@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uniapp/main.dart';
+import 'package:unisa_plus/main.dart';
 
 void main() {
   testWidgets('App avvia e mostra la schermata di accesso', (WidgetTester tester) async {
