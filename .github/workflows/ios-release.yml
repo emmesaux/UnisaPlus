@@ -58,14 +58,23 @@ jobs:
           cp "$PP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
 
           # Configura la firma manuale SOLO sul target Runner in project.pbxproj e in ExportOptions.plist
-          python3 - <<EOF
-          import pathlib, re
+          export TEAM_ID PP_NAME BUNDLE_ID
+          python3 - <<'EOF'
+          import os, pathlib, re
+
+          team_id = os.environ["TEAM_ID"]
+          pp_name = os.environ["PP_NAME"]
+          bundle_id = os.environ["BUNDLE_ID"]
 
           pbx_path = pathlib.Path("ios/Runner.xcodeproj/project.pbxproj")
           text = pbx_path.read_text(encoding="utf-8")
 
           def patch_runner_config(block_id: str, src: str) -> str:
-              pattern = rf"({re.escape(block_id)} /\* (?:Release|Profile) \*/ = \{{\s*isa = XCBuildConfiguration;.*?buildSettings = \{{)(.*?)(\n\t\t\t\}};\s*\n\t\t\tname = (?:Release|Profile);)"
+              pattern = (
+                  r"(" + re.escape(block_id) + r" /\* (?:Release|Profile) \*/ = \{\s*isa = XCBuildConfiguration;.*?buildSettings = \{)"
+                  r"(.*?)"
+                  r"(\n\t\t\t\};\s*\n\t\t\tname = (?:Release|Profile);)"
+              )
               def repl(m):
                   header, body, footer = m.group(1), m.group(2), m.group(3)
                   body = re.sub(r"\n\t\t\t\tCODE_SIGN_STYLE = [^;]+;", "", body)
@@ -75,10 +84,10 @@ jobs:
                   body = re.sub(r"\n\t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = [^;]+;", "", body)
                   extra = (
                       f'\n\t\t\t\tCODE_SIGN_STYLE = Manual;'
-                      f'\n\t\t\t\tDEVELOPMENT_TEAM = "{ "$TEAM_ID" }";'
-                      f'\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "{ "$PP_NAME" }";'
+                      f'\n\t\t\t\tDEVELOPMENT_TEAM = "{team_id}";'
+                      f'\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "{pp_name}";'
                       f'\n\t\t\t\t"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";'
-                      f'\n\t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = "{ "$BUNDLE_ID" }";'
+                      f'\n\t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = "{bundle_id}";'
                   )
                   return header + body + extra + footer
               return re.sub(pattern, repl, src, flags=re.DOTALL)
@@ -88,31 +97,33 @@ jobs:
           text = patch_runner_config("249021D4217E4FDB00AE95B9", text)
           pbx_path.write_text(text, encoding="utf-8")
 
-          export_plist = f'''<?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>app-store-connect</string>
-              <key>signingStyle</key>
-              <string>manual</string>
-              <key>teamID</key>
-              <string>{ "$TEAM_ID" }</string>
-              <key>signingCertificate</key>
-              <string>iPhone Distribution</string>
-              <key>provisioningProfiles</key>
-              <dict>
-                  <key>{ "$BUNDLE_ID" }</key>
-                  <string>{ "$PP_NAME" }</string>
-              </dict>
-              <key>uploadSymbols</key>
-              <true/>
-              <key>compileBitcode</key>
-              <false/>
-          </dict>
-          </plist>
-          '''
-          pathlib.Path("ios/ExportOptions.plist").write_text(export_plist.strip() + "\n", encoding="utf-8")
+          export_lines = [
+              '<?xml version="1.0" encoding="UTF-8"?>',
+              '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">',
+              '<plist version="1.0">',
+              '<dict>',
+              '\t<key>method</key>',
+              '\t<string>app-store-connect</string>',
+              '\t<key>signingStyle</key>',
+              '\t<string>manual</string>',
+              '\t<key>teamID</key>',
+              f'\t<string>{team_id}</string>',
+              '\t<key>signingCertificate</key>',
+              '\t<string>iPhone Distribution</string>',
+              '\t<key>provisioningProfiles</key>',
+              '\t<dict>',
+              f'\t\t<key>{bundle_id}</key>',
+              f'\t\t<string>{pp_name}</string>',
+              '\t</dict>',
+              '\t<key>uploadSymbols</key>',
+              '\t<true/>',
+              '\t<key>compileBitcode</key>',
+              '\t<false/>',
+              '</dict>',
+              '</plist>',
+              '',
+          ]
+          pathlib.Path("ios/ExportOptions.plist").write_text("\n".join(export_lines), encoding="utf-8")
           EOF
 
       - name: Setup Flutter
