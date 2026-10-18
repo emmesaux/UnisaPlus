@@ -35,23 +35,39 @@ class _SpidCieLoginScreenState extends State<SpidCieLoginScreen> {
 
   Future<void> _avvia() async {
     try {
+      final cookieManager = WebViewCookieManager();
+      await cookieManager.clearCookies();
       final url = await _cineca.buildAuthorizeUrl();
       if (!mounted) return;
+      final controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setUserAgent(
+          'Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36',
+        )
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onPageStarted: (_) {
+              if (mounted) setState(() => _loading = true);
+            },
+            onPageFinished: (_) {
+              if (mounted) setState(() => _loading = false);
+            },
+            onWebResourceError: (error) {
+              if (mounted && (error.isForMainFrame ?? false)) {
+                setState(() {
+                  _loading = false;
+                  _error =
+                      'Impossibile caricare la pagina di accesso (${error.description}). Riprova.';
+                });
+              }
+            },
+            onNavigationRequest: _onNavigationRequest,
+          ),
+        )
+        ..loadRequest(Uri.parse(url));
+
       setState(() {
-        _controller = WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..setNavigationDelegate(
-            NavigationDelegate(
-              onPageStarted: (_) {
-                if (mounted) setState(() => _loading = true);
-              },
-              onPageFinished: (_) {
-                if (mounted) setState(() => _loading = false);
-              },
-              onNavigationRequest: _onNavigationRequest,
-            ),
-          )
-          ..loadRequest(Uri.parse(url));
+        _controller = controller;
       });
     } catch (e) {
       if (!mounted) return;
@@ -123,15 +139,18 @@ class _SpidCieLoginScreenState extends State<SpidCieLoginScreen> {
       ),
       body: Stack(
         children: [
-          if (_controller != null) WebViewWidget(controller: _controller!),
+          if (_controller != null)
+            Positioned.fill(
+              child: WebViewWidget(controller: _controller!),
+            ),
           if (_loading)
-            Center(child: CircularProgressIndicator(color: scheme.secondary)),
-          if (!_loading && _error == null)
-            Center(
-              child: Text(
-                'Completa l’accesso nel browser e torna qui.',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: LinearProgressIndicator(
+                color: scheme.secondary,
+                backgroundColor: scheme.surfaceContainerHighest,
               ),
             ),
           if (_error != null)
