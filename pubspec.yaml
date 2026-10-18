@@ -72,6 +72,9 @@ flutter:
 
   assets:
     - assets/icon/app_icon.png
+    - assets/icon/app_logo.svg
+    - assets/maps_mapping.json
+    - assets/campus_easyrooms.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

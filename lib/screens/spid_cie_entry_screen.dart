@@ -3,7 +3,9 @@ import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_logo.dart';
 import 'aule_libere_screen.dart';
+import 'mappa_campus_screen.dart';
 import 'presenza_pubblica_screen.dart';
+import 'servizi_utili_screen.dart';
 import 'spid_cie_login_screen.dart';
 
 /// Schermata iniziale: scegliere di accedere (SPID, CIE o credenziali
@@ -121,6 +123,30 @@ class SpidCieEntryScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) =>
                             PresenzaPubblicaScreen(api: authService.api),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.map_outlined),
+                    title: const Text('Mappa dei Campus'),
+                    subtitle: const Text('Fisciano e Baronissi: edifici, aule, CUS e bus'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const MappaCampusScreen(),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.hub_outlined),
+                    title: const Text('Servizi e collegamenti utili'),
+                    subtitle: const Text('Biblioteche & sale studio, ADISURC, CUS Salerno'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const ServiziUtiliScreen(),
                       ),
                     ),
                   ),

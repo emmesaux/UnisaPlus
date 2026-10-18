@@ -39,6 +39,7 @@ class AppLogo extends StatelessWidget {
         width: size,
         height: size,
         fit: BoxFit.cover,
+        filterQuality: FilterQuality.medium,
         errorBuilder: (_, _, _) => Icon(
           Icons.school,
           color: AppColors.zolfo,

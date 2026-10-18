@@ -268,10 +268,18 @@ class ApiService {
       final lista = <AulaConOrario>[];
       for (final room in office.findAllElements('room')) {
         final id = room.getAttribute('id') ?? '';
+        final mapAttr = room.getAttribute('map');
+        final capAttr = room.getAttribute('capacity');
+        final xAttr = room.getAttribute('coordX');
+        final yAttr = room.getAttribute('coordY');
         final aula = AulaConOrario(
           id: id,
           nome: room.getAttribute('name') ?? '',
           lezioni: [],
+          mapId: mapAttr != null && mapAttr.isNotEmpty ? mapAttr : null,
+          capacity: capAttr != null && capAttr.isNotEmpty ? capAttr : null,
+          coordX: xAttr != null && xAttr.isNotEmpty ? double.tryParse(xAttr) : null,
+          coordY: yAttr != null && yAttr.isNotEmpty ? double.tryParse(yAttr) : null,
         );
         lista.add(aula);
         aulaById[id] = aula;

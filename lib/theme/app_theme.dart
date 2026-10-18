@@ -14,6 +14,9 @@ class AppColors {
   static const mare = Color(0xFF16474D); // brand, primario
   static const mareChiaro = Color(0xFF2A6B73);
   static const corallo = Color(0xFFC1443C); // occupato / errore
+  static const smeraldo = Color(0xFF2E7D5B); // superato / successo
+  static const verde = Color(0xFF2E7D5B);
+  static const arancio = Color(0xFFE8A33D); // warning / pianificato
   static const nebbia = Color(0xFF6E7585); // testo secondario
   static const nebbiaChiara = Color(0xFFB9BDC6); // divisori
 }

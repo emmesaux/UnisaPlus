@@ -82,11 +82,19 @@ class AulaConOrario {
   final String id;
   final String nome;
   final List<LezioneAula> lezioni;
+  final String? mapId;
+  final String? capacity;
+  final double? coordX;
+  final double? coordY;
 
   AulaConOrario({
     required this.id,
     required this.nome,
     required this.lezioni,
+    this.mapId,
+    this.capacity,
+    this.coordX,
+    this.coordY,
   });
 
   /// True se non c'è nessuna lezione in tutta la giornata.

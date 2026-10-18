@@ -150,10 +150,15 @@ class _AuleLibereScreenState extends State<AuleLibereScreen> {
                               color: scheme.onSurfaceVariant,
                             ),
                           ),
-                          const Spacer(),
-                          Text(
-                            'Tocca un\'aula per gli orari del giorno',
-                            style: Theme.of(context).textTheme.bodySmall,
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'Tocca un\'aula per gli orari',
+                              textAlign: TextAlign.end,
+                              style: Theme.of(context).textTheme.bodySmall,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),

@@ -1,0 +1,4019 @@
+{
+  "Edificio C": {
+    "name": "Edificio C",
+    "area_code": "FSTEC-02-03",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_52_24.jpg",
+        "rooms": [
+          {
+            "id": "1077",
+            "name": "Aula 'Alfonso Catania'",
+            "code": "FSTEC-02P01097",
+            "capacity": "45",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "998",
+            "name": "Aula Multimediale 'Giuseppe Imbucci'",
+            "code": "FSTEC-03P01057",
+            "capacity": "70",
+            "coordX": null,
+            "coordY": null,
+            "type": "18"
+          },
+          {
+            "id": "1078",
+            "name": "Aula Multimediale Scienze Giuridiche",
+            "code": "FSTEC-02P01073",
+            "capacity": "50",
+            "coordX": null,
+            "coordY": null,
+            "type": "18"
+          },
+          {
+            "id": "485",
+            "name": "Lab. Multim. Ex SCCOM",
+            "code": "FSTEC-03P01005",
+            "capacity": "30",
+            "coordX": 1105.0,
+            "coordY": 724.0,
+            "type": "18"
+          },
+          {
+            "id": "1058",
+            "name": "Laboratorio 'Donald Knuth'",
+            "code": "FSTEC-02P01070",
+            "capacity": "30",
+            "coordX": null,
+            "coordY": null,
+            "type": "5"
+          },
+          {
+            "id": "554",
+            "name": "Laboratorio Analisi dati",
+            "code": "FSTEC-02P01080",
+            "capacity": "15",
+            "coordX": 722.0,
+            "coordY": 296.0,
+            "type": "5"
+          },
+          {
+            "id": "546",
+            "name": "Sala del Consiglio - DISES",
+            "code": "FSTEC-03P01039",
+            "capacity": "0",
+            "coordX": 282.0,
+            "coordY": 607.0,
+            "type": "16"
+          },
+          {
+            "id": "427",
+            "name": "Sala Seminari - DISES",
+            "code": "FSTEC-03P01031",
+            "capacity": "10",
+            "coordX": 204.0,
+            "coordY": 468.0,
+            "type": "8"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_52_22.jpg",
+        "rooms": [
+          {
+            "id": "364",
+            "name": "Aula 1 -  SCIENZE DELLA FORMAZIONE",
+            "code": "FSTEC-03PTE015",
+            "capacity": "140",
+            "coordX": 280.0,
+            "coordY": 724.0,
+            "type": "2"
+          },
+          {
+            "id": "369",
+            "name": "Aula 10",
+            "code": "FSTEC-03PTE028",
+            "capacity": "63",
+            "coordX": 791.0,
+            "coordY": 527.0,
+            "type": "3"
+          },
+          {
+            "id": "368",
+            "name": "Aula 11",
+            "code": "FSTEC-03PTE026",
+            "capacity": "63",
+            "coordX": 607.0,
+            "coordY": 536.0,
+            "type": "3"
+          },
+          {
+            "id": "350",
+            "name": "Aula 11 DISPAC",
+            "code": "FSTEC-02PTE017",
+            "capacity": "63",
+            "coordX": 1166.0,
+            "coordY": 530.0,
+            "type": "3"
+          },
+          {
+            "id": "367",
+            "name": "Aula 12",
+            "code": "FSTEC-03PTE025",
+            "capacity": "63",
+            "coordX": 509.0,
+            "coordY": 536.0,
+            "type": "3"
+          },
+          {
+            "id": "366",
+            "name": "Aula 13",
+            "code": "FSTEC-03PTE022",
+            "capacity": "63",
+            "coordX": 328.0,
+            "coordY": 535.0,
+            "type": "3"
+          },
+          {
+            "id": "365",
+            "name": "Aula 14",
+            "code": "FSTEC-03PTE020",
+            "capacity": "63",
+            "coordX": 224.0,
+            "coordY": 530.0,
+            "type": "3"
+          },
+          {
+            "id": "359",
+            "name": "Aula 2",
+            "code": "FSTEC-02PTE039",
+            "capacity": "63",
+            "coordX": 484.0,
+            "coordY": 528.0,
+            "type": "3"
+          },
+          {
+            "id": "363",
+            "name": "Aula 2 /3",
+            "code": "FSTEC-03PTE013",
+            "capacity": "118",
+            "coordX": 565.0,
+            "coordY": 718.0,
+            "type": "2"
+          },
+          {
+            "id": "356",
+            "name": "Aula 4 - ECONOMIA",
+            "code": "FSTEC-02PTE032",
+            "capacity": "140",
+            "coordX": 259.0,
+            "coordY": 720.0,
+            "type": "2"
+          },
+          {
+            "id": "362",
+            "name": "Aula 4 - SCIENZE DELLA FORMAZIONE",
+            "code": "FSTEC-03PTE005",
+            "capacity": "140",
+            "coordX": 841.0,
+            "coordY": 712.0,
+            "type": "2"
+          },
+          {
+            "id": "361",
+            "name": "Aula 5/6",
+            "code": "FSTEC-03PTE003",
+            "capacity": "154",
+            "coordX": 1122.0,
+            "coordY": 720.0,
+            "type": "11"
+          },
+          {
+            "id": "357",
+            "name": "Aula 7",
+            "code": "FSTEC-02PTE035",
+            "capacity": "63",
+            "coordX": 204.0,
+            "coordY": 530.0,
+            "type": "3"
+          },
+          {
+            "id": "372",
+            "name": "Aula 7",
+            "code": "FSTEC-03PTE034",
+            "capacity": "63",
+            "coordX": 1172.0,
+            "coordY": 534.0,
+            "type": "3"
+          },
+          {
+            "id": "358",
+            "name": "Aula 8",
+            "code": "FSTEC-02PTE036",
+            "capacity": "63",
+            "coordX": 308.0,
+            "coordY": 528.0,
+            "type": "3"
+          },
+          {
+            "id": "371",
+            "name": "Aula 8",
+            "code": "FSTEC-03PTE033",
+            "capacity": "63",
+            "coordX": 1073.0,
+            "coordY": 530.0,
+            "type": "3"
+          },
+          {
+            "id": "370",
+            "name": "Aula 9",
+            "code": "FSTEC-03PTE029",
+            "capacity": "63",
+            "coordX": 891.0,
+            "coordY": 532.0,
+            "type": "3"
+          },
+          {
+            "id": "360",
+            "name": "Aula SSC 1",
+            "code": "FSTEC-02PTE040",
+            "capacity": "63",
+            "coordX": 590.0,
+            "coordY": 539.0,
+            "type": "3"
+          },
+          {
+            "id": "351",
+            "name": "Aula SSC 10",
+            "code": "FSTEC-02PTE013",
+            "capacity": "63",
+            "coordX": 886.0,
+            "coordY": 532.0,
+            "type": "3"
+          },
+          {
+            "id": "355",
+            "name": "Aula SSC 3",
+            "code": "FSTEC-02PTE029",
+            "capacity": "56",
+            "coordX": 492.0,
+            "coordY": 719.0,
+            "type": "3"
+          },
+          {
+            "id": "354",
+            "name": "Aula SSC 4",
+            "code": "FSTEC-02PTE027",
+            "capacity": "56",
+            "coordX": 595.0,
+            "coordY": 719.0,
+            "type": "3"
+          },
+          {
+            "id": "349",
+            "name": "Aula SSC 5",
+            "code": "FSTEC-02PTE009",
+            "capacity": "140",
+            "coordX": 830.0,
+            "coordY": 718.0,
+            "type": "2"
+          },
+          {
+            "id": "348",
+            "name": "Aula SSC 6/7",
+            "code": "FSTEC-02PTE004",
+            "capacity": "112",
+            "coordX": 1122.0,
+            "coordY": 723.0,
+            "type": "2"
+          },
+          {
+            "id": "353",
+            "name": "Aula SSC 8",
+            "code": "FSTEC-02PTE012",
+            "capacity": "63",
+            "coordX": 785.0,
+            "coordY": 524.0,
+            "type": "3"
+          },
+          {
+            "id": "352",
+            "name": "Aula SSC 9",
+            "code": "FSTEC-02PTE016",
+            "capacity": "63",
+            "coordX": 1069.0,
+            "coordY": 530.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "1056",
+            "name": "Laboratorio di GeoStoria 'GeSto'",
+            "code": "FSTEC-02P03008",
+            "capacity": "12",
+            "coordX": null,
+            "coordY": null,
+            "type": "18"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio D": {
+    "name": "Edificio D",
+    "area_code": "FSTEC-04",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_1_40.jpg",
+        "rooms": [
+          {
+            "id": "177",
+            "name": "Aula 1",
+            "code": "FSTEC-04PTE018",
+            "capacity": "110",
+            "coordX": 981.0,
+            "coordY": 339.0,
+            "type": "2"
+          },
+          {
+            "id": "178",
+            "name": "Aula 2",
+            "code": "FSTEC-04PTE015",
+            "capacity": "140",
+            "coordX": 985.0,
+            "coordY": 576.0,
+            "type": "2"
+          },
+          {
+            "id": "179",
+            "name": "Aula 3",
+            "code": "FSTEC-04PTE028",
+            "capacity": "48",
+            "coordX": 694.0,
+            "coordY": 341.0,
+            "type": "1"
+          },
+          {
+            "id": "180",
+            "name": "Aula 4",
+            "code": "FSTEC-04PTE027",
+            "capacity": "98",
+            "coordX": 599.0,
+            "coordY": 569.0,
+            "type": "3"
+          },
+          {
+            "id": "181",
+            "name": "Aula 5",
+            "code": "FSTEC-04PTE029",
+            "capacity": "48",
+            "coordX": 565.0,
+            "coordY": 340.0,
+            "type": "1"
+          },
+          {
+            "id": "39",
+            "name": "Aula C11",
+            "code": "FSTEC-04PTE010",
+            "capacity": "342",
+            "coordX": 1331.0,
+            "coordY": 491.0,
+            "type": "12"
+          },
+          {
+            "id": "37",
+            "name": "Aula Ex Centro Stampa",
+            "code": "FSTEC-04PTE035",
+            "capacity": "365",
+            "coordX": 274.0,
+            "coordY": 460.0,
+            "type": "12"
+          },
+          {
+            "id": "42",
+            "name": "Laboratorio Autoapprendimento",
+            "code": "FSTEC-04PTE001",
+            "capacity": "101",
+            "coordX": 1697.0,
+            "coordY": 425.0,
+            "type": "6"
+          },
+          {
+            "id": "707",
+            "name": "Laboratorio P",
+            "code": "FSTEC-04PTE047",
+            "capacity": "36",
+            "coordX": 1683.0,
+            "coordY": 603.0,
+            "type": "6"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_1_41.jpg",
+        "rooms": [
+          {
+            "id": "262",
+            "name": "Laboratorio A",
+            "code": "FSTEC-04P01008",
+            "capacity": "77",
+            "coordX": 1329.0,
+            "coordY": 354.0,
+            "type": "6"
+          },
+          {
+            "id": "199",
+            "name": "Laboratorio B",
+            "code": "FSTEC-04P01013",
+            "capacity": "26",
+            "coordX": 1211.0,
+            "coordY": 336.0,
+            "type": "6"
+          },
+          {
+            "id": "196",
+            "name": "Laboratorio C",
+            "code": "FSTEC-04P01024",
+            "capacity": "50",
+            "coordX": 1016.0,
+            "coordY": 336.0,
+            "type": "6"
+          },
+          {
+            "id": "197",
+            "name": "Laboratorio D",
+            "code": "FSTEC-04P01026",
+            "capacity": "33",
+            "coordX": 933.0,
+            "coordY": 612.0,
+            "type": "6"
+          },
+          {
+            "id": "198",
+            "name": "Laboratorio E",
+            "code": "FSTEC-04P01025",
+            "capacity": "44",
+            "coordX": 895.0,
+            "coordY": 356.0,
+            "type": "6"
+          },
+          {
+            "id": "200",
+            "name": "Laboratorio F",
+            "code": "FSTEC-04P01035",
+            "capacity": "23",
+            "coordX": 626.0,
+            "coordY": 270.0,
+            "type": "6"
+          },
+          {
+            "id": "193",
+            "name": "Laboratorio G",
+            "code": "FSTEC-04P01062",
+            "capacity": "43",
+            "coordX": 279.0,
+            "coordY": 285.0,
+            "type": "6"
+          },
+          {
+            "id": "192",
+            "name": "Laboratorio H",
+            "code": "FSTEC-04P01037",
+            "capacity": "43",
+            "coordX": 636.0,
+            "coordY": 439.0,
+            "type": "6"
+          },
+          {
+            "id": "261",
+            "name": "Laboratorio I",
+            "code": "FSTEC-04P01061",
+            "capacity": "25",
+            "coordX": 346.0,
+            "coordY": 444.0,
+            "type": "6"
+          },
+          {
+            "id": "195",
+            "name": "Laboratorio L",
+            "code": "FSTEC-04P01060",
+            "capacity": "35",
+            "coordX": 221.0,
+            "coordY": 440.0,
+            "type": "6"
+          },
+          {
+            "id": "194",
+            "name": "Laboratorio M",
+            "code": "FSTEC-04P01059",
+            "capacity": "43",
+            "coordX": 278.0,
+            "coordY": 610.0,
+            "type": "6"
+          },
+          {
+            "id": "201",
+            "name": "Laboratorio N",
+            "code": "FSTEC-04P01067",
+            "capacity": "18",
+            "coordX": 122.0,
+            "coordY": 418.0,
+            "type": "6"
+          },
+          {
+            "id": "253",
+            "name": "Laboratorio Polifunzionale",
+            "code": "FSTEC-04P01039",
+            "capacity": "15",
+            "coordX": 660.0,
+            "coordY": 611.0,
+            "type": "4"
+          },
+          {
+            "id": "373",
+            "name": "Laboratorio Sperimentazione",
+            "code": "FSTEC-04P01040",
+            "capacity": "26",
+            "coordX": 569.0,
+            "coordY": 612.0,
+            "type": "6"
+          },
+          {
+            "id": "693",
+            "name": "Sala Studio Dottorato RAMUS",
+            "code": "FSTEC-04P02039",
+            "capacity": "25",
+            "coordX": null,
+            "coordY": null,
+            "type": "15"
+          }
+        ]
+      }
+    ]
+  },
+  "Ospedale Ruggi": {
+    "name": "Ospedale Ruggi",
+    "area_code": "S-Ruggi",
+    "campus": "altro",
+    "address": "Ospedale Salerno",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_57_85.jpg",
+        "rooms": [
+          {
+            "id": "633",
+            "name": "Aula 1",
+            "code": "S-RUGGIP01006",
+            "capacity": "50",
+            "coordX": 668.0,
+            "coordY": 439.0,
+            "type": "1"
+          },
+          {
+            "id": "634",
+            "name": "Aula 2",
+            "code": "S-RUGGIP01007",
+            "capacity": "50",
+            "coordX": 887.0,
+            "coordY": 691.0,
+            "type": "1"
+          },
+          {
+            "id": "635",
+            "name": "Aula 3",
+            "code": "S-RUGGIP01008",
+            "capacity": "50",
+            "coordX": 959.0,
+            "coordY": 439.0,
+            "type": "1"
+          },
+          {
+            "id": "636",
+            "name": "Aula 7",
+            "code": "S-RUGGIP01009",
+            "capacity": "50",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "489",
+            "name": "Aula Angrisani",
+            "code": "S-RUGGIP01004",
+            "capacity": "50",
+            "coordX": 1064.0,
+            "coordY": 439.0,
+            "type": "1"
+          },
+          {
+            "id": "486",
+            "name": "Aula Cantalamessa",
+            "code": "S-RUGGIP01001",
+            "capacity": "50",
+            "coordX": 972.0,
+            "coordY": 560.0,
+            "type": "1"
+          },
+          {
+            "id": "487",
+            "name": "Aula D'Ambrosio",
+            "code": "S-RUGGIP01002",
+            "capacity": "50",
+            "coordX": 821.0,
+            "coordY": 558.0,
+            "type": "1"
+          },
+          {
+            "id": "488",
+            "name": "Aula Ferro",
+            "code": "S-RUGGIP01003",
+            "capacity": "50",
+            "coordX": 624.0,
+            "coordY": 560.0,
+            "type": "1"
+          },
+          {
+            "id": "490",
+            "name": "Aula Scozia",
+            "code": "S-RUGGIP01005",
+            "capacity": "100",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          }
+        ]
+      },
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "698",
+            "name": "Clinica Cardiologica",
+            "code": "S-RUGGIP01010",
+            "capacity": "10",
+            "coordX": null,
+            "coordY": null,
+            "type": "21"
+          }
+        ]
+      }
+    ]
+  },
+  "Fondazione": {
+    "name": "Fondazione",
+    "area_code": "F-FONDAZ",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_62_71.jpg",
+        "rooms": [
+          {
+            "id": "710",
+            "name": "Aula 1",
+            "code": "F-FONDAZPTE002",
+            "capacity": "90",
+            "coordX": 1386.0,
+            "coordY": 482.0,
+            "type": "3"
+          },
+          {
+            "id": "711",
+            "name": "Aula 2",
+            "code": "F-FONDAZPTE006",
+            "capacity": "150",
+            "coordX": 576.0,
+            "coordY": 746.0,
+            "type": "2"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_62_72.jpg",
+        "rooms": [
+          {
+            "id": "712",
+            "name": "Aula 5",
+            "code": "F-FONDAZP01014",
+            "capacity": "34",
+            "coordX": 499.0,
+            "coordY": 779.0,
+            "type": "1"
+          },
+          {
+            "id": "713",
+            "name": "Aula 6",
+            "code": "F-FONDAZP01013",
+            "capacity": "32",
+            "coordX": 279.0,
+            "coordY": 771.0,
+            "type": "1"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio F1": {
+    "name": "Edificio F1",
+    "area_code": "FINV-11C",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_10_26.jpg",
+        "rooms": [
+          {
+            "id": "157",
+            "name": "Aula 1",
+            "code": "FINV-11CPTE002",
+            "capacity": "404",
+            "coordX": 565.0,
+            "coordY": 852.0,
+            "type": "12"
+          },
+          {
+            "id": "158",
+            "name": "Aula 2",
+            "code": "FINV-11CPTE003",
+            "capacity": "190",
+            "coordX": 1213.0,
+            "coordY": 845.0,
+            "type": "11"
+          },
+          {
+            "id": "172",
+            "name": "Laboratorio 3 - Farmabiolab",
+            "code": "FINV-11CPTE024",
+            "capacity": "15",
+            "coordX": 1149.0,
+            "coordY": 208.0,
+            "type": "5"
+          },
+          {
+            "id": "171",
+            "name": "Laboratorio 4 - Farmabiolab",
+            "code": "FINV-11CPTE023",
+            "capacity": "20",
+            "coordX": 1153.0,
+            "coordY": 413.0,
+            "type": "5"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_10_4.jpg",
+        "rooms": [
+          {
+            "id": "166",
+            "name": "Aula 10",
+            "code": "FINV-11CP02019",
+            "capacity": "96",
+            "coordX": 529.0,
+            "coordY": 742.0,
+            "type": "3"
+          },
+          {
+            "id": "167",
+            "name": "Aula 11",
+            "code": "FINV-11CP02021",
+            "capacity": "48",
+            "coordX": 589.0,
+            "coordY": 554.0,
+            "type": "1"
+          },
+          {
+            "id": "173",
+            "name": "Aula AGR/1",
+            "code": "FINV-11CP02052",
+            "capacity": "56",
+            "coordX": 1111.0,
+            "coordY": 370.0,
+            "type": "3"
+          },
+          {
+            "id": "174",
+            "name": "Aula AGR/2",
+            "code": "FINV-11CP02053",
+            "capacity": "64",
+            "coordX": 1123.0,
+            "coordY": 168.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_10_25.jpg",
+        "rooms": [
+          {
+            "id": "159",
+            "name": "Aula 3",
+            "code": "FINV-11CP01003",
+            "capacity": "72",
+            "coordX": 616.0,
+            "coordY": 746.0,
+            "type": "3"
+          },
+          {
+            "id": "160",
+            "name": "Aula 4",
+            "code": "FINV-11CP01002",
+            "capacity": "80",
+            "coordX": 625.0,
+            "coordY": 944.0,
+            "type": "3"
+          },
+          {
+            "id": "161",
+            "name": "Aula 5",
+            "code": "FINV-11CP01015",
+            "capacity": "40",
+            "coordX": 1015.0,
+            "coordY": 886.0,
+            "type": "1"
+          },
+          {
+            "id": "162",
+            "name": "Aula 6",
+            "code": "FINV-11CP01016",
+            "capacity": "40",
+            "coordX": 1019.0,
+            "coordY": 731.0,
+            "type": "1"
+          },
+          {
+            "id": "163",
+            "name": "Aula 7",
+            "code": "FINV-11CP01035",
+            "capacity": "40",
+            "coordX": 1021.0,
+            "coordY": 392.0,
+            "type": "1"
+          },
+          {
+            "id": "164",
+            "name": "Aula 8",
+            "code": "FINV-11CP01036",
+            "capacity": "40",
+            "coordX": 1008.0,
+            "coordY": 248.0,
+            "type": "1"
+          },
+          {
+            "id": "165",
+            "name": "Aula 9",
+            "code": "FINV-11CP01004",
+            "capacity": "20",
+            "coordX": 535.0,
+            "coordY": 570.0,
+            "type": "1"
+          }
+        ]
+      },
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "169",
+            "name": "Laboratorio 1 - Farmabiolab",
+            "code": "FINV-11CS01027",
+            "capacity": "82",
+            "coordX": 1090.0,
+            "coordY": 919.0,
+            "type": "5"
+          },
+          {
+            "id": "170",
+            "name": "Laboratorio 2 - Farmabiolab",
+            "code": "FINV-11CS01029",
+            "capacity": "20",
+            "coordX": 1193.0,
+            "coordY": 719.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio B1": {
+    "name": "Edificio B1",
+    "area_code": "FINV-01A",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Seminterrato / Lab",
+        "map_image": "maps/mappa_26_21.jpg",
+        "rooms": [
+          {
+            "id": "237",
+            "name": "Aula 1",
+            "code": "FINV-01AS01023",
+            "capacity": "292",
+            "coordX": 1190.0,
+            "coordY": 759.0,
+            "type": "12"
+          },
+          {
+            "id": "238",
+            "name": "Laboratorio Sabatini",
+            "code": "FINV-01AS01030",
+            "capacity": "22",
+            "coordX": 333.0,
+            "coordY": 592.0,
+            "type": "5"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_26_1.jpg",
+        "rooms": [
+          {
+            "id": "279",
+            "name": "Aula 19",
+            "code": "FINV-01AP01017",
+            "capacity": "100",
+            "coordX": 1060.0,
+            "coordY": 250.0,
+            "type": "3"
+          },
+          {
+            "id": "280",
+            "name": "Aula 20",
+            "code": "FINV-01AP01020",
+            "capacity": "100",
+            "coordX": 1049.0,
+            "coordY": 433.0,
+            "type": "3"
+          },
+          {
+            "id": "276",
+            "name": "Aula 21",
+            "code": "FINV-01AP01007",
+            "capacity": "100",
+            "coordX": 518.0,
+            "coordY": 722.0,
+            "type": "3"
+          },
+          {
+            "id": "259",
+            "name": "Aula A",
+            "code": "FINV-01AP01016",
+            "capacity": "196",
+            "coordX": 499.0,
+            "coordY": 306.0,
+            "type": "11"
+          },
+          {
+            "id": "251",
+            "name": "Aula Scarano",
+            "code": "FINV-01AP01005",
+            "capacity": "100",
+            "coordX": 510.0,
+            "coordY": 899.0,
+            "type": "3"
+          },
+          {
+            "id": "277",
+            "name": "Aula Scocozza",
+            "code": "FINV-01AP01008",
+            "capacity": "30",
+            "coordX": 460.0,
+            "coordY": 571.0,
+            "type": "23"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_26_18.jpg",
+        "rooms": [
+          {
+            "id": "239",
+            "name": "Aula 2",
+            "code": "FINV-01APTE003",
+            "capacity": "437",
+            "coordX": 1088.0,
+            "coordY": 786.0,
+            "type": "12"
+          },
+          {
+            "id": "240",
+            "name": "Aula 3",
+            "code": "FINV-01APTE010",
+            "capacity": "136",
+            "coordX": 524.0,
+            "coordY": 742.0,
+            "type": "2"
+          },
+          {
+            "id": "241",
+            "name": "Aula 4",
+            "code": "FINV-01APTE019",
+            "capacity": "136",
+            "coordX": 992.0,
+            "coordY": 284.0,
+            "type": "2"
+          },
+          {
+            "id": "242",
+            "name": "Aula 5",
+            "code": "FINV-01APTE021",
+            "capacity": "136",
+            "coordX": 528.0,
+            "coordY": 294.0,
+            "type": "2"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio C2": {
+    "name": "Edificio C2",
+    "area_code": "FINV-04D",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_47_51.jpg",
+        "rooms": [
+          {
+            "id": "287",
+            "name": "Aula 1 - Marrazzo",
+            "code": "FINV-04DPTE023",
+            "capacity": "336",
+            "coordX": 1096.0,
+            "coordY": 329.0,
+            "type": "12"
+          },
+          {
+            "id": "285",
+            "name": "Aula 5 - Pugliese",
+            "code": "FINV-04DPTE001",
+            "capacity": "136",
+            "coordX": 996.0,
+            "coordY": 851.0,
+            "type": "2"
+          },
+          {
+            "id": "286",
+            "name": "Aula 6",
+            "code": "FINV-04DPTE021",
+            "capacity": "136",
+            "coordX": 545.0,
+            "coordY": 417.0,
+            "type": "2"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_47_61.jpg",
+        "rooms": [
+          {
+            "id": "284",
+            "name": "Laboratorio Multimediale Ex Lettere",
+            "code": "FINV-04DP01001",
+            "capacity": "96",
+            "coordX": 1015.0,
+            "coordY": 915.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio D3": {
+    "name": "Edificio D3",
+    "area_code": "FINV-08C",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_15_33.jpg",
+        "rooms": [
+          {
+            "id": "186",
+            "name": "Aula 10",
+            "code": "FINV-08CP01013",
+            "capacity": "84",
+            "coordX": 1020.0,
+            "coordY": 288.0,
+            "type": "3"
+          },
+          {
+            "id": "183",
+            "name": "Aula 7",
+            "code": "FINV-08CP01008",
+            "capacity": "100",
+            "coordX": 720.0,
+            "coordY": 867.0,
+            "type": "3"
+          },
+          {
+            "id": "184",
+            "name": "Aula 8",
+            "code": "FINV-08CP01009",
+            "capacity": "100",
+            "coordX": 965.0,
+            "coordY": 868.0,
+            "type": "3"
+          },
+          {
+            "id": "185",
+            "name": "Aula 9",
+            "code": "FINV-08CP01010",
+            "capacity": "100",
+            "coordX": 1219.0,
+            "coordY": 858.0,
+            "type": "3"
+          },
+          {
+            "id": "191",
+            "name": "Laboratorio Multimediale  A. Russo",
+            "code": "FINV-08CP01002",
+            "capacity": "50",
+            "coordX": 474.0,
+            "coordY": 870.0,
+            "type": "18"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_15_34.jpg",
+        "rooms": [
+          {
+            "id": "187",
+            "name": "Aula 11",
+            "code": "FINV-08CP02033",
+            "capacity": "100",
+            "coordX": 708.0,
+            "coordY": 852.0,
+            "type": "3"
+          },
+          {
+            "id": "188",
+            "name": "Aula 12",
+            "code": "FINV-08CP02032",
+            "capacity": "100",
+            "coordX": 951.0,
+            "coordY": 860.0,
+            "type": "3"
+          },
+          {
+            "id": "189",
+            "name": "Aula 13",
+            "code": "FINV-08CP02023",
+            "capacity": "100",
+            "coordX": 1020.0,
+            "coordY": 262.0,
+            "type": "3"
+          },
+          {
+            "id": "252",
+            "name": "Sala P",
+            "code": "FINV-08CP02026",
+            "capacity": "16",
+            "coordX": 1268.0,
+            "coordY": 307.0,
+            "type": "8"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_15_32.jpg",
+        "rooms": [
+          {
+            "id": "182",
+            "name": "Aula 6",
+            "code": "FINV-08CPTE025",
+            "capacity": "200",
+            "coordX": 1110.0,
+            "coordY": 346.0,
+            "type": "11"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio E1": {
+    "name": "Edificio E1",
+    "area_code": "FINV-09C",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_37_2.jpg",
+        "rooms": [
+          {
+            "id": "18",
+            "name": "Aula 102 - CAD",
+            "code": "FINV-09CP01018",
+            "capacity": "39",
+            "coordX": 909.0,
+            "coordY": 719.0,
+            "type": "1"
+          },
+          {
+            "id": "25",
+            "name": "Aula Infografica",
+            "code": "FINV-09CP01003",
+            "capacity": "100",
+            "coordX": 556.0,
+            "coordY": 554.0,
+            "type": "3"
+          },
+          {
+            "id": "29",
+            "name": "Aula N",
+            "code": "FINV-09CP01019",
+            "capacity": "100",
+            "coordX": 918.0,
+            "coordY": 843.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_37_39.jpg",
+        "rooms": [
+          {
+            "id": "44",
+            "name": "Aula 141 - Marone",
+            "code": "FINV-09CP02050",
+            "capacity": "50",
+            "coordX": 1051.0,
+            "coordY": 775.0,
+            "type": "1"
+          },
+          {
+            "id": "424",
+            "name": "Sala 108/9C",
+            "code": "FINV-09CP02016",
+            "capacity": "15",
+            "coordX": 649.0,
+            "coordY": 652.0,
+            "type": "8"
+          },
+          {
+            "id": "425",
+            "name": "Sala 109/9C",
+            "code": "FINV-09CP02018",
+            "capacity": "15",
+            "coordX": 655.0,
+            "coordY": 805.0,
+            "type": "8"
+          },
+          {
+            "id": "3",
+            "name": "Spazio per attivita' complementari_107",
+            "code": "FINV-09CP02013",
+            "capacity": "24",
+            "coordX": 657.0,
+            "coordY": 502.0,
+            "type": "23"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_37_38.jpg",
+        "rooms": [
+          {
+            "id": "19",
+            "name": "Aula D",
+            "code": "FINV-09CPTE015",
+            "capacity": "99",
+            "coordX": 1241.0,
+            "coordY": 684.0,
+            "type": "3"
+          },
+          {
+            "id": "20",
+            "name": "Aula E",
+            "code": "FINV-09CPTE014",
+            "capacity": "100",
+            "coordX": 1240.0,
+            "coordY": 876.0,
+            "type": "3"
+          },
+          {
+            "id": "21",
+            "name": "Aula F",
+            "code": "FINV-09CPTE005",
+            "capacity": "90",
+            "coordX": 752.0,
+            "coordY": 680.0,
+            "type": "3"
+          },
+          {
+            "id": "22",
+            "name": "Aula G",
+            "code": "FINV-09CPTE004",
+            "capacity": "80",
+            "coordX": 755.0,
+            "coordY": 881.0,
+            "type": "3"
+          },
+          {
+            "id": "30",
+            "name": "Aula O",
+            "code": "FINV-09CPTE006",
+            "capacity": "75",
+            "coordX": 737.0,
+            "coordY": 470.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Seminterrato / Lab",
+        "map_image": "maps/mappa_37_37.jpg",
+        "rooms": [
+          {
+            "id": "176",
+            "name": "Aula delle Lauree - V. Cardone",
+            "code": "FINV-09CS01009",
+            "capacity": "429",
+            "coordX": 689.0,
+            "coordY": 461.0,
+            "type": "13"
+          },
+          {
+            "id": "308",
+            "name": "Laboratorio Icaro - ICT",
+            "code": "FINV-09CS01031",
+            "capacity": "40",
+            "coordX": 1137.0,
+            "coordY": 650.0,
+            "type": "5"
+          },
+          {
+            "id": "35",
+            "name": "Laboratorio Modelli",
+            "code": "FINV-09CS01051",
+            "capacity": "60",
+            "coordX": 325.0,
+            "coordY": 639.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio B": {
+    "name": "Edificio B",
+    "area_code": "FSTEC-01",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_33_10.jpg",
+        "rooms": [
+          {
+            "id": "343",
+            "name": "Aula 12 - DISPAC",
+            "code": "FSTEC-01PTE043",
+            "capacity": "140",
+            "coordX": 292.0,
+            "coordY": 742.0,
+            "type": "2"
+          },
+          {
+            "id": "342",
+            "name": "Aula 13",
+            "code": "FSTEC-01PTE040",
+            "capacity": "42",
+            "coordX": 530.0,
+            "coordY": 733.0,
+            "type": "1"
+          },
+          {
+            "id": "341",
+            "name": "Aula 14 - Multimediale",
+            "code": "FSTEC-01PTE037",
+            "capacity": "24",
+            "coordX": 627.0,
+            "coordY": 736.0,
+            "type": "5"
+          },
+          {
+            "id": "347",
+            "name": "Aula 15",
+            "code": "FSTEC-01PTE061",
+            "capacity": "63",
+            "coordX": 632.0,
+            "coordY": 547.0,
+            "type": "3"
+          },
+          {
+            "id": "346",
+            "name": "Aula 16",
+            "code": "FSTEC-01PTE060",
+            "capacity": "63",
+            "coordX": 535.0,
+            "coordY": 549.0,
+            "type": "3"
+          },
+          {
+            "id": "345",
+            "name": "Aula 17",
+            "code": "FSTEC-01PTE049",
+            "capacity": "63",
+            "coordX": 349.0,
+            "coordY": 544.0,
+            "type": "3"
+          },
+          {
+            "id": "344",
+            "name": "Aula 18",
+            "code": "FSTEC-01PTE048",
+            "capacity": "63",
+            "coordX": 237.0,
+            "coordY": 528.0,
+            "type": "3"
+          },
+          {
+            "id": "244",
+            "name": "Aula 6 - Di Rago",
+            "code": "FSTEC-01PTE032",
+            "capacity": "140",
+            "coordX": 861.0,
+            "coordY": 737.0,
+            "type": "2"
+          },
+          {
+            "id": "245",
+            "name": "Aula Castellano",
+            "code": "FSTEC-01PTE012",
+            "capacity": "63",
+            "coordX": 1204.0,
+            "coordY": 547.0,
+            "type": "3"
+          },
+          {
+            "id": "246",
+            "name": "Aula D'Ambrosio",
+            "code": "FSTEC-01PTE030",
+            "capacity": "63",
+            "coordX": 814.0,
+            "coordY": 549.0,
+            "type": "3"
+          },
+          {
+            "id": "247",
+            "name": "Aula De Capraris",
+            "code": "FSTEC-01PTE014",
+            "capacity": "56",
+            "coordX": 1200.0,
+            "coordY": 731.0,
+            "type": "3"
+          },
+          {
+            "id": "243",
+            "name": "Aula Fenucci",
+            "code": "FSTEC-01PTE003",
+            "capacity": "76",
+            "coordX": 1450.0,
+            "coordY": 607.0,
+            "type": "3"
+          },
+          {
+            "id": "248",
+            "name": "Aula Mancini",
+            "code": "FSTEC-01PTE029",
+            "capacity": "63",
+            "coordX": 919.0,
+            "coordY": 549.0,
+            "type": "3"
+          },
+          {
+            "id": "249",
+            "name": "Aula Pugliatti",
+            "code": "FSTEC-01PTE020",
+            "capacity": "63",
+            "coordX": 1102.0,
+            "coordY": 554.0,
+            "type": "3"
+          },
+          {
+            "id": "250",
+            "name": "Aula Volterra",
+            "code": "FSTEC-01PTE015",
+            "capacity": "56",
+            "coordX": 1102.0,
+            "coordY": 733.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_33_19.jpg",
+        "rooms": [
+          {
+            "id": "799",
+            "name": "Lab. RIMEDI@",
+            "code": "FSTEC-01P01059",
+            "capacity": "20",
+            "coordX": 262.0,
+            "coordY": 481.0,
+            "type": "5"
+          },
+          {
+            "id": "798",
+            "name": "Laboratorio di sperimentazione didattica LL nella TD",
+            "code": "FSTEC-01P01069",
+            "capacity": "5",
+            "coordX": 637.0,
+            "coordY": 476.0,
+            "type": "5"
+          },
+          {
+            "id": "1002",
+            "name": "Sala Conferenze Dispac",
+            "code": "FSTEC-01P01044",
+            "capacity": "60",
+            "coordX": null,
+            "coordY": null,
+            "type": "8"
+          },
+          {
+            "id": "493",
+            "name": "Sala Studio Dottorato MEM",
+            "code": "FSTEC-01P01012",
+            "capacity": "10",
+            "coordX": 1162.0,
+            "coordY": 744.0,
+            "type": "15"
+          },
+          {
+            "id": "692",
+            "name": "Sala Tirocini - Erasmus",
+            "code": "FSTEC-01P01080",
+            "capacity": "4",
+            "coordX": 1041.0,
+            "coordY": 484.0,
+            "type": "15"
+          },
+          {
+            "id": "691",
+            "name": "Studio Scuola Specializzazione",
+            "code": "FSTEC-01P01019",
+            "capacity": "4",
+            "coordX": 910.0,
+            "coordY": 744.0,
+            "type": "15"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_33_20.jpg",
+        "rooms": [
+          {
+            "id": "797",
+            "name": "Spazio per attività complementari DISUFF",
+            "code": "FSTEC-01P02002",
+            "capacity": "8",
+            "coordX": 1450.0,
+            "coordY": 738.0,
+            "type": "23"
+          }
+        ]
+      },
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "1001",
+            "name": "Laboratorio Multimediale Didattica Innovativa",
+            "code": "FSTEC-01P03003",
+            "capacity": "24",
+            "coordX": null,
+            "coordY": null,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio E": {
+    "name": "Edificio E",
+    "area_code": "FSTEC-05-06",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_2_60.jpg",
+        "rooms": [
+          {
+            "id": "6",
+            "name": "Aula 126",
+            "code": "FSTEC-06P01007",
+            "capacity": "96",
+            "coordX": 1108.0,
+            "coordY": 439.0,
+            "type": "3"
+          },
+          {
+            "id": "429",
+            "name": "Aula 129",
+            "code": "FSTEC-06P01009",
+            "capacity": "99",
+            "coordX": 1110.0,
+            "coordY": 726.0,
+            "type": "3"
+          },
+          {
+            "id": "8",
+            "name": "Aula 133",
+            "code": "FSTEC-05P01085",
+            "capacity": "40",
+            "coordX": 199.0,
+            "coordY": 460.0,
+            "type": "1"
+          },
+          {
+            "id": "9",
+            "name": "Aula 136",
+            "code": "FSTEC-05P01076",
+            "capacity": "40",
+            "coordX": 302.0,
+            "coordY": 467.0,
+            "type": "1"
+          },
+          {
+            "id": "10",
+            "name": "Aula 137",
+            "code": "FSTEC-05P01082",
+            "capacity": "32",
+            "coordX": 242.0,
+            "coordY": 754.0,
+            "type": "1"
+          },
+          {
+            "id": "40",
+            "name": "Aula 167 - Sala Seminari Graffi",
+            "code": "FSTEC-05P01008",
+            "capacity": "20",
+            "coordX": 1180.0,
+            "coordY": 602.0,
+            "type": "8"
+          },
+          {
+            "id": "374",
+            "name": "Aula Mangrella - Teledottorato",
+            "code": "FSTEC-05P01053",
+            "capacity": "39",
+            "coordX": 591.0,
+            "coordY": 603.0,
+            "type": "18"
+          },
+          {
+            "id": "28",
+            "name": "Laboratorio 118 - Grafica computerizzata",
+            "code": "FSTEC-06P01038",
+            "capacity": "30",
+            "coordX": 799.0,
+            "coordY": 440.0,
+            "type": "5"
+          },
+          {
+            "id": "260",
+            "name": "Laboratorio 152 - Software Matematico",
+            "code": "FSTEC-05P01037",
+            "capacity": "50",
+            "coordX": 843.0,
+            "coordY": 463.0,
+            "type": "5"
+          },
+          {
+            "id": "423",
+            "name": "Sala 125 'Biblioteca Berardi'",
+            "code": "FSTEC-06P01032",
+            "capacity": "15",
+            "coordX": 866.0,
+            "coordY": 580.0,
+            "type": "17"
+          },
+          {
+            "id": "2",
+            "name": "Spazio per attivita' complementari_106",
+            "code": "FSTEC-06P01078",
+            "capacity": "40",
+            "coordX": 218.0,
+            "coordY": 590.0,
+            "type": "23"
+          },
+          {
+            "id": "4",
+            "name": "Spazio per attivita' complementari_112",
+            "code": "FSTEC-06P01049",
+            "capacity": "48",
+            "coordX": 502.0,
+            "coordY": 584.0,
+            "type": "23"
+          },
+          {
+            "id": "5",
+            "name": "Spazio per attivita' complementari_119",
+            "code": "FSTEC-06P01037",
+            "capacity": "35",
+            "coordX": 771.0,
+            "coordY": 585.0,
+            "type": "23"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_2_59.jpg",
+        "rooms": [
+          {
+            "id": "11",
+            "name": "Aula 21",
+            "code": "FSTEC-05PTE020",
+            "capacity": "56",
+            "coordX": 772.0,
+            "coordY": 491.0,
+            "type": "3"
+          },
+          {
+            "id": "12",
+            "name": "Aula 22",
+            "code": "FSTEC-05PTE019",
+            "capacity": "56",
+            "coordX": 875.0,
+            "coordY": 489.0,
+            "type": "3"
+          },
+          {
+            "id": "13",
+            "name": "Aula 23",
+            "code": "FSTEC-05PTE011",
+            "capacity": "56",
+            "coordX": 1063.0,
+            "coordY": 487.0,
+            "type": "3"
+          },
+          {
+            "id": "14",
+            "name": "Aula 24",
+            "code": "FSTEC-05PTE007",
+            "capacity": "56",
+            "coordX": 1165.0,
+            "coordY": 495.0,
+            "type": "3"
+          },
+          {
+            "id": "551",
+            "name": "Aula Ex-Cues",
+            "code": "FSTEC06-PTE052",
+            "capacity": "100",
+            "coordX": 1374.0,
+            "coordY": 467.0,
+            "type": "3"
+          },
+          {
+            "id": "34",
+            "name": "Laboratorio T25 - Informatica di base",
+            "code": "FSTEC-05PTE022",
+            "capacity": "40",
+            "coordX": 811.0,
+            "coordY": 684.0,
+            "type": "18"
+          },
+          {
+            "id": "432",
+            "name": "Laboratorio T26",
+            "code": "FSTEC-05PTE009",
+            "capacity": "80",
+            "coordX": 1114.0,
+            "coordY": 680.0,
+            "type": "18"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Seminterrato / Lab",
+        "map_image": "maps/mappa_2_56.jpg",
+        "rooms": [
+          {
+            "id": "36",
+            "name": "Laboratorio I8",
+            "code": "FSTEC-05S01015",
+            "capacity": "30",
+            "coordX": 890.0,
+            "coordY": 589.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio F": {
+    "name": "Edificio F",
+    "area_code": "FSTEC-07-09",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_5_47.jpg",
+        "rooms": [
+          {
+            "id": "381",
+            "name": "Aula 31 - Multimediale",
+            "code": "FSTEC-07P02063",
+            "capacity": "24",
+            "coordX": 1581.0,
+            "coordY": 299.0,
+            "type": "18"
+          },
+          {
+            "id": "235",
+            "name": "Aula 32",
+            "code": "FSTEC-07P02069",
+            "capacity": "60",
+            "coordX": 1699.0,
+            "coordY": 304.0,
+            "type": "3"
+          },
+          {
+            "id": "168",
+            "name": "Aula 33 - Multimediale",
+            "code": "FSTEC-07P02074",
+            "capacity": "66",
+            "coordX": 1644.0,
+            "coordY": 509.0,
+            "type": "3"
+          },
+          {
+            "id": "379",
+            "name": "Aula S1",
+            "code": "FSTEC-09P02036",
+            "capacity": "65",
+            "coordX": 1353.0,
+            "coordY": 806.0,
+            "type": "3"
+          },
+          {
+            "id": "377",
+            "name": "Aula S2",
+            "code": "FSTEC-09P02025",
+            "capacity": "50",
+            "coordX": 1346.0,
+            "coordY": 457.0,
+            "type": "1"
+          },
+          {
+            "id": "376",
+            "name": "Aula S3",
+            "code": "FSTEC-09P02024",
+            "capacity": "50",
+            "coordX": 1152.0,
+            "coordY": 455.0,
+            "type": "1"
+          },
+          {
+            "id": "378",
+            "name": "Aula S4",
+            "code": "FSTEC-09P02035",
+            "capacity": "54",
+            "coordX": 1165.0,
+            "coordY": 810.0,
+            "type": "3"
+          },
+          {
+            "id": "375",
+            "name": "Aula S6",
+            "code": "FSTEC-09P02008",
+            "capacity": "159",
+            "coordX": 277.0,
+            "coordY": 800.0,
+            "type": "11"
+          },
+          {
+            "id": "380",
+            "name": "Aula S7",
+            "code": "FSTEC-09P02045",
+            "capacity": "26",
+            "coordX": 174.0,
+            "coordY": 527.0,
+            "type": "1"
+          },
+          {
+            "id": "587",
+            "name": "Laboratorio 12 - Bio-Ecologico",
+            "code": "FSTEC-08P02040",
+            "capacity": "30",
+            "coordX": 1048.0,
+            "coordY": 798.0,
+            "type": "5"
+          },
+          {
+            "id": "38",
+            "name": "Laboratorio 29 - Fisica",
+            "code": "FSTEC-07P02052",
+            "capacity": "15",
+            "coordX": 1298.0,
+            "coordY": 303.0,
+            "type": "5"
+          },
+          {
+            "id": "588",
+            "name": "Laboratorio Bio-Morfologico",
+            "code": "FSTEC-08P02041",
+            "capacity": "30",
+            "coordX": 1225.0,
+            "coordY": 791.0,
+            "type": "5"
+          },
+          {
+            "id": "439",
+            "name": "Laboratorio di Circuiti e sensori",
+            "code": "FSTEC-08P02001",
+            "capacity": "28",
+            "coordX": 165.0,
+            "coordY": 463.0,
+            "type": "5"
+          },
+          {
+            "id": "436",
+            "name": "Laboratorio di Circuiti lineari a bassa e alta frequenza",
+            "code": "FSTEC-08P02002",
+            "capacity": "28",
+            "coordX": 334.0,
+            "coordY": 471.0,
+            "type": "5"
+          },
+          {
+            "id": "437",
+            "name": "Laboratorio di Esperienze di Elettronica",
+            "code": "FSTEC-08P02019",
+            "capacity": "28",
+            "coordX": 613.0,
+            "coordY": 468.0,
+            "type": "5"
+          },
+          {
+            "id": "434",
+            "name": "Laboratorio di Esperienze Meccaniche",
+            "code": "FSTEC-08P02004",
+            "capacity": "28",
+            "coordX": 166.0,
+            "coordY": 802.0,
+            "type": "5"
+          },
+          {
+            "id": "438",
+            "name": "Laboratorio di Fisica Computazionale",
+            "code": "FSTEC-08P02020",
+            "capacity": "40",
+            "coordX": 777.0,
+            "coordY": 478.0,
+            "type": "4"
+          },
+          {
+            "id": "440",
+            "name": "Laboratorio di Fisica Nucleare e Subnucleare, Astrofisica e Reti neurali",
+            "code": "FSTEC-08P02018",
+            "capacity": "28",
+            "coordX": 780.0,
+            "coordY": 802.0,
+            "type": "5"
+          },
+          {
+            "id": "435",
+            "name": "Laboratorio di Ottica e Termologia",
+            "code": "FSTEC-08P02005",
+            "capacity": "28",
+            "coordX": 337.0,
+            "coordY": 809.0,
+            "type": "5"
+          },
+          {
+            "id": "494",
+            "name": "Laboratorio GAS",
+            "code": "FSTEC-07P02001",
+            "capacity": "12",
+            "coordX": 138.0,
+            "coordY": 305.0,
+            "type": "4"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_5_46.jpg",
+        "rooms": [
+          {
+            "id": "589",
+            "name": "Laboratorio 18/3 - Bio-Molecolare",
+            "code": "FSTEC-08P01041",
+            "capacity": "28",
+            "coordX": 1108.0,
+            "coordY": 513.0,
+            "type": "5"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_5_48.jpg",
+        "rooms": [
+          {
+            "id": "585",
+            "name": "Laboratorio 34 - Chimica Gen. e Analitica",
+            "code": "FSTEC-08PTE034",
+            "capacity": "50",
+            "coordX": 665.0,
+            "coordY": 706.0,
+            "type": "5"
+          },
+          {
+            "id": "586",
+            "name": "Laboratorio 36",
+            "code": "FSTEC-08PTE036",
+            "capacity": "54",
+            "coordX": 1072.0,
+            "coordY": 701.0,
+            "type": "5"
+          },
+          {
+            "id": "1076",
+            "name": "Laboratorio Analisi Ambientali",
+            "code": "FSTEC-07P01061",
+            "capacity": "15",
+            "coordX": null,
+            "coordY": null,
+            "type": "24"
+          },
+          {
+            "id": "1075",
+            "name": "Laboratorio Strumentale",
+            "code": "FSTEC-07P01038",
+            "capacity": "15",
+            "coordX": null,
+            "coordY": null,
+            "type": "24"
+          }
+        ]
+      },
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "714",
+            "name": "Aula T1",
+            "code": "FSTEC-09P04039",
+            "capacity": "36",
+            "coordX": 904.0,
+            "coordY": 654.0,
+            "type": "1"
+          }
+        ]
+      }
+    ]
+  },
+  "Penta": {
+    "name": "Penta",
+    "area_code": "PENTA",
+    "campus": "altro",
+    "address": "Campus di Penta",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_58_77.jpg",
+        "rooms": [
+          {
+            "id": "549",
+            "name": "Aula 7 - Triangolare",
+            "code": "PENTAPTE007",
+            "capacity": "80",
+            "coordX": 1201.0,
+            "coordY": 505.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_58_78.jpg",
+        "rooms": [
+          {
+            "id": "550",
+            "name": "Aula a gradoni",
+            "code": "PENTAP01002",
+            "capacity": "80",
+            "coordX": 1060.0,
+            "coordY": 193.0,
+            "type": "3"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio E2": {
+    "name": "Edificio E2",
+    "area_code": "FINV-07E",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_36_84.jpg",
+        "rooms": [
+          {
+            "id": "15",
+            "name": "Aula A",
+            "code": "FINV-07EPTE005",
+            "capacity": "144",
+            "coordX": 1095.0,
+            "coordY": 553.0,
+            "type": "2"
+          },
+          {
+            "id": "16",
+            "name": "Aula B",
+            "code": "FINV-07EPTE013",
+            "capacity": "144",
+            "coordX": 1092.0,
+            "coordY": 267.0,
+            "type": "2"
+          },
+          {
+            "id": "17",
+            "name": "Aula C",
+            "code": "FINV-07EPTE007",
+            "capacity": "144",
+            "coordX": 810.0,
+            "coordY": 270.0,
+            "type": "2"
+          },
+          {
+            "id": "780",
+            "name": "Laboratorio di Ceramica",
+            "code": "FINV-07ES01009",
+            "capacity": "12",
+            "coordX": 1085.0,
+            "coordY": 267.0,
+            "type": "15"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_36_89.jpg",
+        "rooms": [
+          {
+            "id": "23",
+            "name": "Aula H",
+            "code": "FINV-07EP01001",
+            "capacity": "200",
+            "coordX": 1125.0,
+            "coordY": 592.0,
+            "type": "11"
+          },
+          {
+            "id": "24",
+            "name": "Aula I",
+            "code": "FINV-07EP01014",
+            "capacity": "200",
+            "coordX": 1116.0,
+            "coordY": 244.0,
+            "type": "11"
+          },
+          {
+            "id": "26",
+            "name": "Aula L",
+            "code": "FINV-07EP01021",
+            "capacity": "121",
+            "coordX": 784.0,
+            "coordY": 318.0,
+            "type": "2"
+          },
+          {
+            "id": "27",
+            "name": "Aula M",
+            "code": "FINV-07EP01022",
+            "capacity": "121",
+            "coordX": 788.0,
+            "coordY": 192.0,
+            "type": "2"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio D1": {
+    "name": "Edificio D1",
+    "area_code": "FINV-05E",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_48_68.jpg",
+        "rooms": [
+          {
+            "id": "291",
+            "name": "Aula A  - ECONOMIA",
+            "code": "FINV-05EPTE004",
+            "capacity": "246",
+            "coordX": 1077.0,
+            "coordY": 646.0,
+            "type": "12"
+          },
+          {
+            "id": "292",
+            "name": "Aula B - ECONOMIA",
+            "code": "FINV-05EPTE028",
+            "capacity": "190",
+            "coordX": 711.0,
+            "coordY": 244.0,
+            "type": "11"
+          },
+          {
+            "id": "290",
+            "name": "Aula Studio",
+            "code": "FINV-05EPTE003",
+            "capacity": "40",
+            "coordX": 1068.0,
+            "coordY": 854.0,
+            "type": "15"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_48_70.jpg",
+        "rooms": [
+          {
+            "id": "288",
+            "name": "Aula D",
+            "code": "FINV-05EP01005",
+            "capacity": "132",
+            "coordX": 1022.0,
+            "coordY": 403.0,
+            "type": "2"
+          },
+          {
+            "id": "289",
+            "name": "Aula Informatica - DISES",
+            "code": "FINV-05EP01018",
+            "capacity": "41",
+            "coordX": 584.0,
+            "coordY": 275.0,
+            "type": "5"
+          }
+        ]
+      },
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "479",
+            "name": "Aula del Consiglio",
+            "code": "FINV-05EP02003",
+            "capacity": "35",
+            "coordX": 979.0,
+            "coordY": 629.0,
+            "type": "1"
+          },
+          {
+            "id": "787",
+            "name": "CED DISA-MIS",
+            "code": "FINV-05EP02005",
+            "capacity": "20",
+            "coordX": 973.0,
+            "coordY": 448.0,
+            "type": "5"
+          },
+          {
+            "id": "480",
+            "name": "Sala Biblioteca 'Renato Mele'",
+            "code": "FINV-05EP02004",
+            "capacity": "20",
+            "coordX": 975.0,
+            "coordY": 825.0,
+            "type": "1"
+          }
+        ]
+      }
+    ]
+  },
+  "Convento Montoro": {
+    "name": "Convento Montoro",
+    "area_code": "MCONVENT",
+    "campus": "altro",
+    "address": "Montoro",
+    "floors": [
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "1094",
+            "name": "Aula A OrSa",
+            "code": "MCONVENTP01024",
+            "capacity": "16",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "1095",
+            "name": "Aula B OrSa",
+            "code": "MCONVENTP01015",
+            "capacity": "16",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "1084",
+            "name": "Laboratorio di Archeologia Digitale OrSa",
+            "code": "MCONVENTP01019",
+            "capacity": "16",
+            "coordX": null,
+            "coordY": null,
+            "type": "5"
+          },
+          {
+            "id": "1083",
+            "name": "Sala Conferenze sede Montoro",
+            "code": "MCONVENTP01009",
+            "capacity": "63",
+            "coordX": null,
+            "coordY": null,
+            "type": "8"
+          },
+          {
+            "id": "1096",
+            "name": "Sala Riunioni OrSa",
+            "code": "MCONVENTP01029",
+            "capacity": "16",
+            "coordX": null,
+            "coordY": null,
+            "type": "8"
+          }
+        ]
+      }
+    ]
+  },
+  "Campus Baronissi": {
+    "name": "Campus Baronissi",
+    "area_code": "BCORPOA0-C0-D1-L1",
+    "campus": "baronissi",
+    "address": "Campus di Baronissi",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_42_82.jpg",
+        "rooms": [
+          {
+            "id": "268",
+            "name": "Aula A010",
+            "code": "BCORPOA0PTEA010",
+            "capacity": "32",
+            "coordX": 971.0,
+            "coordY": 268.0,
+            "type": "1"
+          },
+          {
+            "id": "269",
+            "name": "Aula A011",
+            "code": "BCORPOA0PTEA011",
+            "capacity": "78",
+            "coordX": 1087.0,
+            "coordY": 161.0,
+            "type": "3"
+          },
+          {
+            "id": "708",
+            "name": "Aula Acquario",
+            "code": "BCORPOA0PTE001",
+            "capacity": "48",
+            "coordX": 617.0,
+            "coordY": 909.0,
+            "type": "1"
+          },
+          {
+            "id": "431",
+            "name": "Aula L2",
+            "code": "BCORPOL1PTE064",
+            "capacity": "150",
+            "coordX": 1133.0,
+            "coordY": 640.0,
+            "type": "2"
+          },
+          {
+            "id": "999",
+            "name": "AULA LAB 1B",
+            "code": "BCORPOL1PTE037",
+            "capacity": "150",
+            "coordX": null,
+            "coordY": null,
+            "type": "24"
+          },
+          {
+            "id": "851",
+            "name": "Aula Laboratorio 3B",
+            "code": "BCORPOL1PTE038",
+            "capacity": "36",
+            "coordX": 790.0,
+            "coordY": 634.0,
+            "type": "5"
+          },
+          {
+            "id": "850",
+            "name": "Aula Laboratorio 4B",
+            "code": "BCORPOL1PTE080",
+            "capacity": "36",
+            "coordX": 861.0,
+            "coordY": 648.0,
+            "type": "5"
+          },
+          {
+            "id": "869",
+            "name": "Aula Laboratorio 6A",
+            "code": "BCORPOL1PTE081",
+            "capacity": "36",
+            "coordX": null,
+            "coordY": null,
+            "type": "5"
+          },
+          {
+            "id": "844",
+            "name": "Aula Laboratorio 6B",
+            "code": "BCORPOL1PTE039",
+            "capacity": "40",
+            "coordX": 933.0,
+            "coordY": 649.0,
+            "type": "5"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_42_83.jpg",
+        "rooms": [
+          {
+            "id": "264",
+            "name": "Aula A012",
+            "code": "BCORPOA0P01A012",
+            "capacity": "78",
+            "coordX": 860.0,
+            "coordY": 430.0,
+            "type": "3"
+          },
+          {
+            "id": "263",
+            "name": "Aula A013",
+            "code": "BCORPOA0P01A011",
+            "capacity": "78",
+            "coordX": 1050.0,
+            "coordY": 247.0,
+            "type": "3"
+          },
+          {
+            "id": "265",
+            "name": "Aula A014",
+            "code": "BCORPOA0P01A014",
+            "capacity": "32",
+            "coordX": 720.0,
+            "coordY": 571.0,
+            "type": "1"
+          },
+          {
+            "id": "266",
+            "name": "Aula A015",
+            "code": "BCORPOA0P01A015",
+            "capacity": "32",
+            "coordX": 622.0,
+            "coordY": 667.0,
+            "type": "1"
+          },
+          {
+            "id": "267",
+            "name": "Aula A016",
+            "code": "BCORPOA0P01A016",
+            "capacity": "78",
+            "coordX": 473.0,
+            "coordY": 808.0,
+            "type": "3"
+          },
+          {
+            "id": "638",
+            "name": "Aula Banchetti",
+            "code": "BCORPOL1PTE079",
+            "capacity": "12",
+            "coordX": 275.0,
+            "coordY": 660.0,
+            "type": "1"
+          },
+          {
+            "id": "270",
+            "name": "Aula C31",
+            "code": "BCORPOC0P01C002",
+            "capacity": "196",
+            "coordX": 1244.0,
+            "coordY": 890.0,
+            "type": "11"
+          },
+          {
+            "id": "271",
+            "name": "Aula C38 - Capocelli",
+            "code": "BCORPOC0P01C014",
+            "capacity": "196",
+            "coordX": 487.0,
+            "coordY": 882.0,
+            "type": "11"
+          },
+          {
+            "id": "272",
+            "name": "Aula D003",
+            "code": "BCORPOD1P01003",
+            "capacity": "87",
+            "coordX": 505.0,
+            "coordY": 805.0,
+            "type": "3"
+          },
+          {
+            "id": "273",
+            "name": "Aula D005",
+            "code": "BCORPOD1P01005",
+            "capacity": "87",
+            "coordX": 816.0,
+            "coordY": 805.0,
+            "type": "3"
+          },
+          {
+            "id": "274",
+            "name": "Aula D11 - Aula delle Lauree",
+            "code": "BCORPOD1P01011",
+            "capacity": "176",
+            "coordX": 661.0,
+            "coordY": 471.0,
+            "type": "13"
+          },
+          {
+            "id": "275",
+            "name": "Aula L1",
+            "code": "BCORPOL1PTE023",
+            "capacity": "410",
+            "coordX": 448.0,
+            "coordY": 639.0,
+            "type": "12"
+          },
+          {
+            "id": "637",
+            "name": "Aula Simulazione",
+            "code": "BCORPOL1PTE078",
+            "capacity": "60",
+            "coordX": 201.0,
+            "coordY": 669.0,
+            "type": "1"
+          },
+          {
+            "id": "626",
+            "name": "Aula Sodano",
+            "code": "BCORPOC0P01C012",
+            "capacity": "65",
+            "coordX": 537.0,
+            "coordY": 550.0,
+            "type": "3"
+          },
+          {
+            "id": "495",
+            "name": "Laboratorio Bioingegneria",
+            "code": "BCORPOC0P01C008",
+            "capacity": "15",
+            "coordX": 980.0,
+            "coordY": 557.0,
+            "type": "4"
+          },
+          {
+            "id": "625",
+            "name": "Laboratorio Didattico Multimediale 1/A",
+            "code": "BCORPOL1PTE022",
+            "capacity": "0",
+            "coordX": 268.0,
+            "coordY": 592.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Polo Avellino": {
+    "name": "Polo Avellino",
+    "area_code": "APALCOM",
+    "campus": "altro",
+    "address": "Piazza del Popolo",
+    "floors": [
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "866",
+            "name": "Aula A1",
+            "code": "APALCOMPTE073",
+            "capacity": "40",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "867",
+            "name": "Aula A2",
+            "code": "APALCOMPTE079",
+            "capacity": "40",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "865",
+            "name": "Aula A5",
+            "code": "APALCOMPTE035",
+            "capacity": "40",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "868",
+            "name": "Laboratorio A4",
+            "code": "APALCOMPTE057",
+            "capacity": "24",
+            "coordX": null,
+            "coordY": null,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio D2": {
+    "name": "Edificio D2",
+    "area_code": "FINV-06A",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_49_31.jpg",
+        "rooms": [
+          {
+            "id": "294",
+            "name": "Aula Angelo Saturno (Ex SP1)",
+            "code": "FINV-06AP01022",
+            "capacity": "90",
+            "coordX": 1074.0,
+            "coordY": 311.0,
+            "type": "3"
+          },
+          {
+            "id": "295",
+            "name": "Aula del Consiglio - 'Vittorio Foa'",
+            "code": "FINV-06AP01035",
+            "capacity": "64",
+            "coordX": 571.0,
+            "coordY": 480.0,
+            "type": "16"
+          },
+          {
+            "id": "297",
+            "name": "Aula delle Lauree - 'Gabriele De Rosa'",
+            "code": "FINV-06AP01055",
+            "capacity": "90",
+            "coordX": 1161.0,
+            "coordY": 816.0,
+            "type": "13"
+          },
+          {
+            "id": "296",
+            "name": "Aula Multimediale D2LAB",
+            "code": "FINV-06AP01036",
+            "capacity": "76",
+            "coordX": 573.0,
+            "coordY": 275.0,
+            "type": "3"
+          },
+          {
+            "id": "293",
+            "name": "Aula Valdo D'Arienzo (Ex SP2)",
+            "code": "FINV-06AP01021",
+            "capacity": "90",
+            "coordX": 1072.0,
+            "coordY": 470.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_49_30.jpg",
+        "rooms": [
+          {
+            "id": "303",
+            "name": "Aula SP3",
+            "code": "FINV-06APTE024",
+            "capacity": "135",
+            "coordX": 1023.0,
+            "coordY": 377.0,
+            "type": "2"
+          },
+          {
+            "id": "304",
+            "name": "Aula SP4",
+            "code": "FINV-06APTE025",
+            "capacity": "135",
+            "coordX": 623.0,
+            "coordY": 369.0,
+            "type": "2"
+          },
+          {
+            "id": "305",
+            "name": "Aula SP6",
+            "code": "FINV-06APTE044",
+            "capacity": "62",
+            "coordX": 613.0,
+            "coordY": 841.0,
+            "type": "3"
+          },
+          {
+            "id": "302",
+            "name": "Aula SPA",
+            "code": "FINV-06APTE003",
+            "capacity": "339",
+            "coordX": 1124.0,
+            "coordY": 869.0,
+            "type": "12"
+          },
+          {
+            "id": "306",
+            "name": "Laboratorio SP5",
+            "code": "FINV-06APTE045",
+            "capacity": "24",
+            "coordX": 616.0,
+            "coordY": 705.0,
+            "type": "5"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Seminterrato / Lab",
+        "map_image": "maps/mappa_49_29.jpg",
+        "rooms": [
+          {
+            "id": "300",
+            "name": "Aula SP7",
+            "code": "FINV-06APS1009",
+            "capacity": "27",
+            "coordX": 502.0,
+            "coordY": 813.0,
+            "type": "1"
+          },
+          {
+            "id": "301",
+            "name": "Aula SP8",
+            "code": "FINV-06APS1010",
+            "capacity": "42",
+            "coordX": 551.0,
+            "coordY": 673.0,
+            "type": "1"
+          },
+          {
+            "id": "299",
+            "name": "Aula SP9",
+            "code": "FINV-06APS1008",
+            "capacity": "24",
+            "coordX": 650.0,
+            "coordY": 818.0,
+            "type": "1"
+          },
+          {
+            "id": "298",
+            "name": "Aula SPB",
+            "code": "FINV-06APS1003",
+            "capacity": "250",
+            "coordX": 1030.0,
+            "coordY": 838.0,
+            "type": "12"
+          }
+        ]
+      }
+    ]
+  },
+  "Aule virtuali": {
+    "name": "Aule virtuali",
+    "area_code": "VIRT",
+    "campus": "fisciano",
+    "address": "",
+    "floors": [
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "507",
+            "name": "Aula B2",
+            "code": "VRT.DISA-MIS.01",
+            "capacity": "40",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "484",
+            "name": "Aula Caserta",
+            "code": "CASERTA",
+            "capacity": "100",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "1079",
+            "name": "Aula Cilento Virtuale",
+            "code": "VRT-03CPTE024",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "45",
+            "name": "Aula da concordare con il docente",
+            "code": "virtuale",
+            "capacity": "10",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "786",
+            "name": "Aula F4 - Virtuale",
+            "code": "VRT.MAT.07",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "43",
+            "name": "Aula Laboratorio (ing)",
+            "code": "Lab",
+            "capacity": "10",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "632",
+            "name": "Aula Microsoft Teams",
+            "code": "VRT.MAT.02",
+            "capacity": "1",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "1080",
+            "name": "Aula P0101 6 Vrtuale",
+            "code": "VRT.P0101 6",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "776",
+            "name": "Aula P6 - Virtuale",
+            "code": "VRT.MAT.04",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "789",
+            "name": "Aula S2 - Virtuale",
+            "code": "VRT.MAT.08",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "1000",
+            "name": "Aula Virtuale Semestre Filtro",
+            "code": "VRT.MED.01",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "672",
+            "name": "Aula VRT DISUFF 01",
+            "code": "VRT.DISUFF.01",
+            "capacity": "0",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "673",
+            "name": "Aula VRT DISUFF 02",
+            "code": "VRT.DISUFF.02",
+            "capacity": "0",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "674",
+            "name": "Aula VRT DISUFF 03",
+            "code": "VRT.DISUFF.03",
+            "capacity": "0",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "675",
+            "name": "Aula VRT DISUFF 04",
+            "code": "VRT.DISUFF.04",
+            "capacity": "0",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "771",
+            "name": "Aula VRT SSPL 01",
+            "code": "VRT.SSPL.01",
+            "capacity": "100",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "772",
+            "name": "Aula VRT SSPL 02",
+            "code": "VRT.SSPL.02",
+            "capacity": "100",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "548",
+            "name": "Centro Linguistico di Ateneo",
+            "code": "VRT.MAT.03",
+            "capacity": "10",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "778",
+            "name": "Laboratorio 12 DF - Virtuale",
+            "code": "VRT.MAT.06",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "777",
+            "name": "Laboratorio 9 DF - Virtuale",
+            "code": "VRT.MAT.05",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "33",
+            "name": "Laboratorio di Area",
+            "code": "LabAreaIng",
+            "capacity": "20",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "997",
+            "name": "Laboratorio Hopper - Virtuale",
+            "code": "VRT.MAT.10",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "857",
+            "name": "Laboratorio Sammet",
+            "code": "VRT.MAT.09",
+            "capacity": "50",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "974",
+            "name": "SOS Aula 1 - Marrazzo [VIRTUALE]",
+            "code": "VRT.SOS.Aula1Marrazzo",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "987",
+            "name": "SOS Aula 1 B1 [VIRTUALE]",
+            "code": "VRT.SOS.1B1",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "978",
+            "name": "SOS Aula 1 F1 [VIRTUALE]",
+            "code": "VRT.SOS.1F1",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "983",
+            "name": "SOS Aula 2 B1 [VIRTUALE]",
+            "code": "VRT.SOS.2B1",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "975",
+            "name": "SOS Aula 2 F1 [VIRTUALE]",
+            "code": "VRT.SOS.AULA2F1",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "977",
+            "name": "SOS Aula 6 D3[VIRTUALE]",
+            "code": "VRT.SOS.6",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "976",
+            "name": "SOS Aula A B1 [VIRTUALE]",
+            "code": "VRT.SOS.A",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "988",
+            "name": "SOS Aula A D1 [VIRTUALE]",
+            "code": "VRT.SOS.A1",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "1054",
+            "name": "SOS Aula B D1 [VIRTUALE]",
+            "code": "VRT.SOS.B",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "926",
+            "name": "SOS Aula C11 [VIRTUALE]",
+            "code": "VRT.SOS.C11",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "984",
+            "name": "SOS Aula EX CENTRO STAMPA [VIRTUALE]",
+            "code": "VRT.SOS.EXCS",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "989",
+            "name": "SOS Aula H [VIRTUALE]",
+            "code": "VRT.SOS.H",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "990",
+            "name": "SOS Aula I [VIRTUALE]",
+            "code": "VRT.SOS.I",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "982",
+            "name": "SOS Aula P1 [VIRTUALE]",
+            "code": "VRT.SOS.P1",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "980",
+            "name": "SOS Aula P2 [VIRTUALE]",
+            "code": "VRT.SOS.P2",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "981",
+            "name": "SOS Aula P3 [VIRTUALE]",
+            "code": "VRT.SOS.P3",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "928",
+            "name": "SOS Aula Sannio [VIRTUALE]",
+            "code": "VRT.SOS.BV",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "985",
+            "name": "SOS Aula SPA [VIRTUALE]",
+            "code": "VRT.SOS.SPA",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "979",
+            "name": "SOS Aula SPB [VIRTUALE]",
+            "code": "VRT.SOS.SPB",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "927",
+            "name": "SOS Aula Vanvitelli [VIRTUALE]",
+            "code": "VRT.SOS.CE",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "992",
+            "name": "SOS/60 CFU Aula Generica",
+            "code": "VRT.SOS.GENERICA",
+            "capacity": "1000",
+            "coordX": null,
+            "coordY": null,
+            "type": "16"
+          },
+          {
+            "id": "482",
+            "name": "Studio Docente Fisica",
+            "code": "VRT.DF.01",
+            "capacity": "10",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          },
+          {
+            "id": "497",
+            "name": "Studio Docente Matematica",
+            "code": "VRT.MAT.01",
+            "capacity": "10",
+            "coordX": null,
+            "coordY": null,
+            "type": "14"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio A1 - Rettorato": {
+    "name": "Edificio A1 - Rettorato",
+    "area_code": "FRE-RATO",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_53_66.jpg",
+        "rooms": [
+          {
+            "id": "382",
+            "name": "Sala Riunioni CSI",
+            "code": "FRE-RATOP01011",
+            "capacity": "30",
+            "coordX": 313.0,
+            "coordY": 888.0,
+            "type": "8"
+          }
+        ]
+      },
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "442",
+            "name": "Aula della Formazione",
+            "code": "FRE-RATOP03119",
+            "capacity": "47",
+            "coordX": 527.0,
+            "coordY": 255.0,
+            "type": "8"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio C1": {
+    "name": "Edificio C1",
+    "area_code": "FINV-03C",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_46_42.jpg",
+        "rooms": [
+          {
+            "id": "283",
+            "name": "Aula delle Lauree - Nicola Cilento",
+            "code": "FINV-03CPTE024",
+            "capacity": "196",
+            "coordX": 710.0,
+            "coordY": 427.0,
+            "type": "13"
+          },
+          {
+            "id": "281",
+            "name": "Aula Pecoraro",
+            "code": "FINV-03CPTE003",
+            "capacity": "87",
+            "coordX": 1056.0,
+            "coordY": 862.0,
+            "type": "3"
+          },
+          {
+            "id": "282",
+            "name": "Auletta del Consiglio",
+            "code": "FINV-03CPTE023",
+            "capacity": "10",
+            "coordX": 1137.0,
+            "coordY": 416.0,
+            "type": "16"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio F2": {
+    "name": "Edificio F2",
+    "area_code": "FINV-12B",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_50_36.jpg",
+        "rooms": [
+          {
+            "id": "316",
+            "name": "Aula F1",
+            "code": "FINV-12BPTE040",
+            "capacity": "116",
+            "coordX": 932.0,
+            "coordY": 183.0,
+            "type": "2"
+          },
+          {
+            "id": "315",
+            "name": "Aula F2",
+            "code": "FINV-12BPTE037",
+            "capacity": "87",
+            "coordX": 1163.0,
+            "coordY": 146.0,
+            "type": "3"
+          },
+          {
+            "id": "314",
+            "name": "Aula F3",
+            "code": "FINV-12BPTE036",
+            "capacity": "79",
+            "coordX": 1182.0,
+            "coordY": 252.0,
+            "type": "3"
+          },
+          {
+            "id": "313",
+            "name": "Aula F4",
+            "code": "FINV-12BPTE033",
+            "capacity": "109",
+            "coordX": 1191.0,
+            "coordY": 391.0,
+            "type": "2"
+          },
+          {
+            "id": "312",
+            "name": "Aula F5",
+            "code": "FINV-12BPTE031",
+            "capacity": "98",
+            "coordX": 1217.0,
+            "coordY": 597.0,
+            "type": "3"
+          },
+          {
+            "id": "311",
+            "name": "Aula F6",
+            "code": "FINV-12BPTE030",
+            "capacity": "69",
+            "coordX": 1080.0,
+            "coordY": 610.0,
+            "type": "3"
+          },
+          {
+            "id": "310",
+            "name": "Aula F7",
+            "code": "FINV-12BPTE029",
+            "capacity": "81",
+            "coordX": 950.0,
+            "coordY": 609.0,
+            "type": "3"
+          },
+          {
+            "id": "309",
+            "name": "Aula F8",
+            "code": "FINV-12BPTE028",
+            "capacity": "177",
+            "coordX": 782.0,
+            "coordY": 593.0,
+            "type": "11"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Seminterrato / Lab",
+        "map_image": "maps/mappa_50_35.jpg",
+        "rooms": [
+          {
+            "id": "317",
+            "name": "Laboratorio Hopper",
+            "code": "FINV-12BS01027",
+            "capacity": "47",
+            "coordX": 823.0,
+            "coordY": 608.0,
+            "type": "5"
+          },
+          {
+            "id": "492",
+            "name": "Laboratorio L11",
+            "code": "FINV-12BS01049",
+            "capacity": "29",
+            "coordX": 1211.0,
+            "coordY": 234.0,
+            "type": "5"
+          },
+          {
+            "id": "318",
+            "name": "Laboratorio Sammet",
+            "code": "FINV-12BS01040",
+            "capacity": "52",
+            "coordX": 1159.0,
+            "coordY": 610.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio A2 - Aula Magna e Teatro": {
+    "name": "Edificio A2 - Aula Magna e Teatro",
+    "area_code": "FAUL-MAG",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_54_63.jpg",
+        "rooms": [
+          {
+            "id": "383",
+            "name": "Aula Magna - Platea Inferiore",
+            "code": "FAUL-MAGP02015",
+            "capacity": "256",
+            "coordX": 965.0,
+            "coordY": 722.0,
+            "type": "13"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_54_64.jpg",
+        "rooms": [
+          {
+            "id": "384",
+            "name": "Sala del Consiglio",
+            "code": "FAUL-MAGP04012",
+            "capacity": "40",
+            "coordX": 838.0,
+            "coordY": 528.0,
+            "type": "16"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_54_65.jpg",
+        "rooms": [
+          {
+            "id": "781",
+            "name": "Teatro",
+            "code": "FTEATROPTE033",
+            "capacity": "300",
+            "coordX": 979.0,
+            "coordY": 417.0,
+            "type": "22"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio L2": {
+    "name": "Edificio L2",
+    "area_code": "FL-ING03",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Seminterrato / Lab",
+        "map_image": "maps/mappa_3_50.jpg",
+        "rooms": [
+          {
+            "id": "254",
+            "name": "Aula multimediale Lab. Strutture",
+            "code": "FL-ING03S01002",
+            "capacity": "30",
+            "coordX": 245.0,
+            "coordY": 406.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio F3": {
+    "name": "Edificio F3",
+    "area_code": "FINV-13C",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_51_54.jpg",
+        "rooms": [
+          {
+            "id": "915",
+            "name": "Aula P0",
+            "code": "FINV13C-PS01024",
+            "capacity": "40",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "324",
+            "name": "Aula P10",
+            "code": "FINV-13CP01028",
+            "capacity": "79",
+            "coordX": 592.0,
+            "coordY": 511.0,
+            "type": "3"
+          },
+          {
+            "id": "322",
+            "name": "Aula P11",
+            "code": "FINV-13CP01003",
+            "capacity": "80",
+            "coordX": 1087.0,
+            "coordY": 474.0,
+            "type": "3"
+          },
+          {
+            "id": "323",
+            "name": "Aula P7",
+            "code": "FINV-13CP01004",
+            "capacity": "80",
+            "coordX": 1088.0,
+            "coordY": 307.0,
+            "type": "3"
+          },
+          {
+            "id": "326",
+            "name": "Aula P8",
+            "code": "FINV-13CP01030",
+            "capacity": "40",
+            "coordX": 667.0,
+            "coordY": 299.0,
+            "type": "1"
+          },
+          {
+            "id": "325",
+            "name": "Aula P9",
+            "code": "FINV-13CP01029",
+            "capacity": "38",
+            "coordX": 485.0,
+            "coordY": 319.0,
+            "type": "1"
+          },
+          {
+            "id": "321",
+            "name": "Laboratorio P12 - Multimediale",
+            "code": "FINV-13CP01002",
+            "capacity": "28",
+            "coordX": 1086.0,
+            "coordY": 696.0,
+            "type": "5"
+          },
+          {
+            "id": "320",
+            "name": "Laboratorio P13",
+            "code": "FINV-13CP01001",
+            "capacity": "48",
+            "coordX": 1078.0,
+            "coordY": 933.0,
+            "type": "5"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_51_55.jpg",
+        "rooms": [
+          {
+            "id": "331",
+            "name": "Aula P14",
+            "code": "FINV-13CP02007",
+            "capacity": "24",
+            "coordX": 1205.0,
+            "coordY": 461.0,
+            "type": "1"
+          },
+          {
+            "id": "328",
+            "name": "Aula P15",
+            "code": "FINV-13CP02003",
+            "capacity": "25",
+            "coordX": 1200.0,
+            "coordY": 808.0,
+            "type": "1"
+          },
+          {
+            "id": "327",
+            "name": "Aula P16",
+            "code": "FINV-13CP02002",
+            "capacity": "28",
+            "coordX": 982.0,
+            "coordY": 1015.0,
+            "type": "1"
+          },
+          {
+            "id": "333",
+            "name": "Aula P17",
+            "code": "FINV-13CP02022",
+            "capacity": "50",
+            "coordX": 491.0,
+            "coordY": 461.0,
+            "type": "1"
+          },
+          {
+            "id": "330",
+            "name": "Aula P20",
+            "code": "FINV-13CP02006",
+            "capacity": "40",
+            "coordX": 985.0,
+            "coordY": 638.0,
+            "type": "1"
+          },
+          {
+            "id": "329",
+            "name": "Aula P21",
+            "code": "FINV-13CP02004",
+            "capacity": "40",
+            "coordX": 989.0,
+            "coordY": 820.0,
+            "type": "1"
+          },
+          {
+            "id": "334",
+            "name": "P18",
+            "code": "FINV-13CP02023",
+            "capacity": "36",
+            "coordX": 672.0,
+            "coordY": 442.0,
+            "type": "23"
+          },
+          {
+            "id": "332",
+            "name": "P19",
+            "code": "FINV-13CP02008",
+            "capacity": "40",
+            "coordX": 990.0,
+            "coordY": 450.0,
+            "type": "23"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_51_53.jpg",
+        "rooms": [
+          {
+            "id": "338",
+            "name": "Aula P3 - Parmenter",
+            "code": "FINV-13CPTE007",
+            "capacity": "206",
+            "coordX": 556.0,
+            "coordY": 359.0,
+            "type": "12"
+          },
+          {
+            "id": "337",
+            "name": "Aula P4 - Marinaro",
+            "code": "FINV-13CPTE004",
+            "capacity": "191",
+            "coordX": 991.0,
+            "coordY": 369.0,
+            "type": "11"
+          },
+          {
+            "id": "336",
+            "name": "Aula P5 - M. Transirico",
+            "code": "FINV-13CPTE003",
+            "capacity": "85",
+            "coordX": 1005.0,
+            "coordY": 657.0,
+            "type": "3"
+          },
+          {
+            "id": "335",
+            "name": "Aula P6",
+            "code": "FINV-13CPTE002",
+            "capacity": "99",
+            "coordX": 1000.0,
+            "coordY": 844.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "1° Piano",
+        "map_image": "maps/mappa_51_52.jpg",
+        "rooms": [
+          {
+            "id": "339",
+            "name": "Aula P1 - Aula Magna G. Sodano",
+            "code": "FINV-13CS01001",
+            "capacity": "200",
+            "coordX": 1077.0,
+            "coordY": 956.0,
+            "type": "13"
+          },
+          {
+            "id": "340",
+            "name": "Aula P2",
+            "code": "FINV-13CS01025",
+            "capacity": "206",
+            "coordX": 1076.0,
+            "coordY": 459.0,
+            "type": "12"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio F4": {
+    "name": "Edificio F4",
+    "area_code": "FINV-14D",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_65_87.jpg",
+        "rooms": [
+          {
+            "id": "996",
+            "name": "Aula P01027",
+            "code": "FINV-14DP01027",
+            "capacity": "152",
+            "coordX": 619.0,
+            "coordY": 130.0,
+            "type": "2"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_65_88.jpg",
+        "rooms": [
+          {
+            "id": "993",
+            "name": "Aula PTE013",
+            "code": "FINV-14DPTE013",
+            "capacity": "158",
+            "coordX": 198.0,
+            "coordY": 305.0,
+            "type": "2"
+          },
+          {
+            "id": "994",
+            "name": "Aula PTE014",
+            "code": "FINV-14DPTE014",
+            "capacity": "148",
+            "coordX": 197.0,
+            "coordY": 115.0,
+            "type": "2"
+          },
+          {
+            "id": "995",
+            "name": "Aula PTE015",
+            "code": "FINV-14DPTE015",
+            "capacity": "159",
+            "coordX": 372.0,
+            "coordY": 118.0,
+            "type": "2"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio B2": {
+    "name": "Edificio B2",
+    "area_code": "FINV-02B",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_56_90.jpg",
+        "rooms": [
+          {
+            "id": "1065",
+            "name": "B2P01005",
+            "code": "FINV-02BP01005",
+            "capacity": "78",
+            "coordX": 351.0,
+            "coordY": 202.0,
+            "type": "3"
+          },
+          {
+            "id": "1066",
+            "name": "B2P01008",
+            "code": "FINV-02BP01008",
+            "capacity": "96",
+            "coordX": 336.0,
+            "coordY": 113.0,
+            "type": "3"
+          },
+          {
+            "id": "1069",
+            "name": "B2P01036",
+            "code": "FINV-02BP01036",
+            "capacity": "36",
+            "coordX": 92.0,
+            "coordY": 274.0,
+            "type": "1"
+          },
+          {
+            "id": "1067",
+            "name": "B2P01040",
+            "code": "FINV-02BP01040",
+            "capacity": "60",
+            "coordX": 164.0,
+            "coordY": 355.0,
+            "type": "3"
+          }
+        ]
+      },
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_56_67.jpg",
+        "rooms": [
+          {
+            "id": "1070",
+            "name": "B2PTE008",
+            "code": "FINV-02BPTE008",
+            "capacity": "192",
+            "coordX": null,
+            "coordY": null,
+            "type": "11"
+          },
+          {
+            "id": "1071",
+            "name": "B2PTE017",
+            "code": "FINV-02BPTE017",
+            "capacity": "48",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "1072",
+            "name": "B2PTE021",
+            "code": "FINV-02BPTE021",
+            "capacity": "99",
+            "coordX": null,
+            "coordY": null,
+            "type": "3"
+          },
+          {
+            "id": "1073",
+            "name": "B2PTE022",
+            "code": "FINV-02BPTE022",
+            "capacity": "80",
+            "coordX": null,
+            "coordY": null,
+            "type": "3"
+          },
+          {
+            "id": "1074",
+            "name": "B2PTE026",
+            "code": "FINV-02BPTE026",
+            "capacity": "90",
+            "coordX": null,
+            "coordY": null,
+            "type": "3"
+          },
+          {
+            "id": "1068",
+            "name": "B2PTE027",
+            "code": "FINV-02BPTE027",
+            "capacity": "96",
+            "coordX": 674.0,
+            "coordY": 347.0,
+            "type": "3"
+          },
+          {
+            "id": "481",
+            "name": "Laboratorio DISA-MIS",
+            "code": "FINV-02BPTE038",
+            "capacity": "100",
+            "coordX": 629.0,
+            "coordY": 731.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio L8": {
+    "name": "Edificio L8",
+    "area_code": "FL-ING08",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Altre Aule / Senza Mappa",
+        "map_image": "",
+        "rooms": [
+          {
+            "id": "1062",
+            "name": "L8PTE005",
+            "code": "FL-ING08PTE005",
+            "capacity": "20",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "1063",
+            "name": "L8PTE011",
+            "code": "FL-ING08PTE011",
+            "capacity": "24",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          },
+          {
+            "id": "1064",
+            "name": "L8PTE012",
+            "code": "FL-ING08PTE012",
+            "capacity": "40",
+            "coordX": null,
+            "coordY": null,
+            "type": "1"
+          }
+        ]
+      }
+    ]
+  },
+  "Edificio I1": {
+    "name": "Edificio I1",
+    "area_code": "FL-INGSA",
+    "campus": "fisciano",
+    "address": "Campus di Fisciano",
+    "floors": [
+      {
+        "floor_label": "Piano Terra",
+        "map_image": "maps/mappa_55_49.jpg",
+        "rooms": [
+          {
+            "id": "31",
+            "name": "Lab di Ing Sanitaria",
+            "code": "FL-INGSAPTE032",
+            "capacity": "30",
+            "coordX": 853.0,
+            "coordY": 947.0,
+            "type": "5"
+          }
+        ]
+      }
+    ]
+  }
+}

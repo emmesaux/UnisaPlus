@@ -34,9 +34,19 @@ Nessun server intermedio, nessun tracciamento: l'app dialoga direttamente dal tu
 - **Appelli d'esame e Bacheca esiti** — Consultazione degli appelli disponibili, delle prenotazioni attive (con ricevuta e posto) e della bacheca esiti con lo stato di verbalizzazione o pubblicazione del voto.
 - **Situazione Tasse (Esse3)** — Controllo immediato delle fatture e dei contributi universitari (pagati, in scadenza o scaduti) con importi, IUV/bollettino, causale e semaforo di stato.
 - **Mensa ADISURC (Saldo e QR dinamico)** — Accesso SPID/CIE al servizio ristorazione ADISURC con lettura automatica del saldo borsellino, codice utente e generazione del **QR code dinamico** (aggiornato automaticamente ogni 2 secondi) valido ai tornelli della mensa, senza bisogno di scansionare un secondo dispositivo per associare il borsellino.
+- **Mappa interattiva dei Campus & Aule cliccabili** — Mappa 2D interattiva dei campus di Fisciano e Baronissi in stile *EasyMap*: tocca un edificio per aprire la planimetria reale di piano con i pin di tutte le aule cliccabili, capienza e semaforo di disponibilità in tempo reale.
+- **Piano di Studi Esse3** — Visualizzazione completa del piano di studi ufficiale diviso per anno di corso, avanzamento CFU e stato di approvazione/frequenza degli insegnamenti.
+- **Servizi e collegamenti utili** — Hub rapido con link diretti e verificati a Biblioteche di Ateneo, ADISURC Campania, CUS Salerno, CLA, Tirocini & Placement e supporto Disabilità/DSA.
 - **Aule libere in tempo reale** — Mappa dello stato di occupazione di tutte le aule del campus (per edificio e fascia oraria) basata sui dati live di `EasyRoom`.
 - **Avvisi di Ateneo e Dipartimento** — Doppia bacheca aggiornata in tempo reale con i comunicati ufficiali dell'Ateneo (`web.unisa.it`) e la bacheca didattica del proprio Dipartimento.
 - **Supporto multi-carriera** — Se hai più matricole o carriere attive (es. triennale conclusa e magistrale in corso), puoi passare da una carriera all'altra in qualsiasi momento.
+
+## Design System, Icone & Animazioni (In Sviluppo)
+
+Il progetto è pensato per crescere insieme alla community studentesca con un'identità grafica moderna e distintiva:
+- **Stile dedicato & UI proprietaria**: evoluzione continua verso un design system su misura, con tipografia editoriale, palette mediterranea e contrasti ad alta leggibilità.
+- **Set di icone dedicato**: creazione di un set completo di icone vettoriali proprietarie per identificare aule, laboratori, biblioteche, mense e trasporti.
+- **Animazioni & micro-interazioni**: arricchimento dell'esperienza con animazioni vettoriali fluide, feedback aptico e transizioni animate per il caricamento delle mappe, il calcolo della media di laurea e la scansione dei QR code.
 
 ## Con e senza accesso
 
@@ -44,9 +54,11 @@ Non tutto richiede il login universitario. Anche dalla schermata iniziale, **sen
 
 | Funzione senza login | Cosa permette di fare |
 |---|---|
+| **Mappa dei Campus ed Aule** | Esplora la mappa interattiva degli edifici di Fisciano e Baronissi e consulta le planimetrie di piano con le aule cliccabili |
 | **Rileva e consulta presenze** | Timbra la presenza in aula inserendo una o più matricole e inquadrando il QR del docente (ricorda automaticamente l'ultima matricola usata) e consulta il riepilogo frequenza corso per corso |
 | **Aule libere** | Verifica quali aule di ciascun edificio sono libere adesso o per il resto della giornata |
 | **Orario corsi** | Scegli corso di laurea, anno e partizione per consultare l'orario completo delle lezioni |
+| **Servizi e link utili** | Consulta le informazioni su Biblioteche, ADISURC, CUS Salerno e contatti di Ateneo |
 
 ## Servizi integrati
 
