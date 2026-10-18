@@ -103,7 +103,7 @@ jobs:
               '<plist version="1.0">',
               '<dict>',
               '\t<key>method</key>',
-              '\t<string>app-store-connect</string>',
+              '\t<string>app-store</string>',
               '\t<key>signingStyle</key>',
               '\t<string>manual</string>',
               '\t<key>teamID</key>',

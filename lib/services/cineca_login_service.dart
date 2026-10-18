@@ -73,9 +73,9 @@ class CinecaLoginService {
     final config = await _fetchOAuthConfig();
     final state = _randomState();
     return '$idpAuthorizeUrl?response_type=code'
-        '&client_id=${config.clientId}'
-        '&redirect_uri=$redirectUri'
-        '&scope=${Uri.encodeQueryComponent(config.scope)}'
+        '&client_id=${Uri.encodeComponent(config.clientId)}'
+        '&redirect_uri=${Uri.encodeComponent(redirectUri)}'
+        '&scope=${Uri.encodeComponent(config.scope)}'
         '&state=$state';
   }
 
