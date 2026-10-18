@@ -38,9 +38,21 @@ Unisa Plus è un'applicazione mobile open source, non ufficiale e indipendente, 
 
 ---
 
-### 4. Conservazione e Cancellazione dei Dati
-- L'utente ha il pieno e totale controllo sui propri dati in qualsiasi istante.
-- È possibile eliminare istantaneamente tutte le informazioni salvate in locale premendo il pulsante **"Logout"** o **"Cancella dati"** all'interno dell'app, oppure disinstallando l'applicazione dal proprio smartphone.
+### 4. Conservazione e Cancellazione dell'Account e dei Dati (Account & Data Deletion)
+Unisa Plus non gestisce server propri né crea account proprietari: l'autenticazione è delegata ai servizi istituzionali dell'Ateneo.
+
+Per eliminare tutti i dati e le sessioni associate a **Unisa Plus**:
+1. **Eliminazione immediata in-app:**
+   - Apri l'app **Unisa Plus**
+   - Vai nelle Impostazioni / Profilo
+   - Tocca **"Logout"** o **"Cancella dati"**
+   - Tutti i token di sessione, la matricola e i dati in cache vengono cancellati istantaneamente e definitivamente dal dispositivo (0 giorni di conservazione).
+2. **Richiesta di cancellazione via web / supporto:**
+   - Poiché non archiviamo dati su server cloud esterni di nostra proprietà, cancellando i dati in locale o disinstallando l'applicazione nessun dato rimane memorizzato.
+   - Per qualsiasi richiesta formale di verifica o assistenza sulla rimozione dei dati locali/supporto, puoi aprire una richiesta sul repository ufficiale GitHub:  
+     👉 [https://github.com/emmesaux/UnisaPlus/issues](https://github.com/emmesaux/UnisaPlus/issues) o contattare lo sviluppatore all'indirizzo email indicato nella scheda dello Store.
+   - **Tipi di dati eliminati:** Credenziali cifrate in locale, numero di matricola, corsi e voti salvati in cache.
+   - **Dati conservati:** Nessuno.
 
 ---
 
@@ -52,3 +64,4 @@ Unisa Plus è un progetto open source indipendente creato dalla community per gl
 ### 6. Contatti
 Per domande, segnalazioni o chiarimenti relativi a questa Informativa sulla Privacy, puoi aprire un'issue o contattare i mantainer tramite il repository ufficiale:  
 👉 [https://github.com/emmesaux/UnisaPlus](https://github.com/emmesaux/UnisaPlus)
+
