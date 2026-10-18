@@ -23,13 +23,13 @@ class AppLogo extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: AppColors.mare,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: AppColors.inchiostro.withValues(alpha: 0.18),
-            blurRadius: size * 0.18,
-            offset: Offset(0, size * 0.06),
+            color: AppColors.inchiostro.withValues(alpha: 0.12),
+            blurRadius: size * 0.15,
+            offset: Offset(0, size * 0.05),
           ),
         ],
       ),

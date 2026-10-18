@@ -9,7 +9,15 @@ import 'mensa_qr_service.dart';
 class WalletAdisurc {
   final double saldo;
   final String valuta;
-  WalletAdisurc({required this.saldo, this.valuta = 'EUR'});
+  final bool fromCache;
+  final DateTime? updatedAt;
+
+  WalletAdisurc({
+    required this.saldo,
+    this.valuta = 'EUR',
+    this.fromCache = false,
+    this.updatedAt,
+  });
 }
 
 class AdisurcLoginSession {
@@ -41,32 +49,49 @@ class AdisurcService {
   static const _kSidSrm = 'adisurc_sid_srm';
   static const _kMensaKey = 'adisurc_mensa_key';
   static const _kCustomAuth = 'adisurc_custom_auth';
+  static const _kInfoRistAuth = 'adisurc_info_rist_auth';
+  static const _kCachedSaldo = 'adisurc_cached_saldo';
+  static const _kCachedSaldoAt = 'adisurc_cached_saldo_at';
+  static const _kCachedCard = 'adisurc_cached_card';
 
   final ValueNotifier<bool> isDemo = ValueNotifier(false);
 
-  bool _restored = false;
+  Future<void>? _restoreFuture;
 
   /// Sessione `Custom-App-Authorization` ottenuta da `DEVICE-MENSA/user/init`
   /// o dall'associazione QR.
   String? _sessionToken;
-  bool get associato => (_mensaKey != null && _mensaKey!.isNotEmpty) || _sessionToken != null;
+
+  /// Sessione `Custom-App-Authorization` specifica per `INFO-RISTORAZIONE`
+  /// (usata da `badgeinfo` per leggere il saldo).
+  String? _infoRistorazioneToken;
+
+  bool get associato =>
+      (_mensaKey != null && _mensaKey!.isNotEmpty) ||
+      _sessionToken != null ||
+      cartaMensa != null;
 
   /// Credenziali della sessione web ADiSURC (dal login SPID/CIE).
   String? _accessToken;
   String? _flag0;
   String? _accessTokenSRM;
   String? _sidSRM;
-  bool get loggato => _accessToken != null && _flag0 != null;
+  bool get loggato =>
+      (_accessToken != null && _flag0 != null) ||
+      _infoRistorazioneToken != null ||
+      _cachedSaldo != null;
 
   /// Chiave carta mensa (`KEY` del QR di associazione): serve a richiedere
   /// il JWT della carta per generare il QR mensa reale (TOTP).
   String? _mensaKey;
 
-  /// Dati carta mensa correnti (null finché non ottenuti dal server).
+  /// Dati carta mensa correnti (null finché non ottenuti dal server o cache).
   MensaCard? cartaMensa;
 
-  /// Saldo eventualmente estratto dal payload JWT della carta.
+  /// Saldo eventualmente estratto dal payload JWT della carta o persistito.
   double? _saldoDaJwt;
+  double? _cachedSaldo;
+  DateTime? _cachedSaldoAt;
 
   // Endpoint reali del gateway mensa ADiSURC (usati dall'app Campus / ADISURC.EAT).
   static const _mensaGatewayBase =
@@ -83,29 +108,53 @@ class AdisurcService {
   static const _serverBase =
       'https://adisurc-ol.dirittoallostudio.it/apps/V3.1';
 
-  /// Ripristina le credenziali e la chiave QR salvate nello storage sicuro.
-  Future<void> restoreSession() async {
-    if (_restored) return;
-    _restored = true;
+  Future<String?> _readKey(String key) => _storage
+      .read(key: key)
+      .timeout(const Duration(seconds: 3), onTimeout: () => null);
+
+  /// Ripristina le credenziali, la chiave QR e l'ultimo saldo salvati nello
+  /// storage sicuro. Usa un Future condiviso per evitare race condition quando
+  /// `getSaldo()` e `caricaCartaMensa()` vengono invocati in parallelo.
+  Future<void> restoreSession() {
+    return _restoreFuture ??= _doRestoreSession();
+  }
+
+  Future<void> _doRestoreSession() async {
     try {
-      _accessToken = await _storage
-          .read(key: _kAccessToken)
-          .timeout(const Duration(seconds: 3), onTimeout: () => null);
-      _flag0 = await _storage
-          .read(key: _kFlag0)
-          .timeout(const Duration(seconds: 3), onTimeout: () => null);
-      _accessTokenSRM = await _storage
-          .read(key: _kAccessTokenSrm)
-          .timeout(const Duration(seconds: 3), onTimeout: () => null);
-      _sidSRM = await _storage
-          .read(key: _kSidSrm)
-          .timeout(const Duration(seconds: 3), onTimeout: () => null);
-      _mensaKey = await _storage
-          .read(key: _kMensaKey)
-          .timeout(const Duration(seconds: 3), onTimeout: () => null);
-      _sessionToken = await _storage
-          .read(key: _kCustomAuth)
-          .timeout(const Duration(seconds: 3), onTimeout: () => null);
+      final results = await Future.wait<String?>([
+        _readKey(_kAccessToken),
+        _readKey(_kFlag0),
+        _readKey(_kAccessTokenSrm),
+        _readKey(_kSidSrm),
+        _readKey(_kMensaKey),
+        _readKey(_kCustomAuth),
+        _readKey(_kInfoRistAuth),
+        _readKey(_kCachedSaldo),
+        _readKey(_kCachedSaldoAt),
+        _readKey(_kCachedCard),
+      ]);
+      _accessToken = results[0];
+      _flag0 = results[1];
+      _accessTokenSRM = results[2];
+      _sidSRM = results[3];
+      _mensaKey = results[4];
+      _sessionToken = results[5];
+      _infoRistorazioneToken = results[6];
+      if (results[7] != null) {
+        _cachedSaldo = double.tryParse(results[7]!);
+      }
+      if (results[8] != null) {
+        _cachedSaldoAt = DateTime.tryParse(results[8]!);
+      }
+      if (results[9] != null && results[9]!.isNotEmpty && cartaMensa == null) {
+        try {
+          final map = jsonDecode(results[9]!);
+          if (map is Map<String, dynamic>) {
+            final cached = MensaCard.fromPayload(map);
+            if (cached.valida) cartaMensa = cached;
+          }
+        } catch (_) {}
+      }
     } catch (_) {}
   }
 
@@ -129,6 +178,34 @@ class AdisurcService {
       if (_sessionToken != null && _sessionToken!.isNotEmpty) {
         await _storage.write(key: _kCustomAuth, value: _sessionToken);
       }
+      if (_infoRistorazioneToken != null &&
+          _infoRistorazioneToken!.isNotEmpty) {
+        await _storage.write(
+          key: _kInfoRistAuth,
+          value: _infoRistorazioneToken,
+        );
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _salvaSaldoCache(double saldo) async {
+    _cachedSaldo = saldo;
+    _cachedSaldoAt = DateTime.now();
+    try {
+      await _storage.write(
+        key: _kCachedSaldo,
+        value: saldo.toStringAsFixed(2),
+      );
+      await _storage.write(
+        key: _kCachedSaldoAt,
+        value: _cachedSaldoAt!.toIso8601String(),
+      );
+    } catch (_) {}
+  }
+
+  Future<void> _salvaCartaCache(Map<String, dynamic> payload) async {
+    try {
+      await _storage.write(key: _kCachedCard, value: jsonEncode(payload));
     } catch (_) {}
   }
 
@@ -172,11 +249,13 @@ class AdisurcService {
   Future<MensaCard?> caricaCartaMensa() async {
     await restoreSession();
     var key = _mensaKey;
-    if ((key == null || key.isEmpty) && loggato) {
+    if ((key == null || key.isEmpty) &&
+        _accessToken != null &&
+        _flag0 != null) {
       await _procuratiKeyDaSessioneWeb();
       key = _mensaKey;
     }
-    if (key == null || key.isEmpty) return null;
+    if (key == null || key.isEmpty) return cartaMensa;
     try {
       final resp = await http
           .post(
@@ -189,26 +268,32 @@ class AdisurcService {
           )
           .timeout(_timeout);
       debugPrint('[ADISURC] loginQR status=${resp.statusCode}');
-      if (resp.statusCode < 200 || resp.statusCode >= 300) return null;
+      if (resp.statusCode < 200 || resp.statusCode >= 300) return cartaMensa;
       final json = jsonDecode(resp.body);
       if (json is! Map ||
           json['status']?.toString().toUpperCase() != 'OK') {
         debugPrint('[ADISURC] loginQR body=${resp.body}');
-        return null;
+        return cartaMensa;
       }
       final data = json['data'];
       final jwt = data is Map ? data['jwt']?.toString() : null;
-      if (jwt == null || jwt.isEmpty) return null;
+      if (jwt == null || jwt.isEmpty) return cartaMensa;
       final payload = _decodeJwtPayload(jwt);
-      if (payload == null) return null;
+      if (payload == null) return cartaMensa;
       final saldoJwt = _estraiSaldoDaMappa(payload);
-      if (saldoJwt != null) _saldoDaJwt = saldoJwt;
+      if (saldoJwt != null) {
+        _saldoDaJwt = saldoJwt;
+        await _salvaSaldoCache(saldoJwt);
+      }
       final carta = MensaCard.fromPayload(payload);
-      cartaMensa = carta.valida ? carta : null;
+      if (carta.valida) {
+        cartaMensa = carta;
+        await _salvaCartaCache(payload);
+      }
       return cartaMensa;
     } catch (e) {
       debugPrint('[ADISURC] caricaCartaMensa err=$e');
-      return null;
+      return cartaMensa;
     }
   }
 
@@ -302,7 +387,7 @@ class AdisurcService {
     String? accessTokenSRM,
     String? sidSRM,
   }) async {
-    _restored = true;
+    _restoreFuture = Future.value();
     _accessToken = accessToken;
     _flag0 = flag0;
     if (accessTokenSRM != null && accessTokenSRM.isNotEmpty) {
@@ -329,6 +414,11 @@ class AdisurcService {
     if (_mensaKey != null && _mensaKey!.isNotEmpty) {
       await caricaCartaMensa();
     }
+
+    // Step 6: Recupera e memorizza subito il saldo mentre la sessione è attiva
+    try {
+      await getSaldo(forceRefresh: true);
+    } catch (_) {}
 
     return AdisurcLoginSession(
       accessToken: accessToken,
@@ -677,14 +767,26 @@ class AdisurcService {
 
   /// Saldo del borsellino mensa ADiSURC dall'endpoint `badgeinfo`:
   /// `https://adisurc-ol.dirittoallostudio.it/apps/V3.1/dol-100/25/INFO-RISTORAZIONE/public/index.php/badgeinfo?p_idanac=2025&p_codappl=INFO-RISTORAZIONE&p_flag0={flag0}`
-  Future<WalletAdisurc?> getSaldo() async {
+  Future<WalletAdisurc?> getSaldo({bool forceRefresh = false}) async {
     await restoreSession();
     final token = _accessToken;
     final flag0 = _flag0;
-    if (token == null || flag0 == null) {
+
+    // Se non abbiamo credenziali web né token di sessione ma abbiamo un saldo in cache,
+    // restituiscilo subito così non scompare mai dalla schermata.
+    if ((token == null || flag0 == null) &&
+        (_infoRistorazioneToken == null || _infoRistorazioneToken!.isEmpty)) {
+      if (_cachedSaldo != null) {
+        isDemo.value = false;
+        return WalletAdisurc(
+          saldo: _cachedSaldo!,
+          fromCache: true,
+          updatedAt: _cachedSaldoAt,
+        );
+      }
       if (_saldoDaJwt != null) {
         isDemo.value = false;
-        return WalletAdisurc(saldo: _saldoDaJwt!);
+        return WalletAdisurc(saldo: _saldoDaJwt!, fromCache: true);
       }
       isDemo.value = true;
       return null;
@@ -698,92 +800,114 @@ class AdisurcService {
         queryParameters: {
           'p_idanac': year.toString(),
           'p_codappl': 'INFO-RISTORAZIONE',
-          'p_flag0': flag0,
+          'p_flag0': ?flag0,
         },
       );
 
-      // 1) Tentativo diretto su badgeinfo con Authorization (e token SRM se presenti).
-      try {
-        final directResp = await http
-            .get(
-              badgeUri,
-              headers: _adisurcWebHeaders(
-                token,
-                customAppAuth: _sessionToken,
-              ),
-            )
-            .timeout(_timeout);
-        debugPrint(
-          '[ADISURC] GET badgeinfo diretto ($year) status=${directResp.statusCode} body=${directResp.body}',
-        );
-        if (directResp.statusCode >= 200 &&
-            directResp.statusCode < 300 &&
-            directResp.body.trim() != 'Invalid token') {
-          final saldo = _estraiSaldo(directResp.body);
-          if (saldo != null) {
-            isDemo.value = false;
-            return WalletAdisurc(saldo: saldo);
+      // 1) Tentativo diretto su badgeinfo con il token salvato per INFO-RISTORAZIONE
+      final authPerBadge = _infoRistorazioneToken ?? _sessionToken;
+      if (token != null) {
+        try {
+          final directResp = await http
+              .get(
+                badgeUri,
+                headers: _adisurcWebHeaders(
+                  token,
+                  customAppAuth: authPerBadge,
+                ),
+              )
+              .timeout(_timeout);
+          debugPrint(
+            '[ADISURC] GET badgeinfo diretto ($year) status=${directResp.statusCode} body=${directResp.body}',
+          );
+          if (directResp.statusCode >= 200 &&
+              directResp.statusCode < 300 &&
+              directResp.body.trim() != 'Invalid token') {
+            final saldo = _estraiSaldo(directResp.body);
+            if (saldo != null) {
+              isDemo.value = false;
+              await _salvaSaldoCache(saldo);
+              return WalletAdisurc(saldo: saldo, updatedAt: DateTime.now());
+            }
           }
+        } catch (e) {
+          debugPrint('[ADISURC] GET badgeinfo diretto ($year) err=$e');
         }
-      } catch (e) {
-        debugPrint('[ADISURC] GET badgeinfo diretto ($year) err=$e');
       }
 
-      // 2) Tentativo con user/init su INFO-RISTORAZIONE per ottenere Custom-App-Authorization
+      // 2) Tentativo con user/init su INFO-RISTORAZIONE per rinnovare Custom-App-Authorization
       // e successiva GET su badgeinfo.
-      try {
-        final initUri = Uri.parse(
-          '$_serverBase/dol-100/$smallYear/INFO-RISTORAZIONE/public/index.php/user/init',
-        ).replace(
-          queryParameters: {
-            'p_idanac': year.toString(),
-            'p_codappl': 'INFO-RISTORAZIONE',
-            'p_flag0': flag0,
-          },
-        );
-        final initResp = await http
-            .get(initUri, headers: _adisurcWebHeaders(token))
-            .timeout(_timeout);
-        debugPrint(
-          '[ADISURC] INFO-RISTORAZIONE init ($year) status=${initResp.statusCode} body=${initResp.body}',
-        );
-        if (initResp.statusCode >= 200 && initResp.statusCode < 300) {
-          final saldoInit = _estraiSaldo(initResp.body);
-          if (saldoInit != null) {
-            isDemo.value = false;
-            return WalletAdisurc(saldo: saldoInit);
-          }
-          final customAppAuth = _responseDataString(jsonDecode(initResp.body));
-          if (customAppAuth != null && customAppAuth.isNotEmpty) {
-            final resp = await http
-                .get(
-                  badgeUri,
-                  headers: _adisurcWebHeaders(
-                    token,
-                    customAppAuth: customAppAuth,
-                  ),
-                )
-                .timeout(_timeout);
-            debugPrint(
-              '[ADISURC] GET badgeinfo+init ($year) status=${resp.statusCode} body=${resp.body}',
-            );
-            if (resp.statusCode >= 200 && resp.statusCode < 300) {
-              final saldo = _estraiSaldo(resp.body);
-              if (saldo != null) {
-                isDemo.value = false;
-                return WalletAdisurc(saldo: saldo);
+      if (token != null && flag0 != null) {
+        try {
+          final initUri = Uri.parse(
+            '$_serverBase/dol-100/$smallYear/INFO-RISTORAZIONE/public/index.php/user/init',
+          ).replace(
+            queryParameters: {
+              'p_idanac': year.toString(),
+              'p_codappl': 'INFO-RISTORAZIONE',
+              'p_flag0': flag0,
+            },
+          );
+          final initResp = await http
+              .get(initUri, headers: _adisurcWebHeaders(token))
+              .timeout(_timeout);
+          debugPrint(
+            '[ADISURC] INFO-RISTORAZIONE init ($year) status=${initResp.statusCode} body=${initResp.body}',
+          );
+          if (initResp.statusCode >= 200 && initResp.statusCode < 300) {
+            final saldoInit = _estraiSaldo(initResp.body);
+            if (saldoInit != null) {
+              isDemo.value = false;
+              await _salvaSaldoCache(saldoInit);
+              return WalletAdisurc(saldo: saldoInit, updatedAt: DateTime.now());
+            }
+            final customAppAuth = _responseDataString(jsonDecode(initResp.body));
+            if (customAppAuth != null && customAppAuth.isNotEmpty) {
+              _infoRistorazioneToken = customAppAuth;
+              await _storage.write(key: _kInfoRistAuth, value: customAppAuth);
+
+              final resp = await http
+                  .get(
+                    badgeUri,
+                    headers: _adisurcWebHeaders(
+                      token,
+                      customAppAuth: customAppAuth,
+                    ),
+                  )
+                  .timeout(_timeout);
+              debugPrint(
+                '[ADISURC] GET badgeinfo+init ($year) status=${resp.statusCode} body=${resp.body}',
+              );
+              if (resp.statusCode >= 200 && resp.statusCode < 300) {
+                final saldo = _estraiSaldo(resp.body);
+                if (saldo != null) {
+                  isDemo.value = false;
+                  await _salvaSaldoCache(saldo);
+                  return WalletAdisurc(saldo: saldo, updatedAt: DateTime.now());
+                }
               }
             }
           }
+        } catch (e) {
+          debugPrint('[ADISURC] INFO-RISTORAZIONE init+badgeinfo ($year) err=$e');
         }
-      } catch (e) {
-        debugPrint('[ADISURC] INFO-RISTORAZIONE init+badgeinfo ($year) err=$e');
       }
+    }
+
+    // Se la chiamata live fallisce (sessione web temporanea scaduta o offline),
+    // usiamo il saldo persistito in cache: NON azzeriamo né nascondiamo il saldo!
+    if (_cachedSaldo != null) {
+      isDemo.value = false;
+      return WalletAdisurc(
+        saldo: _cachedSaldo!,
+        fromCache: true,
+        updatedAt: _cachedSaldoAt,
+      );
     }
 
     if (_saldoDaJwt != null) {
       isDemo.value = false;
-      return WalletAdisurc(saldo: _saldoDaJwt!);
+      return WalletAdisurc(saldo: _saldoDaJwt!, fromCache: true);
     }
 
     isDemo.value = true;

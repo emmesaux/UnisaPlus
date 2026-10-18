@@ -684,14 +684,29 @@ class _MensaScreenState extends State<MensaScreen> {
                               ),
                             )
                           else
-                            Text(
-                              snapshot.data != null
-                                  ? '${snapshot.data!.saldo.toStringAsFixed(2)} ${snapshot.data!.valuta}'
-                                  : '–',
-                              style: AppTheme.numerico(
-                                size: 24,
-                                color: scheme.onSurface,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  snapshot.data != null
+                                      ? '${snapshot.data!.saldo.toStringAsFixed(2)} ${snapshot.data!.valuta}'
+                                      : '–',
+                                  style: AppTheme.numerico(
+                                    size: 24,
+                                    color: scheme.onSurface,
+                                  ),
+                                ),
+                                if (snapshot.data?.fromCache == true) ...[
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'Ultimo saldo memorizzato',
+                                    style: TextStyle(
+                                      color: scheme.onSurfaceVariant,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ],
                             ),
                         ],
                       ),
