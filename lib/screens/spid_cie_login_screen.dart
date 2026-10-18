@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -24,6 +26,8 @@ class SpidCieLoginScreen extends StatefulWidget {
 class _SpidCieLoginScreenState extends State<SpidCieLoginScreen> {
   final _cineca = CinecaLoginService();
   WebViewController? _controller;
+  String? _initialUrl;
+  StreamSubscription<Uri>? _appLinksSub;
   bool _loading = true;
   String? _error;
 
@@ -31,6 +35,22 @@ class _SpidCieLoginScreenState extends State<SpidCieLoginScreen> {
   void initState() {
     super.initState();
     _avvia();
+    _ascoltaAppLinks();
+  }
+
+  void _ascoltaAppLinks() {
+    _appLinksSub = AppLinks().uriLinkStream.listen((uri) {
+      final url = uri.toString();
+      if (_cineca.isAppHandback(url)) {
+        _completaAccesso(url);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _appLinksSub?.cancel();
+    super.dispose();
   }
 
   Future<void> _avvia() async {
@@ -39,6 +59,7 @@ class _SpidCieLoginScreenState extends State<SpidCieLoginScreen> {
       await cookieManager.clearCookies();
       final url = await _cineca.buildAuthorizeUrl();
       if (!mounted) return;
+      _initialUrl = url;
       final controller = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setUserAgent(
@@ -53,6 +74,12 @@ class _SpidCieLoginScreenState extends State<SpidCieLoginScreen> {
               if (mounted) setState(() => _loading = false);
             },
             onWebResourceError: (error) {
+              if (error.url != null && error.url!.contains('unisa.openid.cineca.it')) {
+                if (_initialUrl != null) {
+                  _controller?.loadRequest(Uri.parse(_initialUrl!));
+                }
+                return;
+              }
               if (mounted && (error.isForMainFrame ?? false)) {
                 setState(() {
                   _loading = false;
@@ -85,6 +112,12 @@ class _SpidCieLoginScreenState extends State<SpidCieLoginScreen> {
       return NavigationDecision.prevent;
     }
     final uri = Uri.tryParse(request.url);
+    if (uri != null && _cineca.isTransientBounce(uri)) {
+      if (_initialUrl != null) {
+        _controller?.loadRequest(Uri.parse(_initialUrl!));
+      }
+      return NavigationDecision.prevent;
+    }
     if (uri != null && (uri.scheme == 'http' || uri.scheme == 'https')) {
       return NavigationDecision.navigate;
     }
@@ -135,7 +168,18 @@ class _SpidCieLoginScreenState extends State<SpidCieLoginScreen> {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Accedi con SPID, CIE o credenziali UNISA'),
+        title: const Text('Accedi con SPID o CIE'),
+        actions: [
+          if (_initialUrl != null)
+            IconButton(
+              icon: const Icon(Icons.open_in_browser),
+              tooltip: 'Apri nel browser esterno',
+              onPressed: () => launchUrl(
+                Uri.parse(_initialUrl!),
+                mode: LaunchMode.externalApplication,
+              ),
+            ),
+        ],
       ),
       body: Stack(
         children: [
