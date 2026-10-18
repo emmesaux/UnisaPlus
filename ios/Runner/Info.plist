@@ -28,6 +28,12 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>Serve per inquadrare il codice QR proiettato in aula e registrare la tua presenza.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Serve per salvare le lezioni del tuo orario direttamente nel calendario del dispositivo.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Serve per salvare le lezioni del tuo orario direttamente nel calendario del dispositivo.</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>Serve per salvare le lezioni del tuo orario direttamente nel calendario del dispositivo.</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
