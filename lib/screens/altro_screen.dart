@@ -103,7 +103,7 @@ class AltroScreen extends StatelessWidget {
           coloreBadge: AppColors.arancio,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => const MappaCampusScreen(),
+              builder: (_) => MappaCampusScreen(api: authService.api),
             ),
           ),
         ),

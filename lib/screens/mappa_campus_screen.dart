@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/campus_map_data.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 import 'edificio_map_screen.dart';
 
 enum TipoCampus {
@@ -477,6 +478,12 @@ class _MappaCampusScreenState extends State<MappaCampusScreen> {
   EdificioSchematico? _edificioSelezionato;
   Map<String, CampusBuildingData> _datiEdificiEasyRoom = {};
 
+  // Fit-to-viewport: dimensione dell'area disponibile e campus gia' centrato,
+  // per mostrare SEMPRE l'intera mappa all'apertura (prima appariva tagliata).
+  Size? _viewport;
+  TipoCampus? _fittedCampus;
+  Size? _fittedViewport;
+
   @override
   void initState() {
     super.initState();
@@ -650,21 +657,71 @@ class _MappaCampusScreenState extends State<MappaCampusScreen> {
     }
   }
 
+  double get _canvasWidth =>
+      _campusSelezionato == TipoCampus.fisciano ? 1000.0 : 800.0;
+  double get _canvasHeight =>
+      _campusSelezionato == TipoCampus.fisciano ? 900.0 : 700.0;
+
+  /// Inquadra l'intera mappa nell'area disponibile (una sola volta per campus
+  /// o quando cambia la dimensione del riquadro). Senza questo la mappa veniva
+  /// renderizzata a grandezza naturale (1000x900) e appariva tagliata.
+  void _fitToViewport(Size viewport) {
+    if (viewport.width <= 0 || viewport.height <= 0) return;
+    final gia = _fittedCampus == _campusSelezionato &&
+        _fittedViewport == viewport;
+    if (gia) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _transCtrl.value = _matriceFit(viewport);
+      _fittedCampus = _campusSelezionato;
+      _fittedViewport = viewport;
+    });
+  }
+
+  Matrix4 _matriceFit(Size viewport) {
+    final cw = _canvasWidth;
+    final ch = _canvasHeight;
+    final scale =
+        (viewport.width / cw < viewport.height / ch
+                ? viewport.width / cw
+                : viewport.height / ch) *
+            0.94;
+    final dx = (viewport.width - cw * scale) / 2;
+    final dy = (viewport.height - ch * scale) / 2;
+    return Matrix4.identity()
+      ..translateByDouble(dx, dy, 0, 1)
+      ..scaleByDouble(scale, scale, 1, 1);
+  }
+
   void _resetZoom() {
-    _transCtrl.value = Matrix4.identity();
+    final vp = _viewport;
+    if (vp == null) {
+      _transCtrl.value = Matrix4.identity();
+      return;
+    }
+    _transCtrl.value = _matriceFit(vp);
   }
 
-  void _zoomIn() {
-    final current = _transCtrl.value.getMaxScaleOnAxis();
-    final newScale = (current * 1.3).clamp(0.4, 3.5);
-    _transCtrl.value = Matrix4.diagonal3Values(newScale, newScale, 1.0);
+  void _scalaAttornoAlCentro(double fattore) {
+    final vp = _viewport;
+    if (vp == null) return;
+    final corrente = _transCtrl.value.clone();
+    final scalaCorrente = corrente.getMaxScaleOnAxis();
+    final nuova = (scalaCorrente * fattore).clamp(0.2, 3.5);
+    final fattoreReale = nuova / scalaCorrente;
+    if (fattoreReale == 1.0) return;
+    final fx = vp.width / 2;
+    final fy = vp.height / 2;
+    final attorno = Matrix4.identity()
+      ..translateByDouble(fx, fy, 0, 1)
+      ..scaleByDouble(fattoreReale, fattoreReale, 1, 1)
+      ..translateByDouble(-fx, -fy, 0, 1);
+    _transCtrl.value = attorno.multiplied(corrente);
   }
 
-  void _zoomOut() {
-    final current = _transCtrl.value.getMaxScaleOnAxis();
-    final newScale = (current / 1.3).clamp(0.4, 3.5);
-    _transCtrl.value = Matrix4.diagonal3Values(newScale, newScale, 1.0);
-  }
+  void _zoomIn() => _scalaAttornoAlCentro(1.3);
+
+  void _zoomOut() => _scalaAttornoAlCentro(1 / 1.3);
 
   @override
   Widget build(BuildContext context) {
@@ -797,124 +854,154 @@ class _MappaCampusScreenState extends State<MappaCampusScreen> {
     final isFisciano = _campusSelezionato == TipoCampus.fisciano;
     final double canvasWidth = isFisciano ? 1000.0 : 800.0;
     final double canvasHeight = isFisciano ? 900.0 : 700.0;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Stack(
-      children: [
-        // Canvas interattivo (Pinch-to-zoom, Pan)
-        InteractiveViewer(
-          transformationController: _transCtrl,
-          minScale: 0.35,
-          maxScale: 3.5,
-          boundaryMargin: const EdgeInsets.all(250),
-          child: Center(
-            child: SizedBox(
-              width: canvasWidth,
-              height: canvasHeight,
-              child: Stack(
-                children: [
-                  // Sfondo e viali del campus (CustomPainter vettoriale)
-                  Positioned.fill(
-                    child: CustomPaint(
-                      painter: _CampusSfondoPainter(
-                        isFisciano: isFisciano,
-                        scheme: scheme,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final viewport = Size(constraints.maxWidth, constraints.maxHeight);
+        _viewport = viewport;
+        // Inquadra l'intera mappa al primo render / al cambio campus.
+        _fitToViewport(viewport);
+
+        return Stack(
+          children: [
+            // Canvas interattivo (pinch-to-zoom, pan). constrained:false lascia
+            // il canvas alla sua dimensione naturale: ci pensa il fit a mostrarlo
+            // tutto, cosi' nessun edificio resta fuori schermo.
+            ClipRect(
+              child: InteractiveViewer(
+                transformationController: _transCtrl,
+                constrained: false,
+                minScale: 0.2,
+                maxScale: 3.5,
+                boundaryMargin: EdgeInsets.symmetric(
+                  horizontal: viewport.width * 0.5,
+                  vertical: viewport.height * 0.5,
+                ),
+                child: SizedBox(
+                  width: canvasWidth,
+                  height: canvasHeight,
+                  child: Stack(
+                    children: [
+                      // Sfondo, parchi e viali del campus (CustomPainter).
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: _CampusSfondoPainter(
+                            isFisciano: isFisciano,
+                            scheme: scheme,
+                            isDark: isDark,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
 
-                  // Blocchi degli edifici non dettagliati
-                  for (final ed in edifici) _buildEdificioBlock(ed, scheme),
+                      // Blocchi degli edifici.
+                      for (final ed in edifici) _buildEdificioBlock(ed, scheme),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            // Badge informativo in alto a destra.
+            Positioned(
+              top: 10,
+              right: 16,
+              child: _buildPillInfo(
+                scheme,
+                Icons.touch_app_outlined,
+                'Tocca un edificio',
+              ),
+            ),
+
+            // Controlli Zoom galleggianti.
+            Positioned(
+              right: 16,
+              bottom: _edificioSelezionato != null ? 200 : 20,
+              child: Column(
+                children: [
+                  FloatingActionButton.small(
+                    heroTag: 'zoom_in_campus',
+                    onPressed: _zoomIn,
+                    tooltip: 'Ingrandisci',
+                    child: const Icon(Icons.add),
+                  ),
+                  const SizedBox(height: 8),
+                  FloatingActionButton.small(
+                    heroTag: 'zoom_out_campus',
+                    onPressed: _zoomOut,
+                    tooltip: 'Rimpicciolisci',
+                    child: const Icon(Icons.remove),
+                  ),
+                  const SizedBox(height: 8),
+                  FloatingActionButton.small(
+                    heroTag: 'zoom_reset_campus',
+                    onPressed: _resetZoom,
+                    tooltip: 'Inquadra tutta la mappa',
+                    child: const Icon(Icons.fit_screen_outlined),
+                  ),
                 ],
               ),
             ),
-          ),
-        ),
 
-        // Badge informativo in alto a destra
-        Positioned(
-          top: 10,
-          right: 16,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: scheme.surface.withValues(alpha: 0.9),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: scheme.outlineVariant),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
+            // Scheda informativa dell'edificio selezionato (in basso).
+            if (_edificioSelezionato != null)
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 16,
+                child: _buildSchedaEdificioSelezionato(
+                  scheme,
+                  _edificioSelezionato!,
                 ),
-              ],
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.touch_app_outlined,
-                    size: 14, color: scheme.primary),
-                const SizedBox(width: 5),
-                Text(
-                  'Tocca un edificio per la mappa aule',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: scheme.onSurface,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // Controlli Zoom galleggianti
-        Positioned(
-          right: 16,
-          bottom: _edificioSelezionato != null ? 180 : 20,
-          child: Column(
-            children: [
-              FloatingActionButton.small(
-                heroTag: 'zoom_in_campus',
-                onPressed: _zoomIn,
-                tooltip: 'Ingrandisci',
-                child: const Icon(Icons.add),
               ),
-              const SizedBox(height: 8),
-              FloatingActionButton.small(
-                heroTag: 'zoom_out_campus',
-                onPressed: _zoomOut,
-                tooltip: 'Rimpicciolisci',
-                child: const Icon(Icons.remove),
-              ),
-              const SizedBox(height: 8),
-              FloatingActionButton.small(
-                heroTag: 'zoom_reset_campus',
-                onPressed: _resetZoom,
-                tooltip: 'Centra mappa',
-                child: const Icon(Icons.filter_center_focus),
-              ),
-            ],
-          ),
-        ),
-
-        // Scheda informativa dell'edificio selezionato (in basso)
-        if (_edificioSelezionato != null)
-          Positioned(
-            left: 16,
-            right: 16,
-            bottom: 16,
-            child: _buildSchedaEdificioSelezionato(
-              scheme,
-              _edificioSelezionato!,
-            ),
-          ),
-      ],
+          ],
+        );
+      },
     );
+  }
+
+  Widget _buildPillInfo(ColorScheme scheme, IconData icona, String testo) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: scheme.surface.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: scheme.outlineVariant),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icona, size: 14, color: scheme.primary),
+          const SizedBox(width: 5),
+          Text(
+            testo,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: scheme.onSurface,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Numero di aule censite nell'edificio (somma dei blocchi EasyRoom).
+  int _conteggioAule(EdificioSchematico ed) {
+    var tot = 0;
+    for (final area in ed.areeEasyRoom) {
+      tot += _datiEdificiEasyRoom[area]?.totalRooms ?? 0;
+    }
+    return tot;
   }
 
   Widget _buildEdificioBlock(EdificioSchematico ed, ColorScheme scheme) {
     final bool isSelected = _edificioSelezionato?.id == ed.id;
     final r = ed.rettangolo;
+    final int nAule = ed.haPlanimetrie ? _conteggioAule(ed) : 0;
 
     return Positioned(
       left: r.left,
@@ -963,20 +1050,29 @@ class _MappaCampusScreenState extends State<MappaCampusScreen> {
                 overflow: TextOverflow.ellipsis,
               ),
               if (ed.haPlanimetrie) ...[
-                const SizedBox(height: 2),
+                const SizedBox(height: 3),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.25),
-                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.white.withValues(alpha: 0.26),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Text(
-                    'PIANTE AULE',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 8.5,
-                      fontWeight: FontWeight.w800,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.layers_outlined,
+                          size: 9, color: Colors.white),
+                      const SizedBox(width: 3),
+                      Text(
+                        nAule > 0 ? '$nAule aule' : 'PIANTE',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -1261,138 +1357,169 @@ class _MappaCampusScreenState extends State<MappaCampusScreen> {
 class _CampusSfondoPainter extends CustomPainter {
   final bool isFisciano;
   final ColorScheme scheme;
+  final bool isDark;
 
-  _CampusSfondoPainter({required this.isFisciano, required this.scheme});
+  _CampusSfondoPainter({
+    required this.isFisciano,
+    required this.scheme,
+    this.isDark = false,
+  });
+
+  // Palette dello sfondo, adattata a tema chiaro/scuro.
+  Color get _bgTop => isDark ? const Color(0xFF12161D) : const Color(0xFFF6F4EC);
+  Color get _bgBottom =>
+      isDark ? const Color(0xFF181D26) : const Color(0xFFEDE9DC);
+  Color get _green =>
+      isDark ? const Color(0xFF1C2B24) : const Color(0xFFDCEBCF);
+  Color get _greenBorder =>
+      isDark ? const Color(0xFF28402F) : const Color(0xFFC6DcB4);
+  Color get _road =>
+      isDark ? const Color(0xFF2A303B) : const Color(0xFFE3DCC6);
+  Color get _roadSub =>
+      isDark ? const Color(0xFF232833) : const Color(0xFFEBE5D2);
+  Color get _roadLine =>
+      isDark ? const Color(0xFF3A414E) : const Color(0xFFFCFAF2);
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Sfondo generale del campus
-    final bgPaint = Paint()..color = const Color(0xFFF3F1E8);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), bgPaint);
+    final full = Rect.fromLTWH(0, 0, size.width, size.height);
 
-    // 2. Aree verdi e giardini
-    final greenPaint = Paint()..color = const Color(0xFFE2ECD8);
-    if (isFisciano) {
-      // Giardino ovest
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          const Rect.fromLTWH(20, 20, 260, 160),
-          const Radius.circular(24),
-        ),
-        greenPaint,
-      );
-      // Giardino centrale (Piazza del Sapere)
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          const Rect.fromLTWH(310, 260, 290, 220),
-          const Radius.circular(24),
-        ),
-        greenPaint,
-      );
-      // Giardino sud
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          const Rect.fromLTWH(20, 700, 580, 160),
-          const Radius.circular(24),
-        ),
-        greenPaint,
-      );
-    } else {
-      // Baronissi giardini
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          const Rect.fromLTWH(20, 20, 760, 120),
-          const Radius.circular(24),
-        ),
-        greenPaint,
-      );
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          const Rect.fromLTWH(20, 540, 760, 140),
-          const Radius.circular(24),
-        ),
-        greenPaint,
-      );
+    // 1. Sfondo generale del campus con lieve gradiente verticale.
+    final bgPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [_bgTop, _bgBottom],
+      ).createShader(full);
+    canvas.drawRect(full, bgPaint);
+
+    // Cornice morbida attorno alla mappa.
+    final cornice = Paint()
+      ..color = (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(full.deflate(3), const Radius.circular(18)),
+      cornice,
+    );
+
+    // 2. Aree verdi e giardini (con bordo tenue).
+    final greenPaint = Paint()..color = _green;
+    final greenStroke = Paint()
+      ..color = _greenBorder
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    void parco(Rect r) {
+      final rr = RRect.fromRectAndRadius(r, const Radius.circular(24));
+      canvas.drawRRect(rr, greenPaint);
+      canvas.drawRRect(rr, greenStroke);
     }
 
-    // 3. Viali pedonali e strade del campus
+    if (isFisciano) {
+      parco(const Rect.fromLTWH(20, 20, 260, 160)); // ovest
+      parco(const Rect.fromLTWH(310, 260, 290, 220)); // Piazza del Sapere
+      parco(const Rect.fromLTWH(20, 700, 580, 160)); // sud
+    } else {
+      parco(const Rect.fromLTWH(20, 20, 760, 120));
+      parco(const Rect.fromLTWH(20, 540, 760, 140));
+    }
+
+    // 3. Viali pedonali e strade del campus (asfalto + linea di mezzeria).
     final roadPaint = Paint()
-      ..color = const Color(0xFFE5DFC9)
+      ..color = _road
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 24
+      ..strokeWidth = 26
       ..strokeCap = StrokeCap.round;
-
     final roadSubPaint = Paint()
-      ..color = const Color(0xFFECE7D5)
+      ..color = _roadSub
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 14
+      ..strokeWidth = 15
+      ..strokeCap = StrokeCap.round;
+    final linePaint = Paint()
+      ..color = _roadLine
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5
       ..strokeCap = StrokeCap.round;
 
-    if (isFisciano) {
-      // Corso principale orizzontale
-      canvas.drawLine(
-        const Offset(50, 250),
-        const Offset(950, 250),
-        roadPaint,
-      );
-      canvas.drawLine(
-        const Offset(50, 480),
-        const Offset(950, 480),
-        roadPaint,
-      );
-      // Viali verticali di collegamento tra edifici
-      canvas.drawLine(
-        const Offset(300, 50),
-        const Offset(300, 850),
-        roadSubPaint,
-      );
-      canvas.drawLine(
-        const Offset(620, 50),
-        const Offset(620, 850),
-        roadSubPaint,
-      );
-      canvas.drawLine(
-        const Offset(790, 50),
-        const Offset(790, 850),
-        roadSubPaint,
-      );
-    } else {
-      // Baronissi viali
-      canvas.drawLine(
-        const Offset(50, 350),
-        const Offset(750, 350),
-        roadPaint,
-      );
-      canvas.drawLine(
-        const Offset(170, 120),
-        const Offset(170, 560),
-        roadSubPaint,
-      );
-      canvas.drawLine(
-        const Offset(460, 120),
-        const Offset(460, 560),
-        roadSubPaint,
-      );
+    void viale(Offset a, Offset b, Paint base, {bool mezzeria = false}) {
+      canvas.drawLine(a, b, base);
+      if (mezzeria) _dashedLine(canvas, a, b, linePaint);
     }
 
-    // 4. Rosa dei venti / Indicatore Nord
-    final textPainter = TextPainter(
-      text: const TextSpan(
-        text: 'N ↑',
+    if (isFisciano) {
+      viale(const Offset(50, 250), const Offset(950, 250), roadPaint,
+          mezzeria: true);
+      viale(const Offset(50, 480), const Offset(950, 480), roadPaint,
+          mezzeria: true);
+      viale(const Offset(300, 50), const Offset(300, 850), roadSubPaint);
+      viale(const Offset(620, 50), const Offset(620, 850), roadSubPaint);
+      viale(const Offset(790, 50), const Offset(790, 850), roadSubPaint);
+    } else {
+      viale(const Offset(50, 350), const Offset(750, 350), roadPaint,
+          mezzeria: true);
+      viale(const Offset(170, 120), const Offset(170, 560), roadSubPaint);
+      viale(const Offset(460, 120), const Offset(460, 560), roadSubPaint);
+    }
+
+    // 4. Bussola in alto a destra.
+    _disegnaBussola(canvas, Offset(size.width - 54, 54));
+  }
+
+  /// Linea tratteggiata (mezzeria dei viali principali).
+  void _dashedLine(Canvas canvas, Offset a, Offset b, Paint paint) {
+    const dash = 16.0;
+    const gap = 14.0;
+    final total = (b - a).distance;
+    if (total == 0) return;
+    final dir = (b - a) / total;
+    var d = 0.0;
+    while (d < total) {
+      final start = a + dir * d;
+      final end = a + dir * (d + dash).clamp(0, total);
+      canvas.drawLine(start, end, paint);
+      d += dash + gap;
+    }
+  }
+
+  /// Rosa dei venti stilizzata con la N.
+  void _disegnaBussola(Canvas canvas, Offset c) {
+    final anello = Paint()
+      ..color = (isDark ? Colors.white : AppColors.mare).withValues(alpha: 0.18)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawCircle(c, 22, anello);
+
+    final ago = Paint()..color = AppColors.corallo;
+    final path = Path()
+      ..moveTo(c.dx, c.dy - 18)
+      ..lineTo(c.dx - 6, c.dy)
+      ..lineTo(c.dx + 6, c.dy)
+      ..close();
+    canvas.drawPath(path, ago);
+    final agoSud = Paint()
+      ..color = (isDark ? Colors.white54 : AppColors.nebbia);
+    final path2 = Path()
+      ..moveTo(c.dx, c.dy + 18)
+      ..lineTo(c.dx - 6, c.dy)
+      ..lineTo(c.dx + 6, c.dy)
+      ..close();
+    canvas.drawPath(path2, agoSud);
+
+    final tp = TextPainter(
+      text: TextSpan(
+        text: 'N',
         style: TextStyle(
-          color: Color(0xFF9E9988),
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 2,
+          color: isDark ? Colors.white : AppColors.mare,
+          fontSize: 13,
+          fontWeight: FontWeight.w800,
         ),
       ),
       textDirection: TextDirection.ltr,
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(size.width - 45, 20));
+    )..layout();
+    tp.paint(canvas, Offset(c.dx - tp.width / 2, c.dy - 36));
   }
 
   @override
   bool shouldRepaint(covariant _CampusSfondoPainter oldDelegate) =>
-      oldDelegate.isFisciano != isFisciano;
+      oldDelegate.isFisciano != isFisciano || oldDelegate.isDark != isDark;
 }
