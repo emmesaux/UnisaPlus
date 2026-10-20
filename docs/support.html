@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unisa Plus — Assistenza</title>
+<style>
+  :root{
+    --mare:#16474D; --zolfo:#E8A33D; --inchiostro:#1B2029;
+    --pietra:#ECEAE2; --nebbia:#6E7585; --bordo:#D9D5C8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--pietra); color:var(--inchiostro);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;
+  }
+  header{background:var(--mare); color:#fff; padding:40px 20px}
+  .wrap{max-width:760px; margin:0 auto; padding:0 20px}
+  header .wrap{padding:0}
+  h1{margin:0 0 6px; font-size:26px; letter-spacing:-.3px}
+  header p{margin:0; opacity:.85; font-size:14px}
+  main{padding:32px 0 56px}
+  h2{font-size:18px; margin:28px 0 6px; color:var(--mare)}
+  p,li{font-size:15px}
+  ul{padding-left:20px}
+  a{color:var(--mare)}
+  .card{background:#fff; border:1px solid var(--bordo); border-radius:12px; padding:18px 18px; margin-top:14px}
+  .card h2{margin-top:0}
+  .mail{display:inline-block; background:var(--zolfo); color:var(--inchiostro); font-weight:700; text-decoration:none; padding:10px 16px; border-radius:8px; margin-top:6px}
+  .pill{display:inline-block; background:var(--zolfo); color:var(--inchiostro); font-weight:700; font-size:12px; padding:3px 10px; border-radius:20px; margin-bottom:14px}
+  footer{border-top:1px solid var(--bordo); padding:22px 0; font-size:13px; color:var(--nebbia)}
+  details{border-bottom:1px solid var(--bordo); padding:12px 0}
+  summary{font-weight:600; cursor:pointer}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="pill">Unisa Plus</div>
+    <h1>Assistenza</h1>
+    <p>Supporto per gli studenti che usano l'app</p>
+  </div>
+</header>
+<main class="wrap">
+  <div class="card">
+    <h2>Hai bisogno di aiuto?</h2>
+    <p>Per domande, segnalazioni di problemi o suggerimenti, scrivi allo
+    sviluppatore. Rispondiamo di norma entro pochi giorni lavorativi.</p>
+    <a class="mail" href="mailto:mario.saulle06@gmail.com?subject=Assistenza%20Unisa%20Plus">Scrivi a mario.saulle06@gmail.com</a>
+  </div>
+
+  <h2>Domande frequenti</h2>
+
+  <details>
+    <summary>Come accedo all'app?</summary>
+    <p>L'accesso avviene con SPID, CIE o le credenziali di Ateneo, tramite
+    l'Identity Provider ufficiale CINECA. Non devi inserire alcuna password
+    nell'app. Le sezioni "Aule libere" e "Mappa dei campus" sono consultabili
+    anche senza accedere.</p>
+  </details>
+
+  <details>
+    <summary>Il login non va a buon fine</summary>
+    <p>Verifica di avere una connessione attiva e di completare tutta la
+    procedura sulla pagina di SPID/CIE. Se la pagina resta bloccata, chiudi e
+    riapri l'accesso: la sessione riparte dall'inizio.</p>
+  </details>
+
+  <details>
+    <summary>L'orario o gli esami non si caricano</summary>
+    <p>Alcuni dati dipendono dal corso e dall'anno impostati. Vai in
+    "Altro → Corso e anno" e verifica che siano corretti, poi riprova.</p>
+  </details>
+
+  <details>
+    <summary>Il QR della mensa o il saldo non compaiono</summary>
+    <p>Il codice e il saldo del borsellino richiedono l'associazione con
+    ADiSURC: accedi alla sezione mensa e completa il collegamento ad ADiSURC.</p>
+  </details>
+
+  <details>
+    <summary>Come elimino i miei dati?</summary>
+    <p>Effettua il logout dall'app oppure disinstallala: il token di sessione
+    e i dati salvati sul dispositivo vengono rimossi. L'app non conserva dati
+    su server dello sviluppatore.</p>
+  </details>
+
+  <h2>Privacy</h2>
+  <p>Consulta l'<a href="privacy.html">informativa sulla privacy</a>.</p>
+
+  <div class="card" style="color:var(--nebbia);font-size:14px">
+    Unisa Plus è un'app non ufficiale e non è sviluppata, approvata o gestita
+    dall'Università degli Studi di Salerno.
+  </div>
+</main>
+<footer class="wrap">© 2026 Unisa Plus — progetto indipendente.
+<a href="privacy.html">Privacy</a></footer>
+</body>
+</html>
