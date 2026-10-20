@@ -570,7 +570,7 @@ class _MensaScreenState extends State<MensaScreen> {
             _contatoreRotazione(carta),
             const SizedBox(height: 6),
             Text(
-              'Carta ${carta.cardId} · Aggiornamento tra ${_qrService.secondiAllaRotazione(carta)}s',
+              'Carta ${carta.numeroCarta} · Aggiornamento tra ${_qrService.secondiAllaRotazione(carta)}s',
               textAlign: TextAlign.center,
               style: AppTheme.codice(
                 size: 11,

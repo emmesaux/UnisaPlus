@@ -37,6 +37,13 @@ class MensaCard {
   }
 
   bool get valida => cardId.isNotEmpty && cardSecret.isNotEmpty;
+
+  /// Numero o identificativo sintetico della carta (es. '1189345') da mostrare a video,
+  /// senza il payload tecnico completo (`:0000000|0:991231|...`).
+  String get numeroCarta {
+    final primo = cardId.split(':').first.trim();
+    return primo.isNotEmpty ? primo : cardId;
+  }
 }
 
 /// Genera il QR mensa reale: un codice TOTP a tempo derivato dal segreto
@@ -59,11 +66,26 @@ class MensaQrService {
     return _totp(key, counter);
   }
 
-  /// Contenuto da codificare nel QR: id carta e codice corrente. Il
-  /// tornello identifica la carta da `cardId` e verifica il TOTP.
+  /// Contenuto da codificare nel QR: il gateway ADiSURC restituisce `cardid`
+  /// con un placeholder di zeri (es. `:0000000|`) o `:{TOTP}|`.
+  /// Il tornello e la cassa della mensa verificano il codice solo se il TOTP
+  /// sostituisce questo segnaposto (es. `1189345:123456|0:991231|D005...`),
+  /// esattamente come implementato nell'app Campus e ADISURC.EAT.
   String contenutoQr(MensaCard card, {DateTime? ora}) {
     final code = codiceTotp(card, ora: ora);
-    return '${card.cardId}:$code';
+    final raw = card.cardId;
+
+    if (raw.contains(':0000000|')) {
+      return raw.replaceFirst(':0000000|', ':$code|');
+    }
+    if (raw.contains('{TOTP}')) {
+      return raw.replaceAll('{TOTP}', code);
+    }
+    final regexZeros = RegExp(r':0+\|');
+    if (regexZeros.hasMatch(raw)) {
+      return raw.replaceFirst(regexZeros, ':$code|');
+    }
+    return '$raw:$code';
   }
 
   /// Secondi mancanti alla prossima rotazione del codice: utile per il
