@@ -7,6 +7,7 @@ import '../services/auth_service.dart';
 import '../services/easybadge_service.dart';
 import '../theme/app_theme.dart';
 import 'presenze_screen.dart';
+import 'presenza_pubblica_screen.dart';
 
 /// Tesserino universitario digitale, rilevazione presenza e consultazione
 /// delle presenze per ciascun insegnamento.
@@ -75,8 +76,9 @@ class _BadgeScreenState extends State<BadgeScreen> {
 
   Future<void> _onDetect(BarcodeCapture capture) async {
     if (!_scanning) return;
-    final raw =
-        capture.barcodes.isNotEmpty ? capture.barcodes.first.rawValue : null;
+    final raw = capture.barcodes.isNotEmpty
+        ? capture.barcodes.first.rawValue
+        : null;
     if (raw == null || raw.trim().isEmpty) return;
     setState(() => _scanning = false);
     await _invia(raw, fromQr: true);
@@ -369,6 +371,20 @@ class _BadgeScreenState extends State<BadgeScreen> {
             'Rileva la tua presenza',
             style: Theme.of(context).textTheme.titleMedium,
           ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => PresenzaPubblicaScreen(
+                  api: widget.authService.api,
+                  autenticazione: true,
+                  matricolaIniziale: matricola,
+                ),
+              ),
+            ),
+            icon: const Icon(Icons.people_alt_outlined),
+            label: const Text('Rileva per più matricole'),
+          ),
           const SizedBox(height: 4),
           Text(
             'Inquadra il codice QR proiettato dal docente in aula oppure inserisci il codice lezione.',
@@ -440,10 +456,9 @@ class _BadgeScreenState extends State<BadgeScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: (_feedbackOk
-                        ? const Color(0xFF2E7D5B)
-                        : AppColors.corallo)
-                    .withValues(alpha: 0.12),
+                color:
+                    (_feedbackOk ? const Color(0xFF2E7D5B) : AppColors.corallo)
+                        .withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
                   color: _feedbackOk

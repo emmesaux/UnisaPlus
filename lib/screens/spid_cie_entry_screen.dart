@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/demo_mode.dart';
+import '../services/settings_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_logo.dart';
 import 'aule_libere_screen.dart';
@@ -25,6 +27,8 @@ class SpidCieEntryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -60,6 +64,32 @@ class SpidCieEntryScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                      IconButton(
+                        tooltip: l10n.toggleLanguageTooltip,
+                        icon: Text(
+                          SettingsService.instance.locale?.languageCode == 'en'
+                              ? '🇬🇧'
+                              : '🇮🇹',
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        onPressed: () {
+                          final current = SettingsService.instance.locale;
+                          if (current?.languageCode == 'en') {
+                            SettingsService.instance.setLocale(const Locale('it'));
+                          } else {
+                            SettingsService.instance.setLocale(const Locale('en'));
+                          }
+                        },
+                      ),
+                      IconButton(
+                        tooltip: l10n.toggleThemeTooltip,
+                        icon: Icon(
+                          SettingsService.instance.isDarkMode(context)
+                              ? Icons.light_mode_outlined
+                              : Icons.dark_mode_outlined,
+                        ),
+                        onPressed: () => SettingsService.instance.toggleTheme(context),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -67,12 +97,12 @@ class SpidCieEntryScreen extends StatelessWidget {
                   _Tabellone(ora: TimeOfDay.now()),
                   const SizedBox(height: 24),
                   Text(
-                    'Bentornato in $kAppName',
+                    '${l10n.welcomeTo} $kAppName',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Accedi con SPID o CIE per vedere orario, libretto, esami, tasse, mensa e la tua presenza.',
+                    l10n.loginSubtitle,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: scheme.onSurfaceVariant,
                     ),
@@ -80,35 +110,33 @@ class SpidCieEntryScreen extends StatelessWidget {
                   const SizedBox(height: 32),
                   FilledButton.icon(
                     icon: const Icon(Icons.badge_outlined),
-                    label: const Text('Accedi con SPID'),
+                    label: Text(l10n.loginWithSpid),
                     onPressed: () => _apriLogin(context),
                   ),
                   const SizedBox(height: 12),
                   OutlinedButton.icon(
                     icon: const Icon(Icons.credit_card),
-                    label: const Text('Accedi con CIE'),
+                    label: Text(l10n.loginWithCie),
                     onPressed: () => _apriLogin(context),
                   ),
                   const SizedBox(height: 28),
                   Divider(color: scheme.outlineVariant),
                   const SizedBox(height: 16),
                   Text(
-                    'Senza accedere',
+                    l10n.orBrowseFreely,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(height: 8),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.meeting_room_outlined),
-                    title: const Text('Vedi le aule libere ora'),
-                    subtitle: const Text(
-                      'Disponibilita pubblica, nessun account richiesto',
-                    ),
+                    title: Text(l10n.freeRoomsNow),
+                    subtitle: Text(l10n.freeRoomsNowSub),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => Scaffold(
-                          appBar: AppBar(title: const Text('Aule libere')),
+                          appBar: AppBar(title: Text(l10n.freeRoomsNow)),
                           body: AuleLibereScreen(api: authService.api),
                         ),
                       ),
@@ -117,8 +145,8 @@ class SpidCieEntryScreen extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.how_to_reg_outlined),
-                    title: const Text('Rileva presenza con matricola'),
-                    subtitle: const Text('Più matricole, senza SPID/CIE'),
+                    title: Text(l10n.checkInWithoutLogin),
+                    subtitle: Text(l10n.checkInWithoutLoginSub),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
@@ -130,8 +158,8 @@ class SpidCieEntryScreen extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.map_outlined),
-                    title: const Text('Mappa dei Campus'),
-                    subtitle: const Text('Fisciano e Baronissi: edifici, aule, CUS e bus'),
+                    title: Text(l10n.campusMap),
+                    subtitle: Text(l10n.campusMapSub),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
@@ -142,8 +170,8 @@ class SpidCieEntryScreen extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.hub_outlined),
-                    title: const Text('Servizi e collegamenti utili'),
-                    subtitle: const Text('Biblioteche & sale studio, ADISURC, CUS Salerno'),
+                    title: Text(l10n.usefulServices),
+                    subtitle: Text(l10n.usefulServicesSub),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
@@ -152,20 +180,13 @@ class SpidCieEntryScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    'Puoi rilevare una o più presenze con la matricola senza accedere. '
-                    'Per vedere i tuoi dati personali usa SPID o CIE.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  const SizedBox(height: 12),
                   // Accesso dimostrativo per la verifica App Store (Apple
                   // Guideline 2.1a): mostra dati di esempio su tutte le
                   // schermate, senza SPID/CIE. Credenziali nelle note di review.
                   OutlinedButton.icon(
                     onPressed: () => _apriDemo(context),
                     icon: const Icon(Icons.verified_user_outlined, size: 18),
-                    label: const Text('Accesso dimostrativo (verifica App Store)'),
+                    label: Text(l10n.demoMode),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: scheme.onSurfaceVariant,
                       textStyle: Theme.of(context).textTheme.bodySmall,

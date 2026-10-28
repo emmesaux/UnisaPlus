@@ -10,9 +10,16 @@ import 'presenze_screen.dart';
 /// collegata agli endpoint reali EasyBadge di UNISA (`TimbratureApi.php`,
 /// `corso_iscritti.php` e `timbrature.php`).
 class PresenzaPubblicaScreen extends StatefulWidget {
-  const PresenzaPubblicaScreen({super.key, required this.api});
+  const PresenzaPubblicaScreen({
+    super.key,
+    required this.api,
+    this.autenticazione = false,
+    this.matricolaIniziale,
+  });
 
   final ApiService api;
+  final bool autenticazione;
+  final String? matricolaIniziale;
 
   @override
   State<PresenzaPubblicaScreen> createState() => _PresenzaPubblicaScreenState();
@@ -36,6 +43,12 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
   @override
   void initState() {
     super.initState();
+    final iniziale = widget.matricolaIniziale?.trim().toUpperCase();
+    if (iniziale != null && iniziale.isNotEmpty) {
+      _matricolaController.text = iniziale;
+      _matricolaConsultazione = iniziale;
+      _corsiFuture = _badgeService.getCorsi(iniziale);
+    }
     _caricaUltimaMatricola();
   }
 
@@ -87,8 +100,9 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
 
   Future<void> _scan(BarcodeCapture capture) async {
     if (!_scanning) return;
-    final value =
-        capture.barcodes.isNotEmpty ? capture.barcodes.first.rawValue : null;
+    final value = capture.barcodes.isNotEmpty
+        ? capture.barcodes.first.rawValue
+        : null;
     if (value == null || value.trim().isEmpty) return;
     final estratto = EasyBadgeService.estraiCodiceLezione(
       value.trim(),
@@ -152,12 +166,10 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
         final msg = await _badgeService.rilevaPresenza(
           matricola: matricola,
           codiceLezioneRaw: codice,
-          autenticazione: false,
+          autenticazione: widget.autenticazione,
           fromQr: _codeFromQr,
         );
-        okMessages.add(
-          targetMatricole.length == 1 ? msg : '$matricola: $msg',
-        );
+        okMessages.add(targetMatricole.length == 1 ? msg : '$matricola: $msg');
       } on EasyBadgeException catch (e) {
         fallite.add(matricola);
         errorMessages.add(
@@ -203,9 +215,7 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
     final input = _matricolaController.text.trim().toUpperCase();
     final target = input.isNotEmpty
         ? input
-        : (_matricole.isNotEmpty
-              ? _matricole.first
-              : _matricolaConsultazione);
+        : (_matricole.isNotEmpty ? _matricole.first : _matricolaConsultazione);
     if (target.isEmpty) {
       setState(() {
         _feedback = 'Inserisci la tua matricola per consultare le presenze.';
@@ -224,7 +234,13 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Presenze senza accesso')),
+      appBar: AppBar(
+        title: Text(
+          widget.autenticazione
+              ? 'Rilevazione presenze'
+              : 'Presenze senza accesso',
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
         children: [
@@ -234,7 +250,10 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Inserisci la tua matricola (es. 0512112345 o NF12100013) e inquadra il QR proiettato dal docente in aula oppure digita il codice lezione.',
+            widget.autenticazione
+                ? 'Puoi rilevare la presenza per una o più matricole. '
+                      'Inquadra il QR proiettato dal docente oppure digita il codice lezione.'
+                : 'Inserisci la tua matricola (es. 0512112345 o NF12100013) e inquadra il QR proiettato dal docente in aula oppure digita il codice lezione.',
             style: Theme.of(
               context,
             ).textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
@@ -326,9 +345,9 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
                   onPressed: _sending
                       ? null
                       : () => setState(() {
-                            _scanning = true;
-                            _feedback = null;
-                          }),
+                          _scanning = true;
+                          _feedback = null;
+                        }),
                   icon: const Icon(Icons.qr_code_scanner),
                   label: const Text('Scansiona QR lezione proiettato in aula'),
                 ),
@@ -368,9 +387,7 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
                     .withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                  color: _success
-                      ? const Color(0xFF2E7D5B)
-                      : AppColors.corallo,
+                  color: _success ? const Color(0xFF2E7D5B) : AppColors.corallo,
                 ),
               ),
               child: Row(
@@ -487,10 +504,7 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
 }
 
 class _CorsoPresenzaPubblicaTile extends StatelessWidget {
-  const _CorsoPresenzaPubblicaTile({
-    required this.corso,
-    required this.onTap,
-  });
+  const _CorsoPresenzaPubblicaTile({required this.corso, required this.onTap});
 
   final CorsoPresenza corso;
   final VoidCallback onTap;

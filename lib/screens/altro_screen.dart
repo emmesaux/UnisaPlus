@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../models/preferenze_corso.dart';
 import '../services/auth_service.dart';
+import '../services/settings_service.dart';
 import '../theme/app_theme.dart';
 import 'agenda_esami_screen.dart';
 import 'bacheca_esiti_screen.dart';
@@ -21,19 +23,21 @@ class AltroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
       children: [
         // --- SEZIONE: CARRIERA & DIDATTICA ---
-        const _SezioneHeader(titolo: 'Carriera & Didattica'),
+        _SezioneHeader(titolo: l10n.secCarriera),
         _Voce(
           icon: Icons.auto_stories_outlined,
-          titolo: 'Libretto e previsione laurea',
-          sottotitolo: 'Esami sostenuti, medie, CFU e simulatore voto di laurea',
+          titolo: l10n.librettoTitolo,
+          sottotitolo: l10n.librettoSub,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => Scaffold(
-                appBar: AppBar(title: const Text('Libretto e laurea')),
+                appBar: AppBar(title: Text(l10n.librettoAppBar)),
                 body: LibrettoScreen(authService: authService),
               ),
             ),
@@ -41,9 +45,9 @@ class AltroScreen extends StatelessWidget {
         ),
         _Voce(
           icon: Icons.account_tree_outlined,
-          titolo: 'Piano di studi',
-          sottotitolo: 'Insegnamenti per anno di corso, CFU conseguiti e da sostenere',
-          badge: 'Nuovo',
+          titolo: l10n.pianoStudiTitolo,
+          sottotitolo: l10n.pianoStudiSub,
+          badge: l10n.nuovoBadge,
           coloreBadge: AppColors.smeraldo,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
@@ -53,12 +57,12 @@ class AltroScreen extends StatelessWidget {
         ),
         _Voce(
           icon: Icons.fact_check_outlined,
-          titolo: 'Bacheca esiti',
-          sottotitolo: 'Esiti pubblicati, presa visione, accetta o rifiuta voto',
+          titolo: l10n.bachecaEsitiTitolo,
+          sottotitolo: l10n.bachecaEsitiSub,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => Scaffold(
-                appBar: AppBar(title: const Text('Bacheca esiti')),
+                appBar: AppBar(title: Text(l10n.bachecaEsitiTitolo)),
                 body: BachecaEsitiScreen(authService: authService),
               ),
             ),
@@ -66,12 +70,12 @@ class AltroScreen extends StatelessWidget {
         ),
         _Voce(
           icon: Icons.menu_book_outlined,
-          titolo: 'Agenda esami',
-          sottotitolo: 'Esami prenotati e appelli disponibili',
+          titolo: l10n.agendaEsamiTitolo,
+          sottotitolo: l10n.agendaEsamiSub,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => Scaffold(
-                appBar: AppBar(title: const Text('Agenda esami')),
+                appBar: AppBar(title: Text(l10n.agendaEsamiTitolo)),
                 body: AgendaEsamiScreen(authService: authService),
               ),
             ),
@@ -79,12 +83,12 @@ class AltroScreen extends StatelessWidget {
         ),
         _Voce(
           icon: Icons.account_balance_wallet_outlined,
-          titolo: 'Tasse',
-          sottotitolo: 'Contributi universitari, scadenze, stato pagamenti e IUV',
+          titolo: l10n.tasseTitolo,
+          sottotitolo: l10n.tasseSub,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => Scaffold(
-                appBar: AppBar(title: const Text('Tasse universitarie')),
+                appBar: AppBar(title: Text(l10n.tasseAppBar)),
                 body: TasseScreen(authService: authService),
               ),
             ),
@@ -94,11 +98,11 @@ class AltroScreen extends StatelessWidget {
         const SizedBox(height: 20),
 
         // --- SEZIONE: CAMPUS & SERVIZI ---
-        const _SezioneHeader(titolo: 'Campus & Servizi'),
+        _SezioneHeader(titolo: l10n.secCampus),
         _Voce(
           icon: Icons.map_outlined,
-          titolo: 'Mappa dei Campus',
-          sottotitolo: 'Fisciano e Baronissi: edifici, aule, biblioteche, CUS e bus',
+          titolo: l10n.mappaTitolo,
+          sottotitolo: l10n.mappaSub,
           badge: 'Mappe & GPS',
           coloreBadge: AppColors.arancio,
           onTap: () => Navigator.of(context).push(
@@ -109,8 +113,8 @@ class AltroScreen extends StatelessWidget {
         ),
         _Voce(
           icon: Icons.hub_outlined,
-          titolo: 'Servizi e collegamenti utili',
-          sottotitolo: 'Biblioteche di Ateneo, ADISURC, CUS Salerno, Esse3 e CLA',
+          titolo: l10n.serviziTitolo,
+          sottotitolo: l10n.serviziSub,
           badge: 'Link Utili',
           coloreBadge: AppColors.zolfo,
           onTap: () => Navigator.of(context).push(
@@ -121,12 +125,12 @@ class AltroScreen extends StatelessWidget {
         ),
         _Voce(
           icon: Icons.restaurant_outlined,
-          titolo: 'Mensa ADISURC',
-          sottotitolo: 'QR dinamico di accesso e saldo borsellino',
+          titolo: l10n.mensaTitolo,
+          sottotitolo: l10n.mensaSub,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => Scaffold(
-                appBar: AppBar(title: const Text('Mensa')),
+                appBar: AppBar(title: Text(l10n.mensaTitolo)),
                 body: MensaScreen(authService: authService),
               ),
             ),
@@ -134,12 +138,12 @@ class AltroScreen extends StatelessWidget {
         ),
         _Voce(
           icon: Icons.mail_outline,
-          titolo: 'Messaggi',
-          sottotitolo: 'Avvisi di Ateneo e del tuo Dipartimento',
+          titolo: l10n.messaggiTitolo,
+          sottotitolo: l10n.messaggiSub,
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => Scaffold(
-                appBar: AppBar(title: const Text('Messaggi')),
+                appBar: AppBar(title: Text(l10n.messaggiTitolo)),
                 body: MessaggiScreen(authService: authService),
               ),
             ),
@@ -149,14 +153,14 @@ class AltroScreen extends StatelessWidget {
         const SizedBox(height: 20),
 
         // --- SEZIONE: IMPOSTAZIONI ---
-        const _SezioneHeader(titolo: 'Impostazioni'),
+        _SezioneHeader(titolo: l10n.secImpostazioni),
         ValueListenableBuilder<PreferenzeCorso?>(
           valueListenable: authService.preferenzeCorso,
           builder: (context, pref, _) => _Voce(
             icon: Icons.school_outlined,
-            titolo: 'Corso e anno',
+            titolo: l10n.corsoAnnoTitolo,
             sottotitolo: pref == null
-                ? 'Non impostati: scegli per vedere l’orario'
+                ? l10n.corsoAnnoNonImpostato
                 : '${pref.corsoLabel} · ${pref.annoLabel}',
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
@@ -165,7 +169,169 @@ class AltroScreen extends StatelessWidget {
             ),
           ),
         ),
+        ListenableBuilder(
+          listenable: SettingsService.instance,
+          builder: (context, _) {
+            final mode = SettingsService.instance.themeMode;
+            final themeLabel = mode == ThemeMode.light
+                ? l10n.temaSubChiaro
+                : mode == ThemeMode.dark
+                    ? l10n.temaSubScuro
+                    : l10n.temaSubSistema;
+            final loc = SettingsService.instance.locale;
+            final langLabel = loc == null
+                ? l10n.linguaSubSistema
+                : loc.languageCode == 'en'
+                    ? 'English'
+                    : 'Italiano';
+
+            return Column(
+              children: [
+                _Voce(
+                  icon: Icons.palette_outlined,
+                  titolo: l10n.temaTitolo,
+                  sottotitolo: themeLabel,
+                  onTap: () => _mostraSelettoreTema(context),
+                ),
+                _Voce(
+                  icon: Icons.language_outlined,
+                  titolo: l10n.linguaTitolo,
+                  sottotitolo: langLabel,
+                  onTap: () => _mostraSelettoreLingua(context),
+                ),
+              ],
+            );
+          },
+        ),
       ],
+    );
+  }
+
+  void _mostraSelettoreTema(BuildContext context) {
+    final l10n = context.l10n;
+    final current = SettingsService.instance.themeMode;
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: Text(
+                  l10n.temaDialogTitle,
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              RadioListTile<ThemeMode>(
+                secondary: const Icon(Icons.brightness_auto_outlined),
+                title: Text(l10n.temaOpzioneSistema),
+                subtitle: Text(l10n.temaSubSistema),
+                value: ThemeMode.system,
+                groupValue: current,
+                onChanged: (mode) {
+                  if (mode != null) {
+                    SettingsService.instance.setThemeMode(mode);
+                  }
+                  Navigator.of(sheetContext).pop();
+                },
+              ),
+              RadioListTile<ThemeMode>(
+                secondary: const Icon(Icons.light_mode_outlined),
+                title: Text(l10n.temaOpzioneChiaro),
+                subtitle: Text(l10n.temaSubChiaro),
+                value: ThemeMode.light,
+                groupValue: current,
+                onChanged: (mode) {
+                  if (mode != null) {
+                    SettingsService.instance.setThemeMode(mode);
+                  }
+                  Navigator.of(sheetContext).pop();
+                },
+              ),
+              RadioListTile<ThemeMode>(
+                secondary: const Icon(Icons.dark_mode_outlined),
+                title: Text(l10n.temaOpzioneScuro),
+                subtitle: Text(l10n.temaSubScuro),
+                value: ThemeMode.dark,
+                groupValue: current,
+                onChanged: (mode) {
+                  if (mode != null) {
+                    SettingsService.instance.setThemeMode(mode);
+                  }
+                  Navigator.of(sheetContext).pop();
+                },
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _mostraSelettoreLingua(BuildContext context) {
+    final l10n = context.l10n;
+    final current = SettingsService.instance.locale;
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                child: Text(
+                  l10n.linguaDialogTitle,
+                  style: Theme.of(sheetContext).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              RadioListTile<String>(
+                secondary: const Icon(Icons.phonelink_setup_outlined),
+                title: Text(l10n.linguaOpzioneSistema),
+                subtitle: Text(l10n.linguaSubSistema),
+                value: 'system',
+                groupValue: current == null ? 'system' : current.languageCode,
+                onChanged: (_) {
+                  SettingsService.instance.setLocale(null);
+                  Navigator.of(sheetContext).pop();
+                },
+              ),
+              RadioListTile<String>(
+                secondary: const Text('🇮🇹', style: TextStyle(fontSize: 20)),
+                title: const Text('Italiano'),
+                value: 'it',
+                groupValue: current == null ? 'system' : current.languageCode,
+                onChanged: (_) {
+                  SettingsService.instance.setLocale(const Locale('it'));
+                  Navigator.of(sheetContext).pop();
+                },
+              ),
+              RadioListTile<String>(
+                secondary: const Text('🇬🇧', style: TextStyle(fontSize: 20)),
+                title: const Text('English'),
+                value: 'en',
+                groupValue: current == null ? 'system' : current.languageCode,
+                onChanged: (_) {
+                  SettingsService.instance.setLocale(const Locale('en'));
+                  Navigator.of(sheetContext).pop();
+                },
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
+import '../services/settings_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_logo.dart';
 import 'orario_screen.dart';
@@ -36,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final user = widget.authService.currentUser;
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -44,13 +47,22 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 10),
             Flexible(
               child: Text(
-                _titleFor(_index),
+                _titleFor(_index, l10n),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
         ),
         actions: [
+          IconButton(
+            tooltip: l10n.toggleThemeTooltip,
+            icon: Icon(
+              SettingsService.instance.isDarkMode(context)
+                  ? Icons.light_mode_outlined
+                  : Icons.dark_mode_outlined,
+            ),
+            onPressed: () => SettingsService.instance.toggleTheme(context),
+          ),
           PopupMenuButton<String>(
             icon: Container(
               width: 32,
@@ -77,11 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
               const PopupMenuDivider(),
               PopupMenuItem(
                 value: 'logout',
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.logout, size: 18),
-                    SizedBox(width: 8),
-                    Text('Esci'),
+                    const Icon(Icons.logout, size: 18),
+                    const SizedBox(width: 8),
+                    Text(l10n.logout),
                   ],
                 ),
               ),
@@ -108,26 +120,26 @@ class _HomeScreenState extends State<HomeScreen> {
         child: NavigationBar(
           selectedIndex: _index,
           onDestinationSelected: (i) => setState(() => _index = i),
-          destinations: const [
+          destinations: [
             NavigationDestination(
-              icon: Icon(Icons.calendar_today_outlined),
-              selectedIcon: Icon(Icons.calendar_today),
-              label: 'Orario',
+              icon: const Icon(Icons.calendar_today_outlined),
+              selectedIcon: const Icon(Icons.calendar_today),
+              label: l10n.navOrario,
             ),
             NavigationDestination(
-              icon: Icon(Icons.meeting_room_outlined),
-              selectedIcon: Icon(Icons.meeting_room),
-              label: 'Aule',
+              icon: const Icon(Icons.meeting_room_outlined),
+              selectedIcon: const Icon(Icons.meeting_room),
+              label: l10n.navAule,
             ),
             NavigationDestination(
-              icon: Icon(Icons.badge_outlined),
-              selectedIcon: Icon(Icons.badge),
-              label: 'Badge',
+              icon: const Icon(Icons.badge_outlined),
+              selectedIcon: const Icon(Icons.badge),
+              label: l10n.navBadge,
             ),
             NavigationDestination(
-              icon: Icon(Icons.grid_view_outlined),
-              selectedIcon: Icon(Icons.grid_view),
-              label: 'Altro',
+              icon: const Icon(Icons.grid_view_outlined),
+              selectedIcon: const Icon(Icons.grid_view),
+              label: l10n.navAltro,
             ),
           ],
         ),
@@ -135,16 +147,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  String _titleFor(int i) {
+  String _titleFor(int i, AppLocalizations l10n) {
     switch (i) {
       case 0:
-        return 'Il mio orario';
+        return l10n.titleOrario;
       case 1:
-        return 'Aule libere';
+        return l10n.titleAule;
       case 2:
-        return 'Badge e presenze';
+        return l10n.titleBadge;
       case 3:
-        return 'Altro';
+        return l10n.titleAltro;
       default:
         return '';
     }

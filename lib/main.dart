@@ -9,11 +9,14 @@ import 'screens/selezione_corso_screen.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/cineca_login_service.dart';
+import 'services/settings_service.dart';
 import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('it_IT');
+  await initializeDateFormatting('en_US');
+  await SettingsService.instance.init();
   runApp(const UniApp());
 }
 
@@ -103,39 +106,49 @@ class _UniAppState extends State<UniApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Unisa Plus',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      themeMode: ThemeMode.system,
-      home: _checkingSession
-          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
-          : _loggedIn && _auth.serveSceltaCorso && !_sceltaCorsoRimandata
-          // Primo accesso (o nuovo anno accademico): come nell'app campus
-          // si chiedono corso e anno, poi si cambiano da Altro.
-          ? SelezioneCorsoScreen(
-              authService: _auth,
-              primoAccesso: true,
-              onSalvato: () => setState(() => _sceltaCorsoRimandata = true),
-            )
-          : _loggedIn
-          ? UpgradeAlert(
-              upgrader: _upgrader,
-              child: HomeScreen(
-                authService: _auth,
-                onLogout: () => setState(() {
-                  _loggedIn = false;
-                  _sceltaCorsoRimandata = false;
-                }),
-              ),
-            )
-          // Schermata "di ingresso": accesso con SPID/CIE, oppure
-          // consultazione delle aule libere senza autenticarsi.
-          : SpidCieEntryScreen(
-              authService: _auth,
-              onLoggedIn: () => setState(() => _loggedIn = true),
-            ),
+    return ListenableBuilder(
+      listenable: SettingsService.instance,
+      builder: (context, _) {
+        return MaterialApp(
+          title: 'Unisa Plus',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
+          themeMode: SettingsService.instance.themeMode,
+          locale: SettingsService.instance.locale,
+          supportedLocales: const [
+            Locale('it'),
+            Locale('en'),
+          ],
+          home: _checkingSession
+              ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+              : _loggedIn && _auth.serveSceltaCorso && !_sceltaCorsoRimandata
+              // Primo accesso (o nuovo anno accademico): come nell'app campus
+              // si chiedono corso e anno, poi si cambiano da Altro.
+              ? SelezioneCorsoScreen(
+                  authService: _auth,
+                  primoAccesso: true,
+                  onSalvato: () => setState(() => _sceltaCorsoRimandata = true),
+                )
+              : _loggedIn
+              ? UpgradeAlert(
+                  upgrader: _upgrader,
+                  child: HomeScreen(
+                    authService: _auth,
+                    onLogout: () => setState(() {
+                      _loggedIn = false;
+                      _sceltaCorsoRimandata = false;
+                    }),
+                  ),
+                )
+              // Schermata "di ingresso": accesso con SPID/CIE, oppure
+              // consultazione delle aule libere senza autenticarsi.
+              : SpidCieEntryScreen(
+                  authService: _auth,
+                  onLoggedIn: () => setState(() => _loggedIn = true),
+                ),
+        );
+      },
     );
   }
 }
