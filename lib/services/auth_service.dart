@@ -6,6 +6,7 @@ import '../models/preferenze_corso.dart';
 import '../models/user.dart';
 import 'api_service.dart';
 import 'cineca_rest_service.dart';
+import 'demo_mode.dart';
 import 'easycourse_combo_service.dart';
 
 /// Gestisce login, logout e sessione corrente.
@@ -28,6 +29,7 @@ class AuthService {
   /// Appelli d'esame reali per l'utente corrente. Richiede un login con
   /// carriera valida; in assenza propaga un errore invece di inventare.
   Future<List<EsameAgenda>> getAppelliReali() async {
+    if (DemoMode.isActive) return DemoMode.esami();
     final user = currentUser;
     if (user == null || !user.haCarriera) {
       throw CinecaRestException('Carriera non disponibile per questo account.');
@@ -41,6 +43,7 @@ class AuthService {
 
   /// Libretto e statistiche reali per l'utente corrente.
   Future<LibrettoDati> getLibrettoReale() async {
+    if (DemoMode.isActive) return DemoMode.libretto();
     final user = currentUser;
     if (user == null || !user.haCarriera) {
       throw CinecaRestException('Carriera non disponibile per questo account.');
@@ -54,6 +57,7 @@ class AuthService {
 
   /// Tasse universitarie reali per l'utente corrente.
   Future<List<TassaFattura>> getTasseReali() async {
+    if (DemoMode.isActive) return DemoMode.tasse();
     final user = currentUser;
     if (user == null || user.stuId.isEmpty) {
       throw CinecaRestException('Profilo studente non disponibile.');
@@ -66,6 +70,7 @@ class AuthService {
 
   /// Bacheca esiti reale per l'utente corrente.
   Future<List<EsitoBacheca>> getBachecaEsitiReali() async {
+    if (DemoMode.isActive) return DemoMode.bacheca();
     final user = currentUser;
     if (user == null || (!user.haCarriera && user.stuId.isEmpty)) {
       throw CinecaRestException('Carriera non disponibile per questo account.');
@@ -108,6 +113,19 @@ class AuthService {
     return user;
   }
 
+  /// Attiva la modalità dimostrativa per la verifica App Store: crea una
+  /// sessione di esempio (nessuna chiamata di rete) con dati pre-popolati per
+  /// tutte le schermate. Vedi [DemoMode].
+  Future<AppUser> loginDemo() async {
+    DemoMode.enable();
+    final user = DemoMode.utente();
+    _applicaAllaApi(user);
+    currentUser = user;
+    await _storage.write(key: _kUserKey, value: jsonEncode(user.toJson()));
+    _applicaPreferenze(DemoMode.preferenze());
+    return user;
+  }
+
   void _applicaAllaApi(AppUser user) {
     api.token = user.token;
     api.corsoCodice = user.corsoCodice;
@@ -127,6 +145,15 @@ class AuthService {
         .timeout(const Duration(seconds: 5), onTimeout: () => null);
     if (raw == null) return null;
     final user = AppUser.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    // Sessione dimostrativa salvata (verifica App Store): si riattiva la demo
+    // e si usano corso/anno di esempio, senza toccare la rete.
+    if (user.token == 'DEMO') {
+      DemoMode.enable();
+      _applicaAllaApi(user);
+      currentUser = user;
+      _applicaPreferenze(DemoMode.preferenze());
+      return user;
+    }
     _applicaAllaApi(user);
     currentUser = user;
     await _caricaPreferenzeCorso(user);
@@ -186,6 +213,7 @@ class AuthService {
   }
 
   Future<void> logout() async {
+    DemoMode.disable();
     currentUser = null;
     api.token = null;
     api.corsoCodice = '';

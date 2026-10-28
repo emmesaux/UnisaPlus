@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import '../models/presenza.dart';
+import 'demo_mode.dart';
 
 /// Servizio EasyBadge dell'ateneo UNISA (`it.easystaff.unisa`):
 ///  - `TimbratureApi.php`  : registrazione presenza in aula (`action: CreateFromJSON`)
@@ -212,6 +213,7 @@ class EasyBadgeService {
 
   /// Elenco dei corsi con il riepilogo di frequenza (`corso_iscritti.php`).
   Future<List<CorsoPresenza>> getCorsi(String matricola) async {
+    if (DemoMode.isActive) return DemoMode.corsiPresenza();
     final cleanMatricola = matricola.trim();
     if (cleanMatricola.isEmpty) return [];
 
@@ -257,6 +259,7 @@ class EasyBadgeService {
     String matricola,
     List<String> codiciCorso,
   ) async {
+    if (DemoMode.isActive) return DemoMode.lezioniPresenza();
     final cleanMatricola = matricola.trim();
     if (cleanMatricola.isEmpty || codiciCorso.isEmpty) return [];
 

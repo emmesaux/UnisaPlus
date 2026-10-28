@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 import '../models/aula.dart';
+import 'demo_mode.dart';
 import 'easybadge_service.dart';
 
 /// Client HTTP verso il backend dell'ateneo.
@@ -84,6 +85,7 @@ class ApiService {
   /// scelti dallo studente (es. corso "05121", anno2 "PDS0-2026-A-C|1");
   /// `anno` è l'anno accademico del combo da cui provengono.
   Future<List<dynamic>> getOrarioReale(DateTime from, DateTime to) async {
+    if (DemoMode.isActive) return DemoMode.orario();
     if (!haCorsoOrario) {
       throw CorsoNonImpostatoException();
     }

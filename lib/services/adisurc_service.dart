@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'demo_mode.dart';
 import 'mensa_qr_service.dart';
 
 /// Saldo del borsellino mensa ADiSURC e gestione del tesserino QR TOTP.
@@ -67,6 +68,7 @@ class AdisurcService {
   String? _infoRistorazioneToken;
 
   bool get associato =>
+      DemoMode.isActive ||
       (_mensaKey != null && _mensaKey!.isNotEmpty) ||
       _sessionToken != null ||
       cartaMensa != null;
@@ -77,6 +79,7 @@ class AdisurcService {
   String? _accessTokenSRM;
   String? _sidSRM;
   bool get loggato =>
+      DemoMode.isActive ||
       (_accessToken != null && _flag0 != null) ||
       _infoRistorazioneToken != null ||
       _cachedSaldo != null;
@@ -247,6 +250,7 @@ class AdisurcService {
   /// `_mensaKey`, esegue automaticamente il provisioning da `DEVICE-MENSA`
   /// (come Campus, senza bisogno di scansionare il QR con la fotocamera).
   Future<MensaCard?> caricaCartaMensa() async {
+    if (DemoMode.isActive) return DemoMode.carta();
     await restoreSession();
     var key = _mensaKey;
     if ((key == null || key.isEmpty) &&
@@ -768,6 +772,7 @@ class AdisurcService {
   /// Saldo del borsellino mensa ADiSURC dall'endpoint `badgeinfo`:
   /// `https://adisurc-ol.dirittoallostudio.it/apps/V3.1/dol-100/25/INFO-RISTORAZIONE/public/index.php/badgeinfo?p_idanac=2025&p_codappl=INFO-RISTORAZIONE&p_flag0={flag0}`
   Future<WalletAdisurc?> getSaldo({bool forceRefresh = false}) async {
+    if (DemoMode.isActive) return DemoMode.wallet();
     await restoreSession();
     final token = _accessToken;
     final flag0 = _flag0;

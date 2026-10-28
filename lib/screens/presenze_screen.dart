@@ -48,6 +48,7 @@ class _PresenzeScreenState extends State<PresenzeScreen> {
             icon: Icons.cloud_off_outlined,
             title: 'Presenze non disponibili',
             message: 'Il servizio presenze non ha risposto. Riprova tra poco.',
+            upstream: true,
             onRetry: _ricarica,
           );
         }

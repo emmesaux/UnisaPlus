@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../services/demo_mode.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_logo.dart';
 import 'aule_libere_screen.dart';
@@ -157,6 +158,19 @@ class SpidCieEntryScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
+                  const SizedBox(height: 12),
+                  // Accesso dimostrativo per la verifica App Store (Apple
+                  // Guideline 2.1a): mostra dati di esempio su tutte le
+                  // schermate, senza SPID/CIE. Credenziali nelle note di review.
+                  OutlinedButton.icon(
+                    onPressed: () => _apriDemo(context),
+                    icon: const Icon(Icons.verified_user_outlined, size: 18),
+                    label: const Text('Accesso dimostrativo (verifica App Store)'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: scheme.onSurfaceVariant,
+                      textStyle: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -177,6 +191,85 @@ class SpidCieEntryScreen extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  /// Dialog per i recensori App Store: inserendo le credenziali comunicate
+  /// nelle "App Review Information" si entra in modalità dimostrativa, con
+  /// dati di esempio su orario, libretto, esami, presenze e saldo mensa.
+  void _apriDemo(BuildContext context) {
+    final userCtrl = TextEditingController();
+    final passCtrl = TextEditingController();
+    showDialog<void>(
+      context: context,
+      builder: (ctx) {
+        String? errore;
+        return StatefulBuilder(
+          builder: (ctx, setStateDialog) {
+            Future<void> accedi() async {
+              if (!DemoMode.matches(userCtrl.text, passCtrl.text)) {
+                setStateDialog(() => errore = 'Credenziali non valide.');
+                return;
+              }
+              await authService.loginDemo();
+              if (!ctx.mounted) return;
+              Navigator.of(ctx).pop();
+              onLoggedIn();
+            }
+
+            return AlertDialog(
+              title: const Text('Accesso dimostrativo'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Riservato alla verifica App Store. Mostra dati di esempio '
+                    'su tutte le schermate, senza SPID/CIE.',
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: userCtrl,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    decoration: const InputDecoration(
+                      labelText: 'Utente',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: passCtrl,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                    onSubmitted: (_) => accedi(),
+                  ),
+                  if (errore != null) ...[
+                    const SizedBox(height: 12),
+                    Text(
+                      errore!,
+                      style: TextStyle(color: Theme.of(ctx).colorScheme.error),
+                    ),
+                  ],
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: const Text('Annulla'),
+                ),
+                FilledButton(
+                  onPressed: accedi,
+                  child: const Text('Accedi'),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

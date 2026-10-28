@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:app_links/app_links.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:upgrader/upgrader.dart';
 import 'screens/spid_cie_entry_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/selezione_corso_screen.dart';
@@ -28,6 +29,14 @@ class _UniAppState extends State<UniApp> {
     baseUrl: 'https://easycourse.unisa.it/EasyApp/api',
   );
   late final AuthService _auth = AuthService(_api);
+
+  // Controllo aggiornamenti: confronta la versione installata con quella
+  // pubblicata su App Store (iOS) e Google Play (Android) e, se ne esiste una
+  // piu' recente, mostra un popup. Riproposto al massimo una volta al giorno.
+  late final Upgrader _upgrader = Upgrader(
+    messages: UpgraderMessages(code: 'it'),
+    durationUntilAlertAgain: const Duration(days: 1),
+  );
 
   bool _checkingSession = true;
   bool _loggedIn = false;
@@ -111,12 +120,15 @@ class _UniAppState extends State<UniApp> {
               onSalvato: () => setState(() => _sceltaCorsoRimandata = true),
             )
           : _loggedIn
-          ? HomeScreen(
-              authService: _auth,
-              onLogout: () => setState(() {
-                _loggedIn = false;
-                _sceltaCorsoRimandata = false;
-              }),
+          ? UpgradeAlert(
+              upgrader: _upgrader,
+              child: HomeScreen(
+                authService: _auth,
+                onLogout: () => setState(() {
+                  _loggedIn = false;
+                  _sceltaCorsoRimandata = false;
+                }),
+              ),
             )
           // Schermata "di ingresso": accesso con SPID/CIE, oppure
           // consultazione delle aule libere senza autenticarsi.

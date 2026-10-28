@@ -314,6 +314,7 @@ class _MessaggiScreenState extends State<MessaggiScreen> {
             message: isDipartimento
                 ? 'Il sito del dipartimento (${_dipartimento?.sigla ?? ""}) non è al momento raggiungibile.'
                 : 'Il portale web di Ateneo non è al momento raggiungibile.',
+            upstream: true,
             onRetry: _ricaricaCorrente,
           );
         }

@@ -64,6 +64,7 @@ class _AgendaEsamiScreenState extends State<AgendaEsamiScreen>
                   title: 'Esami non disponibili',
                   message:
                       'Il servizio esami dell’ateneo non ha risposto. Riprova tra poco.',
+                  upstream: true,
                   onRetry: _ricarica,
                 );
               }
