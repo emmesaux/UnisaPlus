@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/demo_mode.dart';
 import '../services/settings_service.dart';
-import '../theme/app_theme.dart';
+import '../widgets/app_arrow.dart';
 import '../widgets/app_logo.dart';
 import 'aule_libere_screen.dart';
 import 'mappa_campus_screen.dart';
@@ -92,10 +93,7 @@ class SpidCieEntryScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  // Tabellone: ora e orario reali, come intestazione.
-                  _Tabellone(ora: TimeOfDay.now()),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
                   Text(
                     '${l10n.welcomeTo} $kAppName',
                     style: Theme.of(context).textTheme.headlineMedium,
@@ -109,13 +107,33 @@ class SpidCieEntryScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
                   FilledButton.icon(
-                    icon: const Icon(Icons.badge_outlined),
+                    icon: Container(
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Image.asset(
+                        'assets/loghi/spid-ico-circle-bb.png',
+                        height: 18,
+                        width: 18,
+                      ),
+                    ),
                     label: Text(l10n.loginWithSpid),
                     onPressed: () => _apriLogin(context),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
+                  _SpidProvidersStrip(onTap: () => _apriLogin(context)),
+                  const SizedBox(height: 14),
                   OutlinedButton.icon(
-                    icon: const Icon(Icons.credit_card),
+                    icon: SvgPicture.asset(
+                      'assets/loghi/logo_cie_id.svg',
+                      height: 22,
+                      colorFilter: ColorFilter.mode(
+                        scheme.primary,
+                        BlendMode.srcIn,
+                      ),
+                    ),
                     label: Text(l10n.loginWithCie),
                     onPressed: () => _apriLogin(context),
                   ),
@@ -132,7 +150,7 @@ class SpidCieEntryScreen extends StatelessWidget {
                     leading: const Icon(Icons.meeting_room_outlined),
                     title: Text(l10n.freeRoomsNow),
                     subtitle: Text(l10n.freeRoomsNowSub),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: const AppArrow(),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => Scaffold(
@@ -147,7 +165,7 @@ class SpidCieEntryScreen extends StatelessWidget {
                     leading: const Icon(Icons.how_to_reg_outlined),
                     title: Text(l10n.checkInWithoutLogin),
                     subtitle: Text(l10n.checkInWithoutLoginSub),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: const AppArrow(),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) =>
@@ -160,7 +178,7 @@ class SpidCieEntryScreen extends StatelessWidget {
                     leading: const Icon(Icons.map_outlined),
                     title: Text(l10n.campusMap),
                     subtitle: Text(l10n.campusMapSub),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: const AppArrow(),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => const MappaCampusScreen(),
@@ -172,7 +190,7 @@ class SpidCieEntryScreen extends StatelessWidget {
                     leading: const Icon(Icons.hub_outlined),
                     title: Text(l10n.usefulServices),
                     subtitle: Text(l10n.usefulServicesSub),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: const AppArrow(),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => const ServiziUtiliScreen(),
@@ -297,37 +315,70 @@ class SpidCieEntryScreen extends StatelessWidget {
 
 /// Riquadro scuro con l'ora corrente in cifre grandi, come un vero
 /// tabellone: e il primo elemento che si vede, prima ancora del saluto.
-class _Tabellone extends StatelessWidget {
-  const _Tabellone({required this.ora});
-  final TimeOfDay ora;
+/// Striscia con i loghi reali dei gestori di identità SPID supportati.
+/// Tutti aprono lo stesso accesso CINECA (dove si sceglie il gestore);
+/// i loghi sono quelli ufficiali AgID.
+class _SpidProvidersStrip extends StatelessWidget {
+  const _SpidProvidersStrip({required this.onTap});
+  final VoidCallback onTap;
+
+  static const _providers = [
+    'spid-idp-posteid.png',
+    'spid-idp-timid.png',
+    'spid-idp-arubaid.png',
+    'spid-idp-infocertid.png',
+    'spid-idp-lepidaid.png',
+    'spid-idp-namirialid.png',
+    'spid-idp-sielteid.png',
+    'spid-idp-spiditalia.png',
+    'spid-idp-teamsystemid.png',
+    'spid-idp-intesaid.png',
+    'spid-idp-etnaid.png',
+    'spid-idp-infocamereid.png',
+    'spid-idp-intesigroupspid.png',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final hh = ora.hour.toString().padLeft(2, '0');
-    final mm = ora.minute.toString().padLeft(2, '0');
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.inchiostro,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
-      child: Column(
-        children: [
-          Text(
-            'UNIVERSITA DI SALERNO',
-            style: AppTheme.codice(size: 12, color: AppColors.nebbiaChiara),
+    final scheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'con il tuo gestore SPID',
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: scheme.onSurfaceVariant),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [for (final p in _providers) _logo(p)],
+        ),
+      ],
+    );
+  }
+
+  Widget _logo(String file) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(6),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          width: 64,
+          height: 34,
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 6),
+          child: Image.asset(
+            'assets/loghi/$file',
+            fit: BoxFit.contain,
           ),
-          const SizedBox(height: 8),
-          Text(
-            '$hh:$mm',
-            style: AppTheme.numerico(
-              size: 56,
-              color: AppColors.pietra,
-              weight: FontWeight.w500,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
+

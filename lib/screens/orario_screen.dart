@@ -183,7 +183,7 @@ class _OrarioScreenState extends State<OrarioScreen> {
                 onRefresh: () async => _ricarica(),
                 child: ListView(
                   controller: _scrollController,
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
                   children: [
                     _StripGiorni(
                       weekStart: _weekStart,

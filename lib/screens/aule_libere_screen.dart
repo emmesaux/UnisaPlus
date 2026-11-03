@@ -137,7 +137,7 @@ class _AuleLibereScreenState extends State<AuleLibereScreen> {
               return RefreshIndicator(
                 onRefresh: () async => _ricarica(),
                 child: ListView(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),

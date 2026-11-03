@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_arrow.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../models/preferenze_corso.dart';
@@ -149,7 +150,7 @@ class _BadgeScreenState extends State<BadgeScreen> {
     return RefreshIndicator(
       onRefresh: () async => _ricaricaPresenze(),
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
         children: [
           // --- Tesserino universitario digitale con matricola copiabile ---
           ValueListenableBuilder<PreferenzeCorso?>(
@@ -663,7 +664,7 @@ class _CorsoPresenzaCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
+              const AppArrow(),
             ],
           ),
         ),

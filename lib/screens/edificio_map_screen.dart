@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_arrow.dart';
 import '../models/aula.dart';
 import '../models/campus_map_data.dart';
 import '../services/api_service.dart';
@@ -583,7 +584,7 @@ class _EdificioMapScreenState extends State<EdificioMapScreen> {
                     child: ListTile(
                       title: Text(r.name),
                       subtitle: Text(r.code),
-                      trailing: const Icon(Icons.chevron_right),
+                      trailing: const AppArrow(),
                       onTap: () => _apriDettaglioAula(r),
                     ),
                   );

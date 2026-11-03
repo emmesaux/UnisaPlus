@@ -4,6 +4,7 @@ import '../services/auth_service.dart';
 import '../services/easycourse_combo_service.dart';
 import '../services/unisa_news_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_segmented.dart';
 import '../widgets/empty_state.dart';
 
 /// Pagina Avvisi e Messaggi, divisa come l'app Campus in due sezioni:
@@ -196,23 +197,13 @@ class _MessaggiScreenState extends State<MessaggiScreen> {
           child: Row(
             children: [
               Expanded(
-                child: SegmentedButton<int>(
+                child: AppSegmented<int>(
+                  value: _sezione,
+                  onChanged: (v) => setState(() => _sezione = v),
                   segments: const [
-                    ButtonSegment<int>(
-                      value: 0,
-                      icon: Icon(Icons.account_balance_outlined, size: 18),
-                      label: Text('News Ateneo'),
-                    ),
-                    ButtonSegment<int>(
-                      value: 1,
-                      icon: Icon(Icons.domain_outlined, size: 18),
-                      label: Text('News Dipartimento'),
-                    ),
+                    AppSegment(value: 0, label: 'News Ateneo', icon: Icons.account_balance_outlined),
+                    AppSegment(value: 1, label: 'News Dipartimento', icon: Icons.domain_outlined),
                   ],
-                  selected: {_sezione},
-                  onSelectionChanged: (sel) {
-                    setState(() => _sezione = sel.first);
-                  },
                 ),
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/cineca_rest_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_segmented.dart';
 
 class LibrettoScreen extends StatefulWidget {
   const LibrettoScreen({super.key, required this.authService});
@@ -199,21 +200,13 @@ class _LibrettoScreenState extends State<LibrettoScreen> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-          child: SegmentedButton<int>(
+          child: AppSegmented<int>(
+            value: _sezione,
+            onChanged: (v) => setState(() => _sezione = v),
             segments: const [
-              ButtonSegment(
-                value: 0,
-                icon: Icon(Icons.book_outlined, size: 18),
-                label: Text('Libretto'),
-              ),
-              ButtonSegment(
-                value: 1,
-                icon: Icon(Icons.school_outlined, size: 18),
-                label: Text('Previsione laurea'),
-              ),
+              AppSegment(value: 0, label: 'Libretto', icon: Icons.menu_book_outlined),
+              AppSegment(value: 1, label: 'Previsione laurea', icon: Icons.school_outlined),
             ],
-            selected: {_sezione},
-            onSelectionChanged: (s) => setState(() => _sezione = s.first),
           ),
         ),
         Expanded(
@@ -516,20 +509,22 @@ class _LibrettoScreenState extends State<LibrettoScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Calcola voto finale su:',
-                    style: Theme.of(context).textTheme.bodySmall,
+                  Flexible(
+                    child: Text(
+                      'Calcola voto finale su:',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ),
-                  SegmentedButton<bool>(
-                    segments: const [
-                      ButtonSegment(value: true, label: Text('Ponderata')),
-                      ButtonSegment(value: false, label: Text('Aritmetica')),
-                    ],
-                    selected: {_usaMediaPonderata},
-                    onSelectionChanged: (s) =>
-                        setState(() => _usaMediaPonderata = s.first),
-                    style: const ButtonStyle(
-                      visualDensity: VisualDensity.compact,
+                  const SizedBox(width: 12),
+                  SizedBox(
+                    width: 210,
+                    child: AppSegmented<bool>(
+                      value: _usaMediaPonderata,
+                      onChanged: (v) => setState(() => _usaMediaPonderata = v),
+                      segments: const [
+                        AppSegment(value: true, label: 'Ponderata'),
+                        AppSegment(value: false, label: 'Aritmetica'),
+                      ],
                     ),
                   ),
                 ],

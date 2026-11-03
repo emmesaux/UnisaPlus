@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_arrow.dart';
 import '../models/preferenze_corso.dart';
 import '../services/auth_service.dart';
 import '../services/easycourse_combo_service.dart';
@@ -238,7 +239,7 @@ class _SelezioneCorsoScreenState extends State<SelezioneCorsoScreen> {
   Widget _tileCorso(CorsoCombo c) => ListTile(
     title: Text(c.label),
     subtitle: Text([c.tipo, c.valore].where((s) => s.isNotEmpty).join(' · ')),
-    trailing: const Icon(Icons.chevron_right),
+    trailing: const AppArrow(),
     onTap: () {
       final user = widget.authService.currentUser;
       setState(() {

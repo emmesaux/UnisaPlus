@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/cineca_rest_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_segmented.dart';
 import '../widgets/empty_state.dart';
 
 enum FiltroPiano {
@@ -287,20 +288,13 @@ class _PianoStudiScreenState extends State<PianoStudiScreen> {
 
                 const SizedBox(height: 12),
 
-                // Chips filtro
-                SegmentedButton<FiltroPiano>(
-                  segments: FiltroPiano.values.map((f) {
-                    return ButtonSegment(
-                      value: f,
-                      label: Text(f.label, style: const TextStyle(fontSize: 12)),
-                    );
-                  }).toList(),
-                  selected: {_filtro},
-                  onSelectionChanged: (set) {
-                    if (set.isNotEmpty) {
-                      setState(() => _filtro = set.first);
-                    }
-                  },
+                // Filtro segmentato
+                AppSegmented<FiltroPiano>(
+                  value: _filtro,
+                  onChanged: (f) => setState(() => _filtro = f),
+                  segments: FiltroPiano.values
+                      .map((f) => AppSegment(value: f, label: f.label))
+                      .toList(),
                 ),
 
                 const SizedBox(height: 16),

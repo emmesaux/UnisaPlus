@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_arrow.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../models/presenza.dart';
 import '../services/api_service.dart';
@@ -539,7 +540,7 @@ class _CorsoPresenzaPubblicaTile extends StatelessWidget {
           '${corso.percentuale.toStringAsFixed(0)}%',
           style: AppTheme.numerico(size: 18, color: colore),
         ),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: const AppArrow(),
       ),
     );
   }

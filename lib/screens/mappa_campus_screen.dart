@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_arrow.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/campus_map_data.dart';
 import '../services/api_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_segmented.dart';
 import 'edificio_map_screen.dart';
 
 enum TipoCampus {
@@ -609,7 +611,7 @@ class _MappaCampusScreenState extends State<MappaCampusScreen> {
                         subtitle: Text(
                           '$numPiani planimetrie · $numAule aule censite',
                         ),
-                        trailing: const Icon(Icons.chevron_right),
+                        trailing: const AppArrow(),
                         onTap: () {
                           Navigator.of(ctx).pop();
                           if (data != null) {
@@ -752,29 +754,25 @@ class _MappaCampusScreenState extends State<MappaCampusScreen> {
           // Selettore Campus: Fisciano / Baronissi
           Container(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
-            child: SegmentedButton<TipoCampus>(
+            child: AppSegmented<TipoCampus>(
+              value: _campusSelezionato,
+              onChanged: (c) => setState(() {
+                _campusSelezionato = c;
+                _edificioSelezionato = null;
+                _resetZoom();
+              }),
               segments: const [
-                ButtonSegment(
+                AppSegment(
                   value: TipoCampus.fisciano,
-                  label: Text('Campus di Fisciano'),
-                  icon: Icon(Icons.school, size: 18),
+                  label: 'Fisciano',
+                  icon: Icons.school,
                 ),
-                ButtonSegment(
+                AppSegment(
                   value: TipoCampus.baronissi,
-                  label: Text('Campus di Baronissi'),
-                  icon: Icon(Icons.local_hospital, size: 18),
+                  label: 'Baronissi',
+                  icon: Icons.local_hospital,
                 ),
               ],
-              selected: {_campusSelezionato},
-              onSelectionChanged: (set) {
-                if (set.isNotEmpty) {
-                  setState(() {
-                    _campusSelezionato = set.first;
-                    _edificioSelezionato = null;
-                    _resetZoom();
-                  });
-                }
-              },
             ),
           ),
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
-import '../models/preferenze_corso.dart';
 import '../services/auth_service.dart';
 import '../services/settings_service.dart';
 import '../theme/app_theme.dart';
@@ -24,154 +23,64 @@ class AltroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final en = l10n.isEnglish;
+    void go(Widget page) => Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => page));
+    Scaffold sc(String titolo, Widget body) =>
+        Scaffold(appBar: AppBar(title: Text(titolo)), body: body);
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
       children: [
-        // --- SEZIONE: CARRIERA & DIDATTICA ---
         _SezioneHeader(titolo: l10n.secCarriera),
-        _Voce(
-          icon: Icons.auto_stories_outlined,
-          titolo: l10n.librettoTitolo,
-          sottotitolo: l10n.librettoSub,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => Scaffold(
-                appBar: AppBar(title: Text(l10n.librettoAppBar)),
-                body: LibrettoScreen(authService: authService),
-              ),
-            ),
-          ),
-        ),
-        _Voce(
-          icon: Icons.account_tree_outlined,
-          titolo: l10n.pianoStudiTitolo,
-          sottotitolo: l10n.pianoStudiSub,
-          badge: l10n.nuovoBadge,
-          coloreBadge: AppColors.smeraldo,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => PianoStudiScreen(authService: authService),
-            ),
-          ),
-        ),
-        _Voce(
-          icon: Icons.fact_check_outlined,
-          titolo: l10n.bachecaEsitiTitolo,
-          sottotitolo: l10n.bachecaEsitiSub,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => Scaffold(
-                appBar: AppBar(title: Text(l10n.bachecaEsitiTitolo)),
-                body: BachecaEsitiScreen(authService: authService),
-              ),
-            ),
-          ),
-        ),
-        _Voce(
-          icon: Icons.menu_book_outlined,
-          titolo: l10n.agendaEsamiTitolo,
-          sottotitolo: l10n.agendaEsamiSub,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => Scaffold(
-                appBar: AppBar(title: Text(l10n.agendaEsamiTitolo)),
-                body: AgendaEsamiScreen(authService: authService),
-              ),
-            ),
-          ),
-        ),
-        _Voce(
-          icon: Icons.account_balance_wallet_outlined,
-          titolo: l10n.tasseTitolo,
-          sottotitolo: l10n.tasseSub,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => Scaffold(
-                appBar: AppBar(title: Text(l10n.tasseAppBar)),
-                body: TasseScreen(authService: authService),
-              ),
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 20),
-
-        // --- SEZIONE: CAMPUS & SERVIZI ---
+        const SizedBox(height: 10),
+        _TileGrid(tiles: [
+          _TileData(Icons.auto_stories_outlined, 'Libretto', AppColors.mare,
+              () => go(sc(l10n.librettoAppBar,
+                  LibrettoScreen(authService: authService)))),
+          _TileData(Icons.account_tree_outlined, en ? 'Study plan' : 'Piano studi',
+              const Color(0xFF2E5EAA),
+              () => go(PianoStudiScreen(authService: authService)),
+              badge: l10n.nuovoBadge),
+          _TileData(Icons.fact_check_outlined, en ? 'Results' : 'Esiti',
+              AppColors.smeraldo,
+              () => go(sc(l10n.bachecaEsitiTitolo,
+                  BachecaEsitiScreen(authService: authService)))),
+          _TileData(Icons.menu_book_outlined, en ? 'Exams' : 'Esami',
+              AppColors.corallo,
+              () => go(sc(l10n.agendaEsamiTitolo,
+                  AgendaEsamiScreen(authService: authService)))),
+          _TileData(Icons.account_balance_wallet_outlined, en ? 'Fees' : 'Tasse',
+              AppColors.mareChiaro,
+              () => go(sc(l10n.tasseAppBar,
+                  TasseScreen(authService: authService)))),
+        ]),
+        const SizedBox(height: 24),
         _SezioneHeader(titolo: l10n.secCampus),
-        _Voce(
-          icon: Icons.map_outlined,
-          titolo: l10n.mappaTitolo,
-          sottotitolo: l10n.mappaSub,
-          badge: 'Mappe & GPS',
-          coloreBadge: AppColors.arancio,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => MappaCampusScreen(api: authService.api),
-            ),
-          ),
-        ),
-        _Voce(
-          icon: Icons.hub_outlined,
-          titolo: l10n.serviziTitolo,
-          sottotitolo: l10n.serviziSub,
-          badge: 'Link Utili',
-          coloreBadge: AppColors.zolfo,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const ServiziUtiliScreen(),
-            ),
-          ),
-        ),
-        _Voce(
-          icon: Icons.restaurant_outlined,
-          titolo: l10n.mensaTitolo,
-          sottotitolo: l10n.mensaSub,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => Scaffold(
-                appBar: AppBar(title: Text(l10n.mensaTitolo)),
-                body: MensaScreen(authService: authService),
-              ),
-            ),
-          ),
-        ),
-        _Voce(
-          icon: Icons.mail_outline,
-          titolo: l10n.messaggiTitolo,
-          sottotitolo: l10n.messaggiSub,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => Scaffold(
-                appBar: AppBar(title: Text(l10n.messaggiTitolo)),
-                body: MessaggiScreen(authService: authService),
-              ),
-            ),
-          ),
-        ),
-
+        const SizedBox(height: 10),
+        _TileGrid(tiles: [
+          _TileData(Icons.map_outlined, en ? 'Map' : 'Mappa', AppColors.arancio,
+              () => go(MappaCampusScreen(api: authService.api))),
+          _TileData(Icons.hub_outlined, en ? 'Services' : 'Servizi',
+              const Color(0xFF7B5EA7), () => go(const ServiziUtiliScreen())),
+          _TileData(Icons.restaurant_outlined, en ? 'Canteen' : 'Mensa',
+              AppColors.corallo,
+              () => go(sc(l10n.mensaTitolo, MensaScreen(authService: authService)))),
+          _TileData(Icons.mail_outline, en ? 'Messages' : 'Messaggi',
+              const Color(0xFF158A8A),
+              () => go(sc(l10n.messaggiTitolo,
+                  MessaggiScreen(authService: authService)))),
+        ]),
         const SizedBox(height: 20),
 
         // --- SEZIONE: IMPOSTAZIONI ---
         _SezioneHeader(titolo: l10n.secImpostazioni),
-        ValueListenableBuilder<PreferenzeCorso?>(
-          valueListenable: authService.preferenzeCorso,
-          builder: (context, pref, _) => _Voce(
-            icon: Icons.school_outlined,
-            titolo: l10n.corsoAnnoTitolo,
-            sottotitolo: pref == null
-                ? l10n.corsoAnnoNonImpostato
-                : '${pref.corsoLabel} · ${pref.annoLabel}',
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => SelezioneCorsoScreen(authService: authService),
-              ),
-            ),
-          ),
-        ),
+        const SizedBox(height: 10),
         ListenableBuilder(
-          listenable: SettingsService.instance,
+          listenable: Listenable.merge(
+              [authService.preferenzeCorso, SettingsService.instance]),
           builder: (context, _) {
+            final pref = authService.preferenzeCorso.value;
             final mode = SettingsService.instance.themeMode;
             final themeLabel = mode == ThemeMode.light
                 ? l10n.temaSubChiaro
@@ -184,25 +93,20 @@ class AltroScreen extends StatelessWidget {
                 : loc.languageCode == 'en'
                     ? 'English'
                     : 'Italiano';
-
-            return Column(
-              children: [
-                _Voce(
-                  icon: Icons.palette_outlined,
-                  titolo: l10n.temaTitolo,
-                  sottotitolo: themeLabel,
-                  onTap: () => _mostraSelettoreTema(context),
-                ),
-                _Voce(
-                  icon: Icons.language_outlined,
-                  titolo: l10n.linguaTitolo,
-                  sottotitolo: langLabel,
-                  onTap: () => _mostraSelettoreLingua(context),
-                ),
-              ],
-            );
+            return _TileGrid(tiles: [
+              _TileData(Icons.school_outlined, en ? 'Course' : 'Corso',
+                  AppColors.mare,
+                  () => go(SelezioneCorsoScreen(authService: authService)),
+                  subtitle: pref == null ? l10n.corsoAnnoNonImpostato : pref.annoLabel),
+              _TileData(Icons.palette_outlined, en ? 'Theme' : 'Tema',
+                  const Color(0xFF7B5EA7), () => _mostraSelettoreTema(context),
+                  subtitle: themeLabel),
+              _TileData(Icons.language_outlined, en ? 'Language' : 'Lingua',
+                  const Color(0xFF158A8A), () => _mostraSelettoreLingua(context),
+                  subtitle: langLabel),
+            ]);
           },
-        ),
+        )
       ],
     );
   }
@@ -358,97 +262,125 @@ class _SezioneHeader extends StatelessWidget {
   }
 }
 
-class _Voce extends StatelessWidget {
-  const _Voce({
-    required this.icon,
-    required this.titolo,
-    required this.sottotitolo,
-    required this.onTap,
-    this.badge,
-    this.coloreBadge,
-  });
-
+class _TileData {
+  const _TileData(this.icon, this.label, this.colore, this.onTap,
+      {this.badge, this.subtitle});
   final IconData icon;
-  final String titolo;
-  final String sottotitolo;
+  final String label;
+  final Color colore;
   final VoidCallback onTap;
   final String? badge;
-  final Color? coloreBadge;
+  final String? subtitle;
+}
+
+/// Griglia di quadretti (3 per riga) tramite Wrap: l'ultima riga incompleta
+/// non lascia celle vuote, niente spazi inutili.
+class _TileGrid extends StatelessWidget {
+  const _TileGrid({required this.tiles});
+  final List<_TileData> tiles;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, c) {
+        const spacing = 12.0;
+        final w = (c.maxWidth - spacing * 2) / 3;
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: [
+            for (final t in tiles) SizedBox(width: w, child: _Tile(data: t)),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _Tile extends StatelessWidget {
+  const _Tile({required this.data});
+  final _TileData data;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: scheme.outlineVariant)),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: scheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, color: scheme.onSurface, size: 20),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Material(
+      color: scheme.surfaceContainerHigh,
+      borderRadius: BorderRadius.circular(16),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: data.onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: scheme.outlineVariant),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          titolo,
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (badge != null) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: (coloreBadge ?? scheme.primary)
-                                .withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            badge!,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: coloreBadge ?? scheme.primary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
+                  Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: data.colore.withValues(alpha: 0.14),
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(data.icon, color: data.colore, size: 22),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 8),
                   Text(
-                    sottotitolo,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                        ),
+                    data.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                        ?.copyWith(fontWeight: FontWeight.w600),
                   ),
+                  if (data.subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      data.subtitle!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                            fontSize: 11,
+                          ),
+                    ),
+                  ],
                 ],
               ),
-            ),
-            Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
-          ],
+              if (data.badge != null)
+                Positioned(
+                  top: -4,
+                  right: -2,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: AppColors.smeraldo,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      data.badge!,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

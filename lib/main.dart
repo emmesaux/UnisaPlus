@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:app_links/app_links.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:upgrader/upgrader.dart';
 import 'screens/spid_cie_entry_screen.dart';
@@ -116,6 +117,15 @@ class _UniAppState extends State<UniApp> {
           darkTheme: AppTheme.dark(),
           themeMode: SettingsService.instance.themeMode,
           locale: SettingsService.instance.locale,
+          // Delegate delle localizzazioni Material/Widgets/Cupertino: senza di
+          // essi i widget Material (AppBar, Tooltip, NavigationBar) non trovano
+          // MaterialLocalizations per la lingua italiana e lanciano un errore
+          // (riquadri grigi). Devono includere tutte le supportedLocales.
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
           supportedLocales: const [
             Locale('it'),
             Locale('en'),

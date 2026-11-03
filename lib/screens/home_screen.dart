@@ -4,6 +4,7 @@ import '../services/auth_service.dart';
 import '../services/settings_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_logo.dart';
+import '../widgets/liquid_glass_nav_bar.dart';
 import 'orario_screen.dart';
 import 'badge_screen.dart';
 import 'aule_libere_screen.dart';
@@ -40,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final user = widget.authService.currentUser;
     final l10n = context.l10n;
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Row(
           children: [
@@ -109,40 +111,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: IndexedStack(index: _index, children: _pages),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Theme.of(context).colorScheme.outlineVariant,
-            ),
+      bottomNavigationBar: LiquidGlassNavBar(
+        currentIndex: _index,
+        onTap: (i) => setState(() => _index = i),
+        items: [
+          GlassNavItem(
+            icon: Icons.calendar_today_outlined,
+            activeIcon: Icons.calendar_today,
+            label: l10n.navOrario,
           ),
-        ),
-        child: NavigationBar(
-          selectedIndex: _index,
-          onDestinationSelected: (i) => setState(() => _index = i),
-          destinations: [
-            NavigationDestination(
-              icon: const Icon(Icons.calendar_today_outlined),
-              selectedIcon: const Icon(Icons.calendar_today),
-              label: l10n.navOrario,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.meeting_room_outlined),
-              selectedIcon: const Icon(Icons.meeting_room),
-              label: l10n.navAule,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.badge_outlined),
-              selectedIcon: const Icon(Icons.badge),
-              label: l10n.navBadge,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.grid_view_outlined),
-              selectedIcon: const Icon(Icons.grid_view),
-              label: l10n.navAltro,
-            ),
-          ],
-        ),
+          GlassNavItem(
+            icon: Icons.meeting_room_outlined,
+            activeIcon: Icons.meeting_room,
+            label: l10n.navAule,
+          ),
+          GlassNavItem(
+            icon: Icons.badge_outlined,
+            activeIcon: Icons.badge,
+            label: l10n.navBadge,
+          ),
+          GlassNavItem(
+            icon: Icons.grid_view_outlined,
+            activeIcon: Icons.grid_view,
+            label: l10n.navAltro,
+          ),
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_arrow.dart';
 import 'package:intl/intl.dart';
 import '../models/presenza.dart';
 import '../services/auth_service.dart';
@@ -145,7 +146,7 @@ class _CorsoRow extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: scheme.onSurfaceVariant),
+            const AppArrow(),
           ],
         ),
       ),
