@@ -1,244 +1,1008 @@
 <!doctype html>
-<html lang="it">
+<html lang="it" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Unisa Plus — Il campus di Salerno in tasca</title>
-<meta name="description" content="Unisa Plus: orario, aule libere, mensa, esami, libretto e mappa dell'Università di Salerno in un'unica app. Accesso con SPID o CIE.">
+<meta name="description" content="Unisa Plus: orario lezioni, aule libere, mensa ADISURC, esami, libretto e mappa dell'Università di Salerno in un'unica app veloce. Accesso con SPID o CIE.">
 <link rel="icon" href="assets/icon.png">
-<meta property="og:title" content="Unisa Plus">
-<meta property="og:description" content="Orario, aule, mensa, esami e libretto dell'Università di Salerno in un'app.">
+<meta property="og:title" content="Unisa Plus — Il campus di Salerno in tasca">
+<meta property="og:description" content="Orario, aule libere, mensa, esami, tasse e libretto dell'Università di Salerno in un'unica app.">
 <meta property="og:image" content="assets/icon.png">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#10151a">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+
+<script>
+  // Evita flash del tema all'avvio caricandolo prima del rendering
+  try {
+    const salvato = localStorage.getItem('unisaplus_tema');
+    if (salvato) {
+      document.documentElement.dataset.theme = salvato;
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.documentElement.dataset.theme = 'light';
+    } else {
+      document.documentElement.dataset.theme = 'dark';
+    }
+  } catch (e) {}
+</script>
+
 <style>
-  :root{
-    --mare:#16474D; --mare2:#2A6B73; --zolfo:#E8A33D; --inchiostro:#1B2029;
-    --pietra:#ECEAE2; --pietra2:#E2DFD4; --bianco:#FFFFFF;
-    --nebbia:#6E7585; --bordo:#D9D5C8; --smeraldo:#2E7D5B; --corallo:#C1443C;
+  /* ===== VARIABILI DI TEMA (Design System TiE / Unisa Plus) ===== */
+  :root, [data-theme='dark'] {
+    --bg: #0e1217;
+    --bg-surface: #141922;
+    --bg-surface-elevated: #1a222e;
+    --border: #232c3d;
+    --border-subtle: #1c2331;
+    --ink: #f0f2f5;
+    --ink-muted: #8c96a8;
+    --ink-dim: #5a6578;
+    
+    --brand-mare: #1c5d66;
+    --brand-mare-light: #2d7c87;
+    --brand-zolfo: #e8a33d;
+    --brand-zolfo-hover: #f5b352;
+    --brand-zolfo-dim: rgba(232, 163, 61, 0.14);
+    --smeraldo: #2e7d5b;
+    --corallo: #c1443c;
+    --viola: #7b5ea7;
+    
+    --nav-bg: rgba(14, 18, 23, 0.82);
+    --hero-gradient: radial-gradient(circle at 80% 20%, rgba(232, 163, 61, 0.12), transparent 45%), radial-gradient(circle at 20% 0%, rgba(28, 93, 102, 0.28), transparent 50%), #0e1217;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+    --phone-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+    
+    --badge-bg: #000000;
+    --badge-border: #2d3748;
+    --badge-text: #ffffff;
+    --badge-sub: #a0aec0;
+    
+    color-scheme: dark;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:'IBM Plex Sans',system-ui,sans-serif;color:var(--inchiostro);background:var(--pietra);line-height:1.6;-webkit-font-smoothing:antialiased}
-  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:700;line-height:1.15;letter-spacing:-.02em}
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-  .sym{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;line-height:1;vertical-align:middle}
 
-  /* Header */
-  header{position:sticky;top:0;z-index:50;background:rgba(236,234,226,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--bordo)}
-  .nav{display:flex;align-items:center;gap:16px;height:64px}
-  .brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:700;font-size:19px}
-  .brand img{width:34px;height:34px;border-radius:9px;box-shadow:0 2px 8px rgba(27,32,41,.15)}
-  .brand b{color:var(--zolfo)}
-  .nav .links{display:flex;gap:22px;margin-left:auto;font-size:15px;font-weight:500;color:var(--nebbia)}
-  .nav .links a:hover{color:var(--mare)}
-  .nav .cta{background:var(--mare);color:#fff;padding:9px 16px;border-radius:9px;font-weight:600;font-size:14px}
-  @media(max-width:780px){.nav .links{display:none}}
+  [data-theme='light'] {
+    --bg: #f5f4ef;
+    --bg-surface: #ffffff;
+    --bg-surface-elevated: #ece9df;
+    --border: #ded8cb;
+    --border-subtle: #eae5d9;
+    --ink: #181d24;
+    --ink-muted: #5e6676;
+    --ink-dim: #8b93a2;
+    
+    --brand-mare: #16474d;
+    --brand-mare-light: #235c63;
+    --brand-zolfo: #d89127;
+    --brand-zolfo-hover: #c47e19;
+    --brand-zolfo-dim: rgba(232, 163, 61, 0.18);
+    --smeraldo: #246a4d;
+    --corallo: #ad3932;
+    --viola: #674c8e;
+    
+    --nav-bg: rgba(245, 244, 239, 0.86);
+    --hero-gradient: radial-gradient(circle at 80% 15%, rgba(232, 163, 61, 0.15), transparent 45%), radial-gradient(circle at 10% 0%, rgba(22, 71, 77, 0.12), transparent 50%), #f5f4ef;
+    --card-shadow: 0 4px 18px rgba(27, 32, 41, 0.06);
+    --phone-shadow: 0 20px 48px rgba(27, 32, 41, 0.14);
+    
+    --badge-bg: #0a0d12;
+    --badge-border: #1a202c;
+    --badge-text: #ffffff;
+    --badge-sub: #cbd5e1;
+    
+    color-scheme: light;
+  }
 
-  /* Hero */
-  .hero{background:linear-gradient(160deg,#10161C 0%,var(--mare) 100%);color:var(--pietra);overflow:hidden;position:relative}
-  .hero::after{content:"";position:absolute;top:-120px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(232,163,61,.28),transparent 60%)}
-  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:72px 20px 80px;position:relative;z-index:2}
-  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--zolfo);margin-bottom:22px}
-  .hero h1{font-size:clamp(34px,5vw,54px);color:#fff}
-  .hero h1 span{color:var(--zolfo)}
-  .hero p.sub{margin:18px 0 28px;font-size:18px;color:#CBD3D2;max-width:40ch}
-  .btns{display:flex;gap:12px;flex-wrap:wrap}
-  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 20px;border-radius:12px;font-weight:600;font-size:15px}
-  .btn-primary{background:var(--zolfo);color:var(--inchiostro)}
-  .btn-ghost{background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.2)}
-  .btn small{display:block;font-size:11px;font-weight:500;opacity:.75}
-  .btn b{font-size:15px}
-  .hero .phone-wrap{display:flex;justify-content:center}
-  @media(max-width:860px){.hero .wrap{grid-template-columns:1fr;text-align:center;padding:56px 20px 64px}.hero p.sub{margin-inline:auto}.btns{justify-content:center}.hero .phone-wrap{margin-top:8px}}
+  /* ===== RESET E BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  body {
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+  .sym {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    vertical-align: middle;
+  }
 
-  /* Phone frame */
-  .phone{width:270px;max-width:72vw;border-radius:34px;padding:10px;background:#0B0E12;box-shadow:0 30px 60px rgba(0,0,0,.4);border:1px solid #2a323d}
-  .phone img{width:100%;display:block;border-radius:26px}
+  /* ===== HEADER & NAVBAR ===== */
+  header.nav-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.25s, background-color 0.25s;
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 68px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+  }
+  .brand-logo-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+  }
+  .brand span.plus { color: var(--brand-zolfo); }
 
-  /* Sections */
-  section{padding:72px 0}
-  .eyebrow{color:var(--mare2);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-family:'Space Grotesk'}
-  .sec-head{max-width:620px;margin-bottom:40px}
-  .sec-head h2{font-size:clamp(26px,3.4vw,38px);margin-top:10px}
-  .sec-head p{color:var(--nebbia);margin-top:12px;font-size:17px}
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-left: auto;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink-muted);
+  }
+  .nav-links a {
+    transition: color 0.15s ease;
+  }
+  .nav-links a:hover {
+    color: var(--ink);
+  }
 
-  /* Features grid */
-  .features{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  @media(max-width:880px){.features{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:520px){.features{grid-template-columns:1fr}}
-  .card{background:var(--bianco);border:1px solid var(--bordo);border-radius:16px;padding:22px}
-  .card .ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
-  .card .ico .sym{font-size:24px}
-  .card h3{font-size:17px}
-  .card p{color:var(--nebbia);font-size:14.5px;margin-top:6px}
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-  /* Screens strip */
-  .screens{background:var(--inchiostro);color:var(--pietra)}
-  .screens .eyebrow{color:var(--zolfo)}
-  .screens .sec-head h2{color:#fff}
-  .screens .sec-head p{color:#AEB4BD}
-  .gallery{display:flex;gap:22px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}
-  .gallery .shot{flex:0 0 auto;scroll-snap-align:center}
-  .gallery .phone{width:230px;background:#05070a;border-color:#1c2530}
+  /* Bottone Tema */
+  .theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .theme-toggle-btn:hover {
+    border-color: var(--brand-zolfo);
+    transform: scale(1.04);
+  }
+  .theme-toggle-btn svg { width: 19px; height: 19px; }
+  .ico-sun { display: none; }
+  .ico-moon { display: block; }
+  [data-theme='light'] .ico-sun { display: block; }
+  [data-theme='light'] .ico-moon { display: none; }
 
-  /* Access */
-  .access .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  @media(max-width:720px){.access .grid{grid-template-columns:1fr}}
-  .access .box{background:var(--bianco);border:1px solid var(--bordo);border-radius:16px;padding:26px;display:flex;gap:16px;align-items:flex-start}
-  .access .box img{width:42px;height:42px;border-radius:10px;background:#fff;padding:3px;border:1px solid var(--bordo)}
-  .access .box .sym{font-size:34px;color:var(--mare)}
-  .access .box h3{font-size:18px}
-  .access .box p{color:var(--nebbia);font-size:14.5px;margin-top:4px}
-  .note{margin-top:22px;background:rgba(232,163,61,.12);border:1px solid rgba(232,163,61,.4);border-radius:12px;padding:14px 16px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
-  .note .sym{color:var(--zolfo)}
+  .cta-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    background: var(--brand-mare);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.15s, transform 0.15s;
+  }
+  .cta-nav:hover {
+    background: var(--brand-mare-light);
+    transform: translateY(-1px);
+  }
 
-  /* FAQ */
-  .faq details{background:var(--bianco);border:1px solid var(--bordo);border-radius:12px;margin-bottom:12px;overflow:hidden}
-  .faq summary{list-style:none;cursor:pointer;padding:18px 20px;font-weight:600;font-family:'Space Grotesk';display:flex;justify-content:space-between;align-items:center}
-  .faq summary::-webkit-details-marker{display:none}
-  .faq summary .sym{color:var(--mare);transition:transform .2s}
-  .faq details[open] summary .sym{transform:rotate(180deg)}
-  .faq .ans{padding:0 20px 18px;color:var(--nebbia);font-size:15px}
+  @media(max-width: 820px) {
+    .nav-links { display: none; }
+  }
 
-  /* Footer */
-  footer{background:var(--inchiostro);color:#AEB4BD;padding:48px 0 30px}
-  footer .top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
-  footer .brand{color:#fff}
-  footer .flinks{display:flex;gap:26px;flex-wrap:wrap;font-size:14.5px}
-  footer .flinks a:hover{color:var(--zolfo)}
-  footer .disc{margin-top:28px;padding-top:20px;border-top:1px solid #2a323d;font-size:13px;color:#7b828c}
+  /* ===== HERO SECTION ===== */
+  .hero-section {
+    background: var(--hero-gradient);
+    position: relative;
+    padding: 72px 0 88px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--brand-zolfo-dim);
+    border: 1px solid rgba(232, 163, 61, 0.35);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--brand-zolfo);
+    margin-bottom: 22px;
+  }
+  .hero-title {
+    font-size: clamp(36px, 4.8vw, 56px);
+    margin-bottom: 20px;
+  }
+  .hero-title span.accent {
+    color: var(--brand-zolfo);
+  }
+  .hero-sub {
+    font-size: clamp(17px, 1.8vw, 20px);
+    color: var(--ink-muted);
+    max-width: 44ch;
+    margin-bottom: 34px;
+    line-height: 1.5;
+  }
+
+  /* ===== STORE BADGES (Pulsanti Ufficiali e Fedeli) ===== */
+  .store-badges-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+
+  .badge-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    height: 52px;
+    padding: 0 18px;
+    border-radius: 12px;
+    background: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    color: var(--badge-text);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+    transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+    user-select: none;
+  }
+  .badge-link:hover {
+    transform: translateY(-2px);
+    border-color: var(--brand-zolfo);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .badge-icon {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .badge-text-box {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    line-height: 1.15;
+  }
+  .badge-sub {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--badge-sub);
+    font-weight: 500;
+  }
+  .badge-main {
+    font-size: 16px;
+    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-secondary-gh {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 18px;
+    border-radius: 12px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-size: 14.5px;
+    font-weight: 600;
+    transition: transform 0.16s, border-color 0.16s, background 0.16s;
+  }
+  .btn-secondary-gh:hover {
+    transform: translateY(-2px);
+    border-color: var(--ink-muted);
+    background: var(--bg-surface-elevated);
+  }
+  .btn-secondary-gh svg { width: 22px; height: 22px; fill: currentColor; }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13.5px;
+    color: var(--ink-muted);
+  }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* Frame Telefono */
+  .hero-phone-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .device-mockup {
+    width: 290px;
+    max-width: 80vw;
+    border-radius: 38px;
+    padding: 10px;
+    background: #000000;
+    border: 3px solid #232c3d;
+    box-shadow: var(--phone-shadow);
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  .device-mockup:hover {
+    transform: scale(1.02);
+  }
+  .device-screen {
+    width: 100%;
+    display: block;
+    border-radius: 28px;
+    background: var(--bg-surface);
+  }
+
+  @media(max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 36px;
+    }
+    .hero-sub { margin-inline: auto; }
+    .store-badges-group { justify-content: center; }
+    .hero-meta { justify-content: center; }
+  }
+
+  /* ===== SEZIONI COMUNI ===== */
+  section.sec-pad {
+    padding: 88px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sec-header {
+    max-width: 680px;
+    margin-bottom: 48px;
+  }
+  .eyebrow {
+    color: var(--brand-mare-light);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+  [data-theme='light'] .eyebrow { color: var(--brand-mare); }
+  .sec-header h2 {
+    font-size: clamp(28px, 3.6vw, 42px);
+    margin-bottom: 14px;
+  }
+  .sec-header p {
+    color: var(--ink-muted);
+    font-size: 17px;
+  }
+
+  /* ===== GRIGLIA FUNZIONI ===== */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media(max-width: 980px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media(max-width: 560px) { .features-grid { grid-template-columns: 1fr; } }
+
+  .feature-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--brand-zolfo);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+  }
+  .feature-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .feature-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .feature-card p {
+    color: var(--ink-muted);
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+
+  /* ===== CAROUSEL / GALLERIA SCHERMATE ===== */
+  .screens-section {
+    background: var(--bg-surface-elevated);
+    position: relative;
+  }
+  .gallery-row {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding: 16px 4px 28px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .gallery-item {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+  }
+  .gallery-phone {
+    width: 236px;
+    background: #000000;
+    border-radius: 34px;
+    padding: 8px;
+    border: 2px solid var(--border);
+    box-shadow: var(--phone-shadow);
+  }
+  .gallery-phone img {
+    width: 100%;
+    display: block;
+    border-radius: 26px;
+  }
+  .gallery-caption {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-muted);
+  }
+
+  /* ===== ACCESSO SPID / CIE ===== */
+  .access-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-bottom: 24px;
+  }
+  @media(max-width: 720px) { .access-grid { grid-template-columns: 1fr; } }
+  .access-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    box-shadow: var(--card-shadow);
+  }
+  .access-box img.idp-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 4px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .access-box .idp-icon-fallback {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(46, 125, 91, 0.15);
+    color: var(--smeraldo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .access-box h3 { font-size: 19px; margin-bottom: 6px; }
+  .access-box p { color: var(--ink-muted); font-size: 14.5px; }
+
+  .access-notice {
+    background: var(--brand-zolfo-dim);
+    border: 1px solid rgba(232, 163, 61, 0.35);
+    border-radius: 14px;
+    padding: 16px 20px;
+    font-size: 14.5px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    color: var(--ink);
+  }
+  .access-notice .sym { color: var(--brand-zolfo); font-size: 24px; flex-shrink: 0; }
+
+  /* ===== FAQ ACCORDION ===== */
+  .faq-wrap { max-width: 800px; margin: 0 auto; }
+  .faq-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .faq-item[open] { border-color: var(--brand-mare-light); }
+  .faq-question {
+    list-style: none;
+    cursor: pointer;
+    padding: 20px 22px;
+    font-weight: 600;
+    font-size: 16.5px;
+    font-family: 'Space Grotesk', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .faq-question::-webkit-details-marker { display: none; }
+  .faq-question .sym {
+    color: var(--brand-mare-light);
+    transition: transform 0.25s ease;
+  }
+  .faq-item[open] .faq-question .sym { transform: rotate(180deg); }
+  .faq-answer {
+    padding: 0 22px 22px;
+    color: var(--ink-muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .faq-answer a {
+    color: var(--brand-zolfo);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  /* ===== FOOTER ===== */
+  footer.site-footer {
+    background: var(--bg-surface-elevated);
+    border-top: 1px solid var(--border);
+    padding: 56px 0 36px;
+    color: var(--ink-muted);
+    font-size: 14px;
+  }
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 36px;
+  }
+  .footer-brand h4 {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+  }
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .footer-links a:hover { color: var(--brand-zolfo); }
+  .footer-disclaimer {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--ink-dim);
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap nav">
-    <a href="#top" class="brand"><img src="assets/icon.png" alt="Unisa Plus"> Unisa<b>Plus</b></a>
-    <nav class="links">
+<!-- HEADER / NAVIGATION -->
+<header class="nav-header">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand" aria-label="Unisa Plus Home">
+      <img src="assets/icon.png" alt="Logo Unisa Plus" class="brand-logo-img">
+      <span>Unisa<span class="plus">Plus</span></span>
+    </a>
+    
+    <nav class="nav-links" aria-label="Navigazione principale">
       <a href="#funzioni">Funzioni</a>
       <a href="#schermate">Schermate</a>
       <a href="#accesso">Accesso</a>
       <a href="#faq">FAQ</a>
       <a href="https://github.com/emmesaux/UnisaPlus" target="_blank" rel="noopener">GitHub</a>
     </nav>
-    <a href="#scarica" class="cta">Scarica</a>
+    
+    <div class="nav-actions">
+      <!-- Pulsante Tema Dark / Light -->
+      <button class="theme-toggle-btn" id="theme-toggle" type="button" aria-label="Cambia tema">
+        <!-- Icona Sole (visibile in tema light) -->
+        <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path><path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path>
+          <path d="M2 12h2"></path><path d="M20 12h2"></path>
+          <path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>
+        </svg>
+        <!-- Icona Luna (visibile in tema dark) -->
+        <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+      </button>
+
+      <a href="#scarica" class="cta-nav">Scarica l'app</a>
+    </div>
   </div>
 </header>
 
 <main id="top">
-  <!-- HERO -->
-  <section class="hero" style="padding:0">
-    <div class="wrap">
-      <div>
-        <span class="pill"><span class="sym">school</span> Università degli Studi di Salerno</span>
-        <h1>Tutta la tua vita<br>universitaria, <span>in tasca.</span></h1>
-        <p class="sub">Orario, aule libere, mensa, esami, libretto e mappa del campus in un'unica app veloce. Accedi con SPID o CIE.</p>
-        <div class="btns" id="scarica">
-          <a class="btn btn-primary" href="#funzioni"><span class="sym">phone_iphone</span><span><small>Presto su</small><b>App Store</b></span></a>
-          <a class="btn btn-ghost" href="#funzioni"><span class="sym">android</span><span><small>Presto su</small><b>Google Play</b></span></a>
-          <a class="btn btn-ghost" href="https://github.com/emmesaux/UnisaPlus" target="_blank" rel="noopener"><span class="sym">code</span><span><small>Open source</small><b>Codice su GitHub</b></span></a>
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="wrap hero-grid">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span class="sym">school</span>
+          Università degli Studi di Salerno
+        </div>
+        <h1 class="hero-title">
+          Tutta la tua vita universitaria, <span class="accent">in tasca.</span>
+        </h1>
+        <p class="hero-sub">
+          Orario delle lezioni, aule libere in tempo reale, QR mensa ADISURC, libretto, tasse ed esami in un'unica app veloce e moderna.
+        </p>
+
+        <!-- PULSANTI UFFICIALI STORE & GITHUB -->
+        <div class="store-badges-group" id="scarica">
+          <!-- Google Play Store Ufficiale -->
+          <a class="badge-link" href="https://play.google.com/store/apps/details?id=it.unisaplus.app&hl=it" target="_blank" rel="noopener">
+            <span class="badge-icon">
+              <!-- SVG Google Play Store Ufficiale -->
+              <svg viewBox="0 0 512 512" width="24" height="24">
+                <path fill="#4285F4" d="M38.8 11.2C29.6 20.9 24 35.8 24 55.4v401.2c0 19.6 5.6 34.5 14.8 44.2l2.4 2.2 225.8-225.8v-5.4L41.2 9l-2.4 2.2z"/>
+                <path fill="#FBBC04" d="M341.6 317.5l-74.6-74.7v-5.6l74.6-74.6 1.8 1 88.5 50.3c25.3 14.4 25.3 37.9 0 52.3l-88.5 50.3-1.8 1z"/>
+                <path fill="#EA4335" d="M343.4 316.5l-76.4-76.5L41.2 503c8.3 8.8 22.1 9.8 37.5 1.1l264.7-187.6z"/>
+                <path fill="#34A853" d="M343.4 195.5L78.7 7.9C63.3-.8 49.5.2 41.2 9l225.8 263 76.4-76.5z"/>
+              </svg>
+            </span>
+            <div class="badge-text-box">
+              <span class="badge-sub">Disponibile su</span>
+              <span class="badge-main">Google Play</span>
+            </div>
+          </a>
+
+          <!-- Apple App Store Ufficiale -->
+          <a class="badge-link" href="https://apps.apple.com/it/app/unisa-plus/id6824274002" target="_blank" rel="noopener">
+            <span class="badge-icon">
+              <!-- SVG Apple Ufficiale -->
+              <svg viewBox="0 0 170 170" width="24" height="24" fill="#ffffff">
+                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.69-7.85-11.97-14.42-6.19-9.58-11.05-20.73-14.58-33.45-3.53-12.72-5.3-24.36-5.3-34.92 0-15.11 3.86-27.42 11.58-36.93 7.72-9.51 17.4-14.35 29.04-14.52 4.46 0 9.47 1.14 15.02 3.42 5.55 2.28 9.3 3.47 11.24 3.56 1.74-.1 5.63-1.33 11.66-3.7 6.03-2.37 11.23-3.4 15.6-3.1 11.52.87 20.89 5.37 28.1 13.5-10.22 6.19-15.22 14.89-15 26.1.22 8.7 3.59 16.03 10.11 22 6.52 5.97 14.24 9.4 23.16 10.3-2.61 8.05-5.98 16.09-10.1 24.13zm-28.8-114.71c.11 1.74-.16 3.69-.82 5.86-.65 2.17-1.63 4.29-2.93 6.36-1.74 2.72-3.8 5.05-6.19 7-2.39 1.96-5.11 3.37-8.15 4.24-.43-1.52-.6-3.1-.5-4.73.11-1.63.49-3.48 1.14-5.55.76-2.4 1.85-4.62 3.26-6.68 1.41-2.07 3.32-3.86 5.71-5.38 2.5-1.52 5.16-2.66 7.99-3.42.22 1.3.38 2.07.49 2.3z"/>
+              </svg>
+            </span>
+            <div class="badge-text-box">
+              <span class="badge-sub">Disponibile su</span>
+              <span class="badge-main">App Store</span>
+            </div>
+          </a>
+
+          <!-- GitHub Open Source -->
+          <a class="btn-secondary-gh" href="https://github.com/emmesaux/UnisaPlus" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16">
+              <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            <span>GitHub Repository</span>
+          </a>
+        </div>
+
+        <div class="hero-meta">
+          <span><span class="sym" style="color:var(--smeraldo);font-size:18px">check_circle</span> Gratuita & Senza pubblicità</span>
+          <span><span class="sym" style="color:var(--brand-zolfo);font-size:18px">lock</span> Nessun server intermedio</span>
         </div>
       </div>
-      <div class="phone-wrap">
-        <div class="phone"><img src="assets/orario.png" alt="Orario Unisa Plus"></div>
-      </div>
-    </div>
-  </section>
 
-  <!-- FUNZIONI -->
-  <section id="funzioni">
-    <div class="wrap">
-      <div class="sec-head">
-        <div class="eyebrow">Cosa fa</div>
-        <h2>Tutto l'essenziale della giornata, in una schermata</h2>
-        <p>Leggibile e veloce come un tabellone delle partenze: quello che ti serve, quando ti serve.</p>
-      </div>
-      <div class="features">
-        <div class="card"><div class="ico" style="background:rgba(22,71,77,.12)"><span class="sym" style="color:#16474D">calendar_month</span></div><h3>Orario</h3><p>Lezioni sempre aggiornate, con quella in corso e la prossima in evidenza.</p></div>
-        <div class="card"><div class="ico" style="background:rgba(46,125,91,.12)"><span class="sym" style="color:#2E7D5B">meeting_room</span></div><h3>Aule libere</h3><p>Disponibilità in tempo reale, cercabili per edificio, corso o docente.</p></div>
-        <div class="card"><div class="ico" style="background:rgba(232,163,61,.14)"><span class="sym" style="color:#E8A33D">restaurant</span></div><h3>Mensa</h3><p>Codice QR per la cassa e saldo del borsellino ADiSURC, sempre pronti.</p></div>
-        <div class="card"><div class="ico" style="background:rgba(193,68,60,.12)"><span class="sym" style="color:#C1443C">menu_book</span></div><h3>Esami</h3><p>Appelli prenotati e prenotabili, con aula e docente in evidenza.</p></div>
-        <div class="card"><div class="ico" style="background:rgba(123,94,167,.14)"><span class="sym" style="color:#7B5EA7">auto_stories</span></div><h3>Libretto</h3><p>Medie, CFU e simulatore del voto di laurea con gli esami che mancano.</p></div>
-        <div class="card"><div class="ico" style="background:rgba(46,125,91,.12)"><span class="sym" style="color:#2E7D5B">fact_check</span></div><h3>Presenze</h3><p>Percentuale di frequenza per ogni corso, lezione per lezione.</p></div>
-        <div class="card"><div class="ico" style="background:rgba(232,163,61,.14)"><span class="sym" style="color:#E8A33D">map</span></div><h3>Mappa campus</h3><p>Fisciano e Baronissi: edifici, aule, mense, biblioteche, CUS e bus.</p></div>
-        <div class="card"><div class="ico" style="background:rgba(22,71,77,.12)"><span class="sym" style="color:#16474D">badge</span></div><h3>Badge</h3><p>Tesserino digitale e QR per i servizi dell'Ateneo.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SCHERMATE -->
-  <section id="schermate" class="screens">
-    <div class="wrap">
-      <div class="sec-head">
-        <div class="eyebrow">Schermate</div>
-        <h2>Fatta per leggersi in un colpo d'occhio</h2>
-        <p>Design "tabellone": colori netti, orari in evidenza, zero fronzoli.</p>
-      </div>
-      <div class="gallery">
-        <div class="shot"><div class="phone"><img src="assets/orario.png" alt="Orario"></div></div>
-        <div class="shot"><div class="phone"><img src="assets/aule.png" alt="Aule libere"></div></div>
-        <div class="shot"><div class="phone"><img src="assets/mensa.png" alt="Mensa"></div></div>
-        <div class="shot"><div class="phone"><img src="assets/libretto.png" alt="Libretto"></div></div>
-        <div class="shot"><div class="phone"><img src="assets/altro.png" alt="Altro"></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ACCESSO -->
-  <section id="accesso" class="access">
-    <div class="wrap">
-      <div class="sec-head">
-        <div class="eyebrow">Accesso sicuro</div>
-        <h2>Entri con SPID o CIE</h2>
-        <p>L'autenticazione avviene tramite l'Identity Provider ufficiale CINECA dell'Ateneo.</p>
-      </div>
-      <div class="grid">
-        <div class="box">
-          <img src="assets/spid.png" alt="SPID">
-          <div><h3>SPID</h3><p>Accedi con il tuo gestore di identità digitale. L'app non vede né memorizza la tua password.</p></div>
-        </div>
-        <div class="box">
-          <span class="sym">credit_card</span>
-          <div><h3>CIE</h3><p>Accesso con la Carta d'Identità Elettronica, tramite l'app CieID o il PIN.</p></div>
+      <!-- MOCKUP TELEFONO HERO -->
+      <div class="hero-phone-col">
+        <div class="device-mockup">
+          <img src="assets/orario.png" alt="Schermata Orario Unisa Plus" class="device-screen">
         </div>
       </div>
-      <div class="note"><span class="sym">info</span><span>Aule libere e mappa dei campus sono consultabili anche <b>senza accedere</b>. I dati personali restano sul dispositivo: l'app non ha un backend proprio.</span></div>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section id="faq" class="faq">
-    <div class="wrap" style="max-width:760px">
-      <div class="sec-head"><div class="eyebrow">Domande</div><h2>Domande frequenti</h2></div>
-      <details><summary>È un'app ufficiale dell'Università? <span class="sym">expand_more</span></summary><div class="ans">No. Unisa Plus è un progetto <b>amatoriale e indipendente</b> realizzato da studenti: non è sviluppato né gestito dall'Università degli Studi di Salerno e non ha con essa alcuna collaborazione o affiliazione. L'app è <b>open source</b>: il codice è pubblico su <a href="https://github.com/emmesaux/UnisaPlus" target="_blank" rel="noopener" style="color:var(--mare);font-weight:600">GitHub</a>.</div></details>
-      <details><summary>Quanto costa? <span class="sym">expand_more</span></summary><div class="ans">È gratuita, senza pubblicità e senza acquisti in-app.</div></details>
-      <details><summary>I miei dati sono al sicuro? <span class="sym">expand_more</span></summary><div class="ans">Sì. L'app non dispone di un backend proprio e non conserva i tuoi dati su server dello sviluppatore: le informazioni vengono mostrate sul dispositivo e richieste direttamente ai servizi dell'Ateneo.</div></details>
-      <details><summary>Come accedo ai miei dati personali? <span class="sym">expand_more</span></summary><div class="ans">Con SPID o CIE tramite l'Identity Provider CINECA. Senza accedere puoi comunque vedere aule libere e mappa dei campus.</div></details>
+  <!-- FUNZIONALITÀ -->
+  <section id="funzioni" class="sec-pad">
+    <div class="wrap">
+      <div class="sec-header">
+        <span class="eyebrow">Cosa puoi fare</span>
+        <h2>Tutto l'essenziale per il tuo percorso accademico</h2>
+        <p>Progettata come un tabellone partenze: ad alto contrasto, immediata, senza schermate superflue o attese.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:rgba(28,93,102,0.16)">
+            <span class="sym" style="color:var(--brand-mare-light)">calendar_month</span>
+          </div>
+          <h3>Orario lezioni</h3>
+          <p>Lezioni del giorno sempre aggiornate in automatico, con aula, docente e alert per quella in corso.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:rgba(46,125,91,0.16)">
+            <span class="sym" style="color:var(--smeraldo)">meeting_room</span>
+          </div>
+          <h3>Aule libere</h3>
+          <p>Disponibilità in tempo reale tra Fisciano e Baronissi per trovare subito un posto studio libero.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:rgba(232,163,61,0.16)">
+            <span class="sym" style="color:var(--brand-zolfo)">restaurant</span>
+          </div>
+          <h3>Mensa ADISURC</h3>
+          <p>QR code dinamico TOTP compatibile con i lettori di cassa e saldo aggiornato del borsellino.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:rgba(193,68,60,0.16)">
+            <span class="sym" style="color:var(--corallo)">menu_book</span>
+          </div>
+          <h3>Agenda esami</h3>
+          <p>Visualizza gli appelli prenotati e disponibili, con presa visione e bacheca esiti Esse3 integrata.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:rgba(123,94,167,0.16)">
+            <span class="sym" style="color:var(--viola)">auto_stories</span>
+          </div>
+          <h3>Libretto & Media</h3>
+          <p>Media ponderata, aritmetica, CFU conseguiti e simulatore del voto di laurea con gli esami residui.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:rgba(46,125,91,0.16)">
+            <span class="sym" style="color:var(--smeraldo)">how_to_reg</span>
+          </div>
+          <h3>Rileva presenze</h3>
+          <p>EasyBadge UNISA per timbrare la presenza in aula inquadrando il QR proiettato, anche per più matricole.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:rgba(232,163,61,0.16)">
+            <span class="sym" style="color:var(--brand-zolfo)">map</span>
+          </div>
+          <h3>Mappa Campus</h3>
+          <p>Mappa completa di Fisciano e Baronissi: edifici, aule, biblioteche, mensa, CUS e fermate bus.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:rgba(28,93,102,0.16)">
+            <span class="sym" style="color:var(--brand-mare-light)">badge</span>
+          </div>
+          <h3>Badge digitale</h3>
+          <p>Tesserino universitario studente con matricola, fototessera e codice per i servizi fisici del campus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHERMATE DELL'APP -->
+  <section id="schermate" class="sec-pad screens-section">
+    <div class="wrap">
+      <div class="sec-header">
+        <span class="eyebrow">Interfaccia</span>
+        <h2>Fatta per leggersi in un istante</h2>
+        <p>Design a schede e navigazione ad alta leggibilità. Disponibile sia in tema scuro che in tema chiaro.</p>
+      </div>
+
+      <div class="gallery-row">
+        <div class="gallery-item">
+          <div class="gallery-phone"><img src="assets/orario.png" alt="Schermata Orario"></div>
+          <div class="gallery-caption">Orario delle lezioni</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-phone"><img src="assets/aule.png" alt="Schermata Aule Libere"></div>
+          <div class="gallery-caption">Aule libere adesso</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-phone"><img src="assets/mensa.png" alt="Schermata Mensa"></div>
+          <div class="gallery-caption">QR Mensa ADISURC</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-phone"><img src="assets/libretto.png" alt="Schermata Libretto"></div>
+          <div class="gallery-caption">Libretto & Medie</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-phone"><img src="assets/altro.png" alt="Schermata Altro"></div>
+          <div class="gallery-caption">Hub Servizi & Carriera</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCESSO SICURO SPID E CIE -->
+  <section id="accesso" class="sec-pad">
+    <div class="wrap">
+      <div class="sec-header">
+        <span class="eyebrow">Privacy & Sicurezza</span>
+        <h2>Entri con SPID o CIE ufficiale</h2>
+        <p>L'autenticazione passa unicamente attraverso l'Identity Provider ufficiale CINECA dell'Ateneo di Salerno.</p>
+      </div>
+
+      <div class="access-grid">
+        <div class="access-box">
+          <img src="assets/spid.png" alt="Logo SPID" class="idp-icon">
+          <div>
+            <h3>Autenticazione con SPID</h3>
+            <p>Accedi con il tuo provider preferito (Poste, SpidItalia, Namirial, ecc.). L'app non legge né memorizza mai le tue credenziali personali.</p>
+          </div>
+        </div>
+
+        <div class="access-box">
+          <div class="idp-icon-fallback">
+            <span class="sym">credit_card</span>
+          </div>
+          <div>
+            <h3>Carta d'Identità Elettronica (CIE)</h3>
+            <p>Accesso immediato con CIE Livello 2 o Livello 3 tramite app CieID o con lettura NFC e PIN.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="access-notice">
+        <span class="sym">verified_user</span>
+        <div>
+          <strong>Nessun server proprietario:</strong> Unisa Plus comunica direttamente dal tuo dispositivo con le API ufficiali di Ateneo (EasyCourse, Esse3, ADISURC). Nessun dato transita o viene salvato su server terzi. Inoltre, puoi consultare aule libere e mappa campus <b>anche senza eseguire il login</b>.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOMANDE FREQUENTI -->
+  <section id="faq" class="sec-pad">
+    <div class="wrap faq-wrap">
+      <div class="sec-header" style="text-align: center; margin-inline: auto;">
+        <span class="eyebrow">Chiarezza</span>
+        <h2>Domande frequenti</h2>
+      </div>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>È un'applicazione ufficiale dell'Università di Salerno?</span>
+          <span class="sym">expand_more</span>
+        </summary>
+        <div class="faq-answer">
+          No. Unisa Plus è un progetto <b>amatoriale, indipendente e open source</b> sviluppato da studenti per gli studenti dell'Università degli Studi di Salerno. Non è sviluppata, gestita o sponsorizzata dall'Ateneo. Il codice sorgente è interamente trasparente e consultabile su <a href="https://github.com/emmesaux/UnisaPlus" target="_blank" rel="noopener">GitHub</a>.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>L'app è gratuita? Ci sono annunci pubblicitari?</span>
+          <span class="sym">expand_more</span>
+        </summary>
+        <div class="faq-answer">
+          L'app è completamente gratuita, priva di pubblicità, annunci traccianti o acquisti in-app. È nata con il solo scopo di offrire agli studenti uno strumento comodo ed efficiente per la vita universitaria quotidiana.
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>Come vengono trattati i miei dati personali?</span>
+          <span class="sym">expand_more</span>
+        </summary>
+        <div class="faq-answer">
+          I tuoi dati non vengono raccolti né memorizzati da alcuno sviluppatore. L'app non possiede database remoti o server di backend: le credenziali di sessione (token CINECA) risiedono unicamente nello spazio crittografato protetto del tuo smartphone (Keychain su iOS, Keystore su Android).
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span>Come funziona il QR per la mensa ADISURC?</span>
+          <span class="sym">expand_more</span>
+        </summary>
+        <div class="faq-answer">
+          Unisa Plus si interfaccia con il portale mensa ADISURC generando lo stesso codice dinamico TOTP con aggiornamento periodico richiesto dai lettori ottici alle casse delle mense di Fisciano e Baronissi.
+        </div>
+      </details>
     </div>
   </section>
 </main>
 
-<footer>
+<!-- FOOTER -->
+<footer class="site-footer">
   <div class="wrap">
-    <div class="top">
-      <div>
-        <a href="#top" class="brand"><img src="assets/icon.png" alt="" style="width:34px;height:34px;border-radius:9px"> Unisa<b style="color:var(--zolfo)">Plus</b></a>
-        <p style="margin-top:10px;max-width:40ch;font-size:14px">Il campus di Salerno in tasca. Progetto indipendente.</p>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h4>
+          <img src="assets/icon.png" alt="" style="width:28px;height:28px;border-radius:7px;">
+          Unisa<span style="color:var(--brand-zolfo)">Plus</span>
+        </h4>
+        <p style="margin-top:8px;max-width:38ch;">
+          Il campus dell'Università degli Studi di Salerno in tasca. Progetto indipendente e open source.
+        </p>
       </div>
-      <div class="flinks">
-        <a href="https://github.com/emmesaux/UnisaPlus" target="_blank" rel="noopener">Open source · GitHub</a>
-        <a href="privacy.html">Privacy</a>
+
+      <div class="footer-links">
+        <a href="https://github.com/emmesaux/UnisaPlus" target="_blank" rel="noopener">GitHub Repository</a>
+        <a href="privacy.html">Privacy Policy</a>
         <a href="support.html">Assistenza</a>
-        <a href="mailto:mario.saulle06@gmail.com">Contatti</a>
+        <a href="mailto:mario.saulle06@gmail.com">Contatta lo sviluppatore</a>
       </div>
     </div>
-    <div class="disc">© 2026 Unisa Plus · Progetto <b>amatoriale e indipendente</b>, realizzato da studenti. <b>Non è un'app ufficiale</b> e non ha alcuna affiliazione, collaborazione o approvazione da parte dell'Università degli Studi di Salerno. App <b>open source</b> (codice su GitHub). SPID, CIE e i loghi dei gestori di identità appartengono ai rispettivi proprietari.</div>
+
+    <div class="footer-disclaimer">
+      © 2026 Unisa Plus · Sviluppato da Mario Saulle (<a href="https://www.technicalinengine.it/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">TiE - Technical In-Engine</a>). Progetto indipendente realizzato da studenti: non è un'app ufficiale dell'Università degli Studi di Salerno né di ADISURC e non ha alcuna affiliazione con esse. Tutti i marchi, loghi SPID e CIE appartengono ai rispettivi proprietari.
+    </div>
   </div>
 </footer>
+
+<script>
+  // Gestione interattiva Toggle Dark/Light Mode
+  const radice = document.documentElement;
+  const toggleBtn = document.getElementById('theme-toggle');
+
+  toggleBtn.addEventListener('click', () => {
+    const temaCorrente = radice.dataset.theme;
+    const nuovoTema = temaCorrente === 'light' ? 'dark' : 'light';
+    radice.dataset.theme = nuovoTema;
+    try {
+      localStorage.setItem('unisaplus_tema', nuovoTema);
+    } catch (e) {}
+  });
+</script>
 
 </body>
 </html>

@@ -11,6 +11,11 @@ class Lezione {
   final int postiDisponibili;
   final int postiTotali;
 
+  /// Partizione a settimane alterne quando il corso è pubblicato come "anno
+  /// comune": '' = per tutti / non nota, 'pari' o 'dispari' = riservata al
+  /// gruppo con matricola pari/dispari.
+  final String parita;
+
   Lezione({
     required this.id,
     required this.insegnamento,
@@ -23,6 +28,7 @@ class Lezione {
     this.prenotata = false,
     this.postiDisponibili = 0,
     this.postiTotali = 0,
+    this.parita = '',
   });
 
   factory Lezione.fromJson(Map<String, dynamic> json) {
@@ -38,8 +44,27 @@ class Lezione {
       prenotata: json['prenotata'] as bool? ?? false,
       postiDisponibili: json['posti_disponibili'] as int? ?? 0,
       postiTotali: json['posti_totali'] as int? ?? 0,
+      parita: json['parita'] as String? ?? '',
     );
   }
+}
+
+/// Parità ('pari'/'dispari') di una matricola: lo studente segue le lezioni
+/// del proprio gruppo quando l'orario è a settimane alterne. Deciso dall'ultima
+/// cifra numerica della matricola.
+String paritaMatricola(String matricola) {
+  final cifre = matricola.replaceAll(RegExp(r'[^0-9]'), '');
+  if (cifre.isEmpty) return '';
+  final ultima = int.parse(cifre[cifre.length - 1]);
+  return ultima.isEven ? 'pari' : 'dispari';
+}
+
+/// Rileva la partizione pari/dispari dal testo grezzo di una cella orario.
+String rilevaParita(String testo) {
+  final t = testo.toLowerCase();
+  if (RegExp(r'\bdispari\b').hasMatch(t)) return 'dispari';
+  if (RegExp(r'\bpari\b').hasMatch(t)) return 'pari';
+  return '';
 }
 
 class EsameAgenda {

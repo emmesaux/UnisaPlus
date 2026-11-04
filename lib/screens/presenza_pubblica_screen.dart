@@ -7,6 +7,27 @@ import '../services/easybadge_service.dart';
 import '../theme/app_theme.dart';
 import 'presenze_screen.dart';
 
+const kMultiPresenzaCode = '%AMULTIP%A';
+const kMultiPresenzaEasterEgg = '%4ASSENZE%';
+
+bool isMultiPresenzaCode(String value) =>
+    value == kMultiPresenzaCode || value == kMultiPresenzaEasterEgg;
+
+Future<void> mostraEasterEggPresenze(BuildContext context) async {
+  await showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Ti denuncio'),
+      actions: [
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Ok'),
+        ),
+      ],
+    ),
+  );
+}
+
 /// Rilevazione e consultazione presenze senza accesso (tramite matricola),
 /// collegata agli endpoint reali EasyBadge di UNISA (`TimbratureApi.php`,
 /// `corso_iscritti.php` e `timbrature.php`).
@@ -16,11 +37,13 @@ class PresenzaPubblicaScreen extends StatefulWidget {
     required this.api,
     this.autenticazione = false,
     this.matricolaIniziale,
+    this.multiMatricola = false,
   });
 
   final ApiService api;
   final bool autenticazione;
   final String? matricolaIniziale;
+  final bool multiMatricola;
 
   @override
   State<PresenzaPubblicaScreen> createState() => _PresenzaPubblicaScreenState();
@@ -117,6 +140,24 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
   }
 
   Future<void> _submit() async {
+    final codice = _codiceController.text.trim();
+    if (!widget.multiMatricola && isMultiPresenzaCode(codice)) {
+      if (codice == kMultiPresenzaEasterEgg) {
+        await mostraEasterEggPresenze(context);
+        if (!mounted) return;
+      }
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PresenzaPubblicaScreen(
+            api: widget.api,
+            autenticazione: widget.autenticazione,
+            matricolaIniziale: _matricolaController.text,
+            multiMatricola: true,
+          ),
+        ),
+      );
+      return;
+    }
     // Se l'utente ha scritto la matricola nel campo senza premere "+",
     // la includiamo automaticamente così basta un solo tocco.
     final pendingInput = _matricolaController.text.trim().toUpperCase();
@@ -134,7 +175,6 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
       }
     }
 
-    final codice = _codiceController.text.trim();
     if (targetMatricole.isEmpty) {
       setState(() {
         _feedback = 'Inserisci almeno una matricola.';
@@ -279,17 +319,18 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
                     onPressed: _sending ? null : _consultaPresenzeMatricola,
                     icon: const Icon(Icons.search),
                   ),
-                  IconButton(
-                    tooltip: 'Aggiungi più matricole',
-                    onPressed: _sending ? null : _addMatricola,
-                    icon: const Icon(Icons.person_add_alt_1_outlined),
-                  ),
+                  if (widget.multiMatricola)
+                    IconButton(
+                      tooltip: 'Aggiungi più matricole',
+                      onPressed: _sending ? null : _addMatricola,
+                      icon: const Icon(Icons.person_add_alt_1_outlined),
+                    ),
                 ],
               ),
             ),
             onSubmitted: (_) => _consultaPresenzeMatricola(),
           ),
-          if (_matricole.isNotEmpty) ...[
+          if (widget.multiMatricola && _matricole.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(
               'Matricole da registrare (${_matricole.length})',

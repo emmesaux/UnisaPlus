@@ -97,6 +97,10 @@ class _OrarioScreenState extends State<OrarioScreen> {
       _weekStart,
       _mondayOf(DateTime.now()),
     );
+    // Parità della propria matricola: le lezioni dell'altro gruppo (anno comune
+    // a settimane alterne) vengono mostrate ma ingrigite.
+    final parStudente =
+        paritaMatricola(widget.authService.currentUser?.matricola ?? '');
     return Column(
       children: [
         _BarraCorsoEAnno(
@@ -178,7 +182,8 @@ class _OrarioScreenState extends State<OrarioScreen> {
               for (final wd in byDay.keys) {
                 _sectionKeys[wd] = GlobalKey();
               }
-              final inCorsoOProssima = _trovaInCorsoOProssima(lezioni);
+              final inCorsoOProssima =
+                  _trovaInCorsoOProssima(lezioni, parStudente);
               return RefreshIndicator(
                 onRefresh: () async => _ricarica(),
                 child: ListView(
@@ -192,7 +197,10 @@ class _OrarioScreenState extends State<OrarioScreen> {
                     ),
                     const SizedBox(height: 16),
                     if (inCorsoOProssima != null) ...[
-                      _CardOraProssima(info: inCorsoOProssima),
+                      _CardOraProssima(
+                        info: inCorsoOProssima,
+                        parStudente: parStudente,
+                      ),
                       const SizedBox(height: 20),
                     ],
                     for (var wd = 1; wd <= 7; wd++)
@@ -202,6 +210,7 @@ class _OrarioScreenState extends State<OrarioScreen> {
                           day: _weekStart.add(Duration(days: wd - 1)),
                           lezioni: byDay[wd]!,
                           ritardo: (wd - 1) * 50,
+                          parStudente: parStudente,
                         ),
                   ],
                 ),
@@ -213,16 +222,23 @@ class _OrarioScreenState extends State<OrarioScreen> {
     );
   }
 
-  _InfoLezione? _trovaInCorsoOProssima(List<Lezione> lezioni) {
+  _InfoLezione? _trovaInCorsoOProssima(
+    List<Lezione> lezioni,
+    String parStudente,
+  ) {
+    // Per l'evidenza "in corso/prossima" si considerano solo le lezioni del
+    // proprio gruppo (le altre restano in elenco, ingrigite).
+    bool mia(Lezione l) =>
+        parStudente.isEmpty || l.parita.isEmpty || l.parita == parStudente;
     final ora = DateTime.now();
     for (final l in lezioni) {
-      if (ora.isAfter(l.inizio) && ora.isBefore(l.fine)) {
+      if (mia(l) && ora.isAfter(l.inizio) && ora.isBefore(l.fine)) {
         return _InfoLezione(lezione: l, inCorso: true);
       }
     }
     Lezione? prossima;
     for (final l in lezioni) {
-      if (l.inizio.isAfter(ora)) {
+      if (mia(l) && l.inizio.isAfter(ora)) {
         if (prossima == null || l.inizio.isBefore(prossima.inizio)) {
           prossima = l;
         }
@@ -501,8 +517,9 @@ class _StripGiorni extends StatelessWidget {
 /// Riquadro in evidenza con la lezione in corso o la prossima, come
 /// l'annuncio in testa a un vero tabellone delle partenze.
 class _CardOraProssima extends StatelessWidget {
-  const _CardOraProssima({required this.info});
+  const _CardOraProssima({required this.info, this.parStudente = ''});
   final _InfoLezione info;
+  final String parStudente;
 
   @override
   Widget build(BuildContext context) {
@@ -612,6 +629,14 @@ class _CardOraProssima extends StatelessWidget {
                             icon: Icons.person_outline,
                             label: l.docente,
                           ),
+                        if (l.parita.isNotEmpty)
+                          _TagScuro(
+                            icon: Icons.event_repeat_outlined,
+                            label: l.parita == 'pari'
+                                ? 'Sett. pari'
+                                : 'Sett. dispari',
+                            highlight: l.parita == parStudente,
+                          ),
                       ],
                     ),
                     if (progresso != null) ...[
@@ -683,10 +708,12 @@ class _DaySection extends StatelessWidget {
     required this.day,
     required this.lezioni,
     this.ritardo = 0,
+    this.parStudente = '',
   });
   final DateTime day;
   final List<Lezione> lezioni;
   final int ritardo;
+  final String parStudente;
 
   @override
   Widget build(BuildContext context) {
@@ -760,7 +787,8 @@ class _DaySection extends StatelessWidget {
                 ],
               ),
             ),
-            for (final l in lezioni) _LezioneCard(lezione: l),
+            for (final l in lezioni)
+              _LezioneCard(lezione: l, parStudente: parStudente),
           ],
         ),
       ),
@@ -772,8 +800,9 @@ class _DaySection extends StatelessWidget {
 /// colonna orario (inizio, fine e durata) a sinistra, e a destra il titolo
 /// con aula e docente messi in evidenza come targhette.
 class _LezioneCard extends StatelessWidget {
-  const _LezioneCard({required this.lezione});
+  const _LezioneCard({required this.lezione, this.parStudente = ''});
   final Lezione lezione;
+  final String parStudente;
 
   @override
   Widget build(BuildContext context) {
@@ -785,13 +814,18 @@ class _LezioneCard extends StatelessWidget {
     final inCorso = ora.isAfter(l.inizio) && ora.isBefore(l.fine);
     final passata =
         DateUtils.isSameDay(l.inizio, ora) && ora.isAfter(l.fine);
+    // Lezione dell'altro gruppo (anno comune a settimane alterne): mostrata
+    // ma ingrigita, non rimossa.
+    final altraPartizione = l.parita.isNotEmpty &&
+        parStudente.isNotEmpty &&
+        l.parita != parStudente;
     final minuti = l.fine.difference(l.inizio).inMinutes;
     final durata = minuti >= 60 && minuti % 60 == 0
         ? '${minuti ~/ 60}h'
         : '${minuti}m';
 
     return Opacity(
-      opacity: passata ? 0.65 : 1,
+      opacity: altraPartizione ? 0.4 : (passata ? 0.65 : 1),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
@@ -897,6 +931,15 @@ class _LezioneCard extends StatelessWidget {
                               Icons.person_outline,
                               l.docente,
                               scheme.primary,
+                            ),
+                          if (l.parita.isNotEmpty)
+                            _chip(
+                              context,
+                              Icons.event_repeat_outlined,
+                              l.parita == 'pari'
+                                  ? 'Sett. pari'
+                                  : 'Sett. dispari',
+                              AppColors.mare,
                             ),
                         ],
                       ),

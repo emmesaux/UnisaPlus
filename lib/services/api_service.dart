@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml/xml.dart';
 import '../models/aula.dart';
+import '../models/lezione.dart';
 import 'demo_mode.dart';
 import 'easybadge_service.dart';
 
@@ -128,12 +129,16 @@ class ApiService {
     final date = _parseAgendaDate(cell['data']?.toString());
     final start = _parseTime(cell['ora_inizio']?.toString());
     final end = _parseTime(cell['ora_fine']?.toString());
+    // La partizione a settimane alterne (pari/dispari) può trovarsi nel nome
+    // dell'insegnamento o nelle annotazioni: si scandisce l'intera cella.
+    final blob = cell.values.map((v) => v?.toString() ?? '').join(' ');
     return {
       'id':
           '${cell['data']}-${cell['ora_inizio']}-${cell['nome_insegnamento']}',
       'insegnamento': cell['nome_insegnamento']?.toString() ?? '',
       'docente': cell['docente']?.toString() ?? '',
       'aula': cell['aula']?.toString() ?? '',
+      'parita': rilevaParita(blob),
       'inizio': DateTime(
         date.year,
         date.month,

@@ -242,7 +242,13 @@ class AdisurcService {
   /// Anni accademici candidati (in ordine di priorità). Su ADiSURC i moduli
   /// `INFO-RISTORAZIONE` e `DEVICE-MENSA` sono pubblicati su `dol-100/25`
   /// (`p_idanac=2025`), con fallback su `2026` e `2024`.
-  List<int> _anniCandidati() => const [2025, 2026, 2024];
+  /// Annate ADiSURC da interrogare: l'anno corrente piu' quelli adiacenti,
+  /// per recuperare anche eventuali borsellini residui di annate precedenti
+  /// (ADiSURC non riporta il vecchio saldo sulla nuova annata).
+  List<int> _anniCandidati() {
+    final y = DateTime.now().year;
+    return [y, y - 1, y + 1, y - 2];
+  }
 
   /// Richiede al gateway `mensa-agw-02` i dati carta (`cardid`, `cardsecret`,
   /// `cardinterval`) dentro un JWT usando la `KEY` di associazione.
@@ -797,106 +803,24 @@ class AdisurcService {
       return null;
     }
 
+    // Somma i borsellini delle diverse annate: ADiSURC non riporta il vecchio
+    // saldo sulla nuova, quindi il disponibile reale e' la somma. Valori
+    // identici tra annate vengono contati una sola volta (il gateway potrebbe
+    // rispecchiare lo stesso borsellino per p_idanac diversi).
+    final saldiPerAnno = <int, double>{};
     for (final year in _anniCandidati()) {
-      final smallYear = (year % 100).toString().padLeft(2, '0');
-      final badgeUri = Uri.parse(
-        '$_serverBase/dol-100/$smallYear/INFO-RISTORAZIONE/public/index.php/badgeinfo',
-      ).replace(
-        queryParameters: {
-          'p_idanac': year.toString(),
-          'p_codappl': 'INFO-RISTORAZIONE',
-          'p_flag0': ?flag0,
-        },
+      final s = await _saldoAnno(year, token, flag0);
+      if (s != null) saldiPerAnno[year] = s;
+    }
+    if (saldiPerAnno.isNotEmpty) {
+      final distinti = saldiPerAnno.values.toSet();
+      final totale = distinti.fold<double>(0, (a, b) => a + b);
+      isDemo.value = false;
+      debugPrint(
+        '[ADISURC] saldo per annata=$saldiPerAnno distinti=$distinti totale=$totale',
       );
-
-      // 1) Tentativo diretto su badgeinfo con il token salvato per INFO-RISTORAZIONE
-      final authPerBadge = _infoRistorazioneToken ?? _sessionToken;
-      if (token != null) {
-        try {
-          final directResp = await http
-              .get(
-                badgeUri,
-                headers: _adisurcWebHeaders(
-                  token,
-                  customAppAuth: authPerBadge,
-                ),
-              )
-              .timeout(_timeout);
-          debugPrint(
-            '[ADISURC] GET badgeinfo diretto ($year) status=${directResp.statusCode} body=${directResp.body}',
-          );
-          if (directResp.statusCode >= 200 &&
-              directResp.statusCode < 300 &&
-              directResp.body.trim() != 'Invalid token') {
-            final saldo = _estraiSaldo(directResp.body);
-            if (saldo != null) {
-              isDemo.value = false;
-              await _salvaSaldoCache(saldo);
-              return WalletAdisurc(saldo: saldo, updatedAt: DateTime.now());
-            }
-          }
-        } catch (e) {
-          debugPrint('[ADISURC] GET badgeinfo diretto ($year) err=$e');
-        }
-      }
-
-      // 2) Tentativo con user/init su INFO-RISTORAZIONE per rinnovare Custom-App-Authorization
-      // e successiva GET su badgeinfo.
-      if (token != null && flag0 != null) {
-        try {
-          final initUri = Uri.parse(
-            '$_serverBase/dol-100/$smallYear/INFO-RISTORAZIONE/public/index.php/user/init',
-          ).replace(
-            queryParameters: {
-              'p_idanac': year.toString(),
-              'p_codappl': 'INFO-RISTORAZIONE',
-              'p_flag0': flag0,
-            },
-          );
-          final initResp = await http
-              .get(initUri, headers: _adisurcWebHeaders(token))
-              .timeout(_timeout);
-          debugPrint(
-            '[ADISURC] INFO-RISTORAZIONE init ($year) status=${initResp.statusCode} body=${initResp.body}',
-          );
-          if (initResp.statusCode >= 200 && initResp.statusCode < 300) {
-            final saldoInit = _estraiSaldo(initResp.body);
-            if (saldoInit != null) {
-              isDemo.value = false;
-              await _salvaSaldoCache(saldoInit);
-              return WalletAdisurc(saldo: saldoInit, updatedAt: DateTime.now());
-            }
-            final customAppAuth = _responseDataString(jsonDecode(initResp.body));
-            if (customAppAuth != null && customAppAuth.isNotEmpty) {
-              _infoRistorazioneToken = customAppAuth;
-              await _storage.write(key: _kInfoRistAuth, value: customAppAuth);
-
-              final resp = await http
-                  .get(
-                    badgeUri,
-                    headers: _adisurcWebHeaders(
-                      token,
-                      customAppAuth: customAppAuth,
-                    ),
-                  )
-                  .timeout(_timeout);
-              debugPrint(
-                '[ADISURC] GET badgeinfo+init ($year) status=${resp.statusCode} body=${resp.body}',
-              );
-              if (resp.statusCode >= 200 && resp.statusCode < 300) {
-                final saldo = _estraiSaldo(resp.body);
-                if (saldo != null) {
-                  isDemo.value = false;
-                  await _salvaSaldoCache(saldo);
-                  return WalletAdisurc(saldo: saldo, updatedAt: DateTime.now());
-                }
-              }
-            }
-          }
-        } catch (e) {
-          debugPrint('[ADISURC] INFO-RISTORAZIONE init+badgeinfo ($year) err=$e');
-        }
-      }
+      await _salvaSaldoCache(totale);
+      return WalletAdisurc(saldo: totale, updatedAt: DateTime.now());
     }
 
     // Se la chiamata live fallisce (sessione web temporanea scaduta o offline),
@@ -916,6 +840,89 @@ class AdisurcService {
     }
 
     isDemo.value = true;
+    return null;
+  }
+
+  /// Saldo del borsellino per una singola annata [year] dal gateway
+  /// `badgeinfo` (con eventuale rinnovo del token INFO-RISTORAZIONE).
+  /// Restituisce null se per quell'annata non c'e' un borsellino valido.
+  Future<double?> _saldoAnno(int year, String? token, String? flag0) async {
+    final smallYear = (year % 100).toString().padLeft(2, '0');
+    final badgeUri = Uri.parse(
+      '$_serverBase/dol-100/$smallYear/INFO-RISTORAZIONE/public/index.php/badgeinfo',
+    ).replace(
+      queryParameters: {
+        'p_idanac': year.toString(),
+        'p_codappl': 'INFO-RISTORAZIONE',
+        'p_flag0': ?flag0,
+      },
+    );
+    final authPerBadge = _infoRistorazioneToken ?? _sessionToken;
+    if (token != null) {
+      try {
+        final directResp = await http
+            .get(
+              badgeUri,
+              headers: _adisurcWebHeaders(token, customAppAuth: authPerBadge),
+            )
+            .timeout(_timeout);
+        debugPrint(
+          '[ADISURC] GET badgeinfo diretto ($year) status=${directResp.statusCode} body=${directResp.body}',
+        );
+        if (directResp.statusCode >= 200 &&
+            directResp.statusCode < 300 &&
+            directResp.body.trim() != 'Invalid token') {
+          final saldo = _estraiSaldo(directResp.body);
+          if (saldo != null) return saldo;
+        }
+      } catch (e) {
+        debugPrint('[ADISURC] GET badgeinfo diretto ($year) err=$e');
+      }
+    }
+    if (token != null && flag0 != null) {
+      try {
+        final initUri = Uri.parse(
+          '$_serverBase/dol-100/$smallYear/INFO-RISTORAZIONE/public/index.php/user/init',
+        ).replace(
+          queryParameters: {
+            'p_idanac': year.toString(),
+            'p_codappl': 'INFO-RISTORAZIONE',
+            'p_flag0': flag0,
+          },
+        );
+        final initResp = await http
+            .get(initUri, headers: _adisurcWebHeaders(token))
+            .timeout(_timeout);
+        debugPrint(
+          '[ADISURC] INFO-RISTORAZIONE init ($year) status=${initResp.statusCode} body=${initResp.body}',
+        );
+        if (initResp.statusCode >= 200 && initResp.statusCode < 300) {
+          final saldoInit = _estraiSaldo(initResp.body);
+          if (saldoInit != null) return saldoInit;
+          final customAppAuth = _responseDataString(jsonDecode(initResp.body));
+          if (customAppAuth != null && customAppAuth.isNotEmpty) {
+            _infoRistorazioneToken = customAppAuth;
+            await _storage.write(key: _kInfoRistAuth, value: customAppAuth);
+            final resp = await http
+                .get(
+                  badgeUri,
+                  headers:
+                      _adisurcWebHeaders(token, customAppAuth: customAppAuth),
+                )
+                .timeout(_timeout);
+            debugPrint(
+              '[ADISURC] GET badgeinfo+init ($year) status=${resp.statusCode} body=${resp.body}',
+            );
+            if (resp.statusCode >= 200 && resp.statusCode < 300) {
+              final saldo = _estraiSaldo(resp.body);
+              if (saldo != null) return saldo;
+            }
+          }
+        }
+      } catch (e) {
+        debugPrint('[ADISURC] INFO-RISTORAZIONE init+badgeinfo ($year) err=$e');
+      }
+    }
     return null;
   }
 

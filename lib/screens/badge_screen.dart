@@ -35,6 +35,14 @@ class _BadgeScreenState extends State<BadgeScreen> {
   String? _feedback;
   bool _feedbackOk = false;
 
+  // Scansione continua: lo scanner resta attivo per una eventuale seconda
+  // rilevazione (alcuni docenti ne fanno due). `_inviandoScansione` evita invii
+  // sovrapposti; l'ultimo codice/istante servono all'anti-rimbalzo per non
+  // riscattare subito lo stesso QR ancora inquadrato.
+  bool _inviandoScansione = false;
+  String? _ultimoCodiceScansionato;
+  DateTime? _ultimaScansioneAt;
+
   late Future<List<CorsoPresenza>> _corsiPresenze;
 
   @override
@@ -76,18 +84,47 @@ class _BadgeScreenState extends State<BadgeScreen> {
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
-    if (!_scanning) return;
+    if (!_scanning || _inviandoScansione) return;
     final raw = capture.barcodes.isNotEmpty
         ? capture.barcodes.first.rawValue
         : null;
     if (raw == null || raw.trim().isEmpty) return;
-    setState(() => _scanning = false);
+    // Lo scanner NON si chiude dopo la prima scansione, così una seconda
+    // rilevazione (QR diverso) viene acquisita subito. Lo stesso QR ancora
+    // inquadrato però non viene riscattato entro pochi secondi.
+    final now = DateTime.now();
+    if (raw == _ultimoCodiceScansionato &&
+        _ultimaScansioneAt != null &&
+        now.difference(_ultimaScansioneAt!).inSeconds < 5) {
+      return;
+    }
+    _ultimoCodiceScansionato = raw;
+    _ultimaScansioneAt = now;
+    _inviandoScansione = true;
     await _invia(raw, fromQr: true);
+    _inviandoScansione = false;
   }
 
   Future<void> _submitCodiceManuale() async {
     final code = _codeCtrl.text.trim();
     if (code.isEmpty) return;
+    if (isMultiPresenzaCode(code)) {
+      if (code == kMultiPresenzaEasterEgg) {
+        await mostraEasterEggPresenze(context);
+        if (!mounted) return;
+      }
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PresenzaPubblicaScreen(
+            api: widget.authService.api,
+            autenticazione: true,
+            matricolaIniziale: widget.authService.currentUser?.matricola,
+            multiMatricola: true,
+          ),
+        ),
+      );
+      return;
+    }
     setState(() => _submittingCode = true);
     await _invia(code, fromQr: false);
     if (mounted) {
@@ -373,20 +410,6 @@ class _BadgeScreenState extends State<BadgeScreen> {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
-          OutlinedButton.icon(
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => PresenzaPubblicaScreen(
-                  api: widget.authService.api,
-                  autenticazione: true,
-                  matricolaIniziale: matricola,
-                ),
-              ),
-            ),
-            icon: const Icon(Icons.people_alt_outlined),
-            label: const Text('Rileva per più matricole'),
-          ),
-          const SizedBox(height: 4),
           Text(
             'Inquadra il codice QR proiettato dal docente in aula oppure inserisci il codice lezione.',
             style: Theme.of(
