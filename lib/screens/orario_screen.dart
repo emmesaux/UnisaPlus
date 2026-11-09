@@ -184,35 +184,42 @@ class _OrarioScreenState extends State<OrarioScreen> {
               }
               final inCorsoOProssima =
                   _trovaInCorsoOProssima(lezioni, parStudente);
+              // SingleChildScrollView (non-lazy) così tutte le sezioni-giorno
+              // sono sempre nel widget tree: le GlobalKey hanno un contesto e
+              // il salto al giorno (anche venerdì/ultimi, fuori schermo) funziona.
               return RefreshIndicator(
                 onRefresh: () async => _ricarica(),
-                child: ListView(
+                child: SingleChildScrollView(
                   controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-                  children: [
-                    _StripGiorni(
-                      weekStart: _weekStart,
-                      lezioniPerGiorno: byDay,
-                      onTapGiorno: _vaiAlGiorno,
-                    ),
-                    const SizedBox(height: 16),
-                    if (inCorsoOProssima != null) ...[
-                      _CardOraProssima(
-                        info: inCorsoOProssima,
-                        parStudente: parStudente,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _StripGiorni(
+                        weekStart: _weekStart,
+                        lezioniPerGiorno: byDay,
+                        onTapGiorno: _vaiAlGiorno,
                       ),
-                      const SizedBox(height: 20),
-                    ],
-                    for (var wd = 1; wd <= 7; wd++)
-                      if (byDay.containsKey(wd))
-                        _DaySection(
-                          key: _sectionKeys[wd],
-                          day: _weekStart.add(Duration(days: wd - 1)),
-                          lezioni: byDay[wd]!,
-                          ritardo: (wd - 1) * 50,
+                      const SizedBox(height: 16),
+                      if (inCorsoOProssima != null) ...[
+                        _CardOraProssima(
+                          info: inCorsoOProssima,
                           parStudente: parStudente,
                         ),
-                  ],
+                        const SizedBox(height: 20),
+                      ],
+                      for (var wd = 1; wd <= 7; wd++)
+                        if (byDay.containsKey(wd))
+                          _DaySection(
+                            key: _sectionKeys[wd],
+                            day: _weekStart.add(Duration(days: wd - 1)),
+                            lezioni: byDay[wd]!,
+                            ritardo: (wd - 1) * 50,
+                            parStudente: parStudente,
+                          ),
+                    ],
+                  ),
                 ),
               );
             },

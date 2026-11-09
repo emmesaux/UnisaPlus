@@ -8,7 +8,6 @@ import '../services/auth_service.dart';
 import '../services/easybadge_service.dart';
 import '../theme/app_theme.dart';
 import 'presenze_screen.dart';
-import 'presenza_pubblica_screen.dart';
 
 /// Tesserino universitario digitale, rilevazione presenza e consultazione
 /// delle presenze per ciascun insegnamento.
@@ -108,23 +107,6 @@ class _BadgeScreenState extends State<BadgeScreen> {
   Future<void> _submitCodiceManuale() async {
     final code = _codeCtrl.text.trim();
     if (code.isEmpty) return;
-    if (isMultiPresenzaCode(code)) {
-      if (code == kMultiPresenzaEasterEgg) {
-        await mostraEasterEggPresenze(context);
-        if (!mounted) return;
-      }
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => PresenzaPubblicaScreen(
-            api: widget.authService.api,
-            autenticazione: true,
-            matricolaIniziale: widget.authService.currentUser?.matricola,
-            multiMatricola: true,
-          ),
-        ),
-      );
-      return;
-    }
     setState(() => _submittingCode = true);
     await _invia(code, fromQr: false);
     if (mounted) {

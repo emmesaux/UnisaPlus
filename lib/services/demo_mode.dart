@@ -93,6 +93,13 @@ class DemoMode {
     add(2, oggi.add(const Duration(hours: 14)), oggi.add(const Duration(hours: 16)),
         'Programmazione I', 'Prof. L. Verdi', 'Lab. Knuth');
 
+    // Due lezioni in CONTEMPORANEA lo stesso giorno (lunedì 09:00): verifica
+    // che l'app le mostri entrambe e non ne nasconda una.
+    add(11, lun.add(const Duration(hours: 9)), lun.add(const Duration(hours: 11)),
+        'Chimica Organica', 'Prof. R. Marino', 'Aula D1');
+    add(12, lun.add(const Duration(hours: 9)), lun.add(const Duration(hours: 11)),
+        'Laboratorio di Reti', 'Prof. F. Conti', 'Lab. Shannon');
+
     final mar = lun.add(const Duration(days: 1));
     add(3, mar.add(const Duration(hours: 9)), mar.add(const Duration(hours: 11)),
         'Fisica Generale', 'Prof. A. Bianchi', 'Aula F1');
@@ -104,6 +111,12 @@ class DemoMode {
         'Basi di Dati', 'Prof.ssa C. Romano', 'Aula P2');
     add(6, gio.add(const Duration(hours: 14)), gio.add(const Duration(hours: 16)),
         'Analisi Matematica II', 'Prof. M. Rossi', 'Aula F3');
+
+    final ven = lun.add(const Duration(days: 4));
+    add(7, ven.add(const Duration(hours: 9)), ven.add(const Duration(hours: 11)),
+        'Calcolo delle Probabilità', 'Prof. D. Ferrara', 'Aula F1');
+    add(8, ven.add(const Duration(hours: 11, minutes: 15)), ven.add(const Duration(hours: 13, minutes: 15)),
+        'Ingegneria del Software', 'Prof.ssa S. Greco', 'Lab. Turing');
     return list;
   }
 

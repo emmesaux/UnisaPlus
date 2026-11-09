@@ -263,22 +263,21 @@ class _SelezioneCorsoScreenState extends State<SelezioneCorsoScreen> {
         ),
         Divider(color: scheme.outlineVariant),
         const _Intestazione('Anno di corso e gruppo (partizione o curriculum)'),
-        RadioGroup<String>(
-          groupValue: _anno?.valore,
-          onChanged: (v) => setState(() {
-            _anno = corso.anni.where((a) => a.valore == v).firstOrNull;
-          }),
-          child: Column(
-            children: [
-              for (final a in corso.anni)
-                RadioListTile<String>(
-                  value: a.valore,
-                  title: Text(a.annoDiCorso.isNotEmpty ? '${a.annoDiCorso}° anno' : a.label),
-                  subtitle: a.partizione.isNotEmpty ? Text(a.partizione) : null,
-                ),
-            ],
+        for (final a in corso.anni)
+          ListTile(
+            leading: Icon(
+              _anno?.valore == a.valore
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_unchecked,
+              color: _anno?.valore == a.valore
+                  ? scheme.primary
+                  : scheme.onSurfaceVariant,
+            ),
+            title: Text(a.annoDiCorso.isNotEmpty ? '${a.annoDiCorso}° anno' : a.label),
+            subtitle: a.partizione.isNotEmpty ? Text(a.partizione) : null,
+            selected: _anno?.valore == a.valore,
+            onTap: () => setState(() => _anno = a),
           ),
-        ),
       ],
     );
   }

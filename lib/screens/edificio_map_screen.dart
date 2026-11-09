@@ -384,9 +384,12 @@ class _EdificioMapScreenState extends State<EdificioMapScreen> {
     final Color badgeColor =
         isLibera ? const Color(0xFF2E7D5B) : AppColors.corallo;
 
-    // Coordinate esatte (pixel su canvas 1653x1169)
-    final double left = pin.coordX! - 42;
-    final double top = pin.coordY! - 18;
+    // Blocco "stanza" centrato sulle coordinate (canvas 1653x1169), in stile
+    // planimetria: rettangolo pieno colorato per disponibilità con l'etichetta.
+    const double w = 116;
+    const double h = 52;
+    final double left = pin.coordX! - w / 2;
+    final double top = pin.coordY! - h / 2;
 
     return Positioned(
       left: left,
@@ -394,10 +397,12 @@ class _EdificioMapScreenState extends State<EdificioMapScreen> {
       child: GestureDetector(
         onTap: () => _apriDettaglioAula(pin),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          width: w,
+          height: h,
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
           decoration: BoxDecoration(
-            color: badgeColor,
-            borderRadius: BorderRadius.circular(16),
+            color: badgeColor.withValues(alpha: 0.92),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Colors.white, width: 2),
             boxShadow: const [
               BoxShadow(
@@ -407,27 +412,19 @@ class _EdificioMapScreenState extends State<EdificioMapScreen> {
               ),
             ],
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 7,
-                height: 7,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
+          child: Center(
+            child: Text(
+              pin.name,
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 10.5,
+                height: 1.05,
               ),
-              const SizedBox(width: 5),
-              Text(
-                pin.name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

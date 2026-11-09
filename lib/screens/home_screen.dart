@@ -29,12 +29,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _index = 0;
 
-  late final List<Widget> _pages = [
-    OrarioScreen(authService: widget.authService),
-    AuleLibereScreen(api: widget.authService.api),
-    BadgeScreen(authService: widget.authService),
-    AltroScreen(authService: widget.authService),
-  ];
+  // Getter (non `late final`): ad ogni build crea istanze fresche, così al
+  // cambio di lingua/tema le pagine nei tab si ricostruiscono e restano
+  // coerenti con la AppBar (niente più UI mista IT/EN). Lo stato dei tab è
+  // comunque preservato da Flutter per posizione e tipo nel widget tree.
+  List<Widget> get _pages => [
+        OrarioScreen(authService: widget.authService),
+        AuleLibereScreen(api: widget.authService.api),
+        BadgeScreen(authService: widget.authService),
+        AltroScreen(authService: widget.authService),
+      ];
 
   @override
   Widget build(BuildContext context) {

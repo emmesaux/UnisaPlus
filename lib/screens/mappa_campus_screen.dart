@@ -6,6 +6,7 @@ import '../services/api_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_segmented.dart';
 import 'edificio_map_screen.dart';
+import 'mappa_reale_screen.dart';
 
 enum TipoCampus {
   fisciano('Campus di Fisciano', 'Sede Principale', Icons.domain),
@@ -84,8 +85,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF012158),
     icona: Icons.directions_bus,
     rettangolo: Rect.fromLTWH(40, 200, 110, 160),
-    latitudine: 40.7752,
-    longitudine: 14.7878,
+    latitudine: 40.773474,
+    longitudine: 14.793414,
   ),
 
   // Piazza del Sapere & Servizi
@@ -101,8 +102,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF012158),
     icona: Icons.local_convenience_store_outlined,
     rettangolo: Rect.fromLTWH(180, 260, 100, 90),
-    latitudine: 40.7728,
-    longitudine: 14.7910,
+    latitudine: 40.769220,
+    longitudine: 14.789550,
   ),
 
   // Edificio A1 - Rettorato
@@ -118,8 +119,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF012158),
     icona: Icons.account_balance,
     rettangolo: Rect.fromLTWH(180, 370, 100, 90),
-    latitudine: 40.7735,
-    longitudine: 14.7895,
+    latitudine: 40.769150,
+    longitudine: 14.792550,
     areeEasyRoom: ['Edificio A1 - Rettorato'],
   ),
 
@@ -136,8 +137,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFFE8A33D),
     icona: Icons.theater_comedy_outlined,
     rettangolo: Rect.fromLTWH(180, 480, 100, 90),
-    latitudine: 40.7739,
-    longitudine: 14.7901,
+    latitudine: 40.769531,
+    longitudine: 14.792297,
     areeEasyRoom: ['Edificio A2 - Aula Magna e Teatro'],
   ),
 
@@ -154,8 +155,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF1B5259),
     icona: Icons.local_library_outlined,
     rettangolo: Rect.fromLTWH(180, 590, 100, 80),
-    latitudine: 40.7734,
-    longitudine: 14.7892,
+    latitudine: 40.769039,
+    longitudine: 14.790943,
   ),
 
   // NORD-OVEST: Edificio B (B, B1, B2)
@@ -171,8 +172,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF1B5259),
     icona: Icons.menu_book,
     rettangolo: Rect.fromLTWH(320, 100, 130, 140),
-    latitudine: 40.7745,
-    longitudine: 14.7890,
+    latitudine: 40.770076,
+    longitudine: 14.793340,
     areeEasyRoom: ['Edificio B', 'Edificio B1', 'Edificio B2'],
   ),
 
@@ -189,8 +190,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF1B5259),
     icona: Icons.insights_outlined,
     rettangolo: Rect.fromLTWH(480, 100, 130, 140),
-    latitudine: 40.7742,
-    longitudine: 14.7912,
+    latitudine: 40.770965,
+    longitudine: 14.792971,
     areeEasyRoom: ['Edificio C', 'Edificio C1', 'Edificio C2'],
   ),
 
@@ -207,8 +208,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF012158),
     icona: Icons.gavel,
     rettangolo: Rect.fromLTWH(640, 100, 130, 140),
-    latitudine: 40.7731,
-    longitudine: 14.7924,
+    latitudine: 40.771569,
+    longitudine: 14.791406,
     areeEasyRoom: ['Edificio D', 'Edificio D1', 'Edificio D2', 'Edificio D3'],
   ),
 
@@ -225,8 +226,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFFE8A33D),
     icona: Icons.restaurant,
     rettangolo: Rect.fromLTWH(420, 330, 120, 90),
-    latitudine: 40.7725,
-    longitudine: 14.7905,
+    latitudine: 40.772896,
+    longitudine: 14.793830,
   ),
 
   // EST: Edificio E (E, E1, E2)
@@ -242,8 +243,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF2E7D5B),
     icona: Icons.biotech,
     rettangolo: Rect.fromLTWH(640, 310, 130, 130),
-    latitudine: 40.7715,
-    longitudine: 14.7928,
+    latitudine: 40.772902,
+    longitudine: 14.790674,
     areeEasyRoom: ['Edificio E', 'Edificio E1', 'Edificio E2'],
   ),
 
@@ -260,8 +261,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFFA3021F),
     icona: Icons.precision_manufacturing_outlined,
     rettangolo: Rect.fromLTWH(640, 500, 140, 170),
-    latitudine: 40.7702,
-    longitudine: 14.7918,
+    latitudine: 40.774534,
+    longitudine: 14.788941,
     areeEasyRoom: [
       'Edificio F',
       'Edificio F1',
@@ -286,23 +287,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF012158),
     icona: Icons.menu_book,
     rettangolo: Rect.fromLTWH(490, 520, 110, 70),
-    latitudine: 40.7705,
-    longitudine: 14.7920,
-  ),
-  EdificioSchematico(
-    id: 'fisc_mensa_f',
-    codice: 'Mensa F',
-    nome: 'Mensa & Ristoro Edificio F',
-    dipartimento: 'Punto ristoro rapido Ingegneria',
-    descrizione:
-        'Primi espressi, insalate, panini e bar a servizio degli studenti del polo tecnologico.',
-    campus: TipoCampus.fisciano,
-    categoria: CategoriaPunto.ristoro,
-    colore: Color(0xFFE8A33D),
-    icona: Icons.lunch_dining_outlined,
-    rettangolo: Rect.fromLTWH(490, 610, 110, 60),
-    latitudine: 40.7698,
-    longitudine: 14.7915,
+    latitudine: 40.772433,
+    longitudine: 14.788757,
   ),
 
   // NORD-EST: CUS Salerno
@@ -318,8 +304,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF2E7D5B),
     icona: Icons.fitness_center,
     rettangolo: Rect.fromLTWH(820, 100, 140, 160),
-    latitudine: 40.7758,
-    longitudine: 14.7942,
+    latitudine: 40.771900,
+    longitudine: 14.787400,
   ),
 
   // SUD: Residenze ADISURC
@@ -335,8 +321,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF1B5259),
     icona: Icons.apartment_outlined,
     rettangolo: Rect.fromLTWH(640, 720, 140, 100),
-    latitudine: 40.7685,
-    longitudine: 14.7935,
+    latitudine: 40.772158,
+    longitudine: 14.794797,
   ),
 
   // ================= BARONISSI (Canvas 800 x 700) =================
@@ -353,8 +339,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF012158),
     icona: Icons.directions_bus,
     rettangolo: Rect.fromLTWH(40, 240, 110, 130),
-    latitudine: 40.7510,
-    longitudine: 14.7728,
+    latitudine: 40.755000,
+    longitudine: 14.779900,
   ),
 
   // Polo Didattico Medicina e Chirurgia
@@ -370,8 +356,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFFA3021F),
     icona: Icons.local_hospital,
     rettangolo: Rect.fromLTWH(200, 160, 240, 180),
-    latitudine: 40.7518,
-    longitudine: 14.7735,
+    latitudine: 40.755522,
+    longitudine: 14.779945,
     areeEasyRoom: ['Campus Baronissi'],
   ),
 
@@ -388,8 +374,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFFA3021F),
     icona: Icons.biotech,
     rettangolo: Rect.fromLTWH(200, 390, 160, 130),
-    latitudine: 40.7522,
-    longitudine: 14.7740,
+    latitudine: 40.755750,
+    longitudine: 14.778700,
   ),
 
   // Biblioteca Polo Biomedico
@@ -405,8 +391,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF1B5259),
     icona: Icons.local_library_outlined,
     rettangolo: Rect.fromLTWH(390, 390, 150, 130),
-    latitudine: 40.7515,
-    longitudine: 14.7732,
+    latitudine: 40.755350,
+    longitudine: 14.780100,
   ),
 
   // Mensa Baronissi
@@ -422,8 +408,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFFE8A33D),
     icona: Icons.restaurant,
     rettangolo: Rect.fromLTWH(480, 180, 120, 110),
-    latitudine: 40.7512,
-    longitudine: 14.7745,
+    latitudine: 40.756150,
+    longitudine: 14.779100,
   ),
 
   // CUS Baronissi
@@ -439,8 +425,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF2E7D5B),
     icona: Icons.fitness_center,
     rettangolo: Rect.fromLTWH(630, 180, 130, 150),
-    latitudine: 40.7525,
-    longitudine: 14.7725,
+    latitudine: 40.754246,
+    longitudine: 14.779558,
   ),
 
   // Residenze Baronissi
@@ -456,8 +442,8 @@ const List<EdificioSchematico> kEdificiSchematici = [
     colore: Color(0xFF1B5259),
     icona: Icons.apartment_outlined,
     rettangolo: Rect.fromLTWH(570, 390, 150, 130),
-    latitudine: 40.7508,
-    longitudine: 14.7748,
+    latitudine: 40.749016,
+    longitudine: 14.775635,
   ),
 ];
 
@@ -734,6 +720,17 @@ class _MappaCampusScreenState extends State<MappaCampusScreen> {
       appBar: AppBar(
         title: const Text('Mappa dei Campus'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.public),
+            tooltip: 'Mappa reale',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => MappaRealeScreen(api: widget.api),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(
               _mostraMappaInterattiva

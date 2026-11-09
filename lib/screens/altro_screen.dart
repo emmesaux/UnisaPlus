@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/settings_service.dart';
@@ -6,7 +7,7 @@ import '../theme/app_theme.dart';
 import 'agenda_esami_screen.dart';
 import 'bacheca_esiti_screen.dart';
 import 'libretto_screen.dart';
-import 'mappa_campus_screen.dart';
+import 'mappa_reale_screen.dart';
 import 'mensa_screen.dart';
 import 'messaggi_screen.dart';
 import 'piano_studi_screen.dart';
@@ -60,7 +61,7 @@ class AltroScreen extends StatelessWidget {
         const SizedBox(height: 10),
         _TileGrid(tiles: [
           _TileData(Icons.map_outlined, en ? 'Map' : 'Mappa', AppColors.arancio,
-              () => go(MappaCampusScreen(api: authService.api))),
+              () => go(MappaRealeScreen(api: authService.api))),
           _TileData(Icons.hub_outlined, en ? 'Services' : 'Servizi',
               const Color(0xFF7B5EA7), () => go(const ServiziUtiliScreen())),
           _TileData(Icons.restaurant_outlined, en ? 'Canteen' : 'Mensa',
@@ -104,10 +105,73 @@ class AltroScreen extends StatelessWidget {
               _TileData(Icons.language_outlined, en ? 'Language' : 'Lingua',
                   const Color(0xFF158A8A), () => _mostraSelettoreLingua(context),
                   subtitle: langLabel),
+              _TileData(Icons.info_outline, en ? 'Info' : 'Informazioni',
+                  const Color(0xFF5E6676), () => _mostraInfo(context),
+                  subtitle: en ? 'Unofficial app' : 'App non ufficiale'),
             ]);
           },
         )
       ],
+    );
+  }
+
+  void _mostraInfo(BuildContext context) {
+    final en = context.l10n.isEnglish;
+    Future<void> apri(String url) async {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    }
+
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(en ? 'About Unisa Plus' : 'Informazioni su Unisa Plus'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                en
+                    ? 'Unisa Plus is an independent, unofficial app made by students, for '
+                        'students. It is not developed, endorsed by, or affiliated with the '
+                        'University of Salerno (UNISA), ADiSURC or CINECA. All names, '
+                        'trademarks and data belong to their respective owners. The app '
+                        'only accesses the official university services on your behalf, '
+                        'with your own login.'
+                    : 'Unisa Plus è un\'app indipendente e non ufficiale, fatta da studenti '
+                        'per studenti. Non è sviluppata, approvata o affiliata all\'Università '
+                        'degli Studi di Salerno (UNISA), ad ADiSURC o a CINECA. Nomi, marchi e '
+                        'dati appartengono ai rispettivi proprietari. L\'app accede ai servizi '
+                        'ufficiali dell\'ateneo solo per tuo conto, con il tuo accesso.',
+                style: Theme.of(ctx).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 10),
+              Text('Versione 1.2.6',
+                  style: Theme.of(ctx).textTheme.bodySmall),
+              const SizedBox(height: 6),
+              TextButton.icon(
+                onPressed: () => apri('https://github.com/emmesaux/UnisaPlus'),
+                icon: const Icon(Icons.code, size: 18),
+                label: const Text('GitHub (open source)'),
+                style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              ),
+              TextButton.icon(
+                onPressed: () =>
+                    apri('https://emmesaux.github.io/UnisaPlus/privacy.html'),
+                icon: const Icon(Icons.privacy_tip_outlined, size: 18),
+                label: Text(en ? 'Privacy Policy' : 'Informativa privacy'),
+                style: TextButton.styleFrom(padding: EdgeInsets.zero),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(en ? 'Close' : 'Chiudi'),
+          ),
+        ],
+      ),
     );
   }
 

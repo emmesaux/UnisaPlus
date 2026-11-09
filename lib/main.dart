@@ -130,33 +130,33 @@ class _UniAppState extends State<UniApp> {
             Locale('it'),
             Locale('en'),
           ],
-          home: _checkingSession
-              ? const Scaffold(body: Center(child: CircularProgressIndicator()))
-              : _loggedIn && _auth.serveSceltaCorso && !_sceltaCorsoRimandata
-              // Primo accesso (o nuovo anno accademico): come nell'app campus
-              // si chiedono corso e anno, poi si cambiano da Altro.
-              ? SelezioneCorsoScreen(
-                  authService: _auth,
-                  primoAccesso: true,
-                  onSalvato: () => setState(() => _sceltaCorsoRimandata = true),
-                )
-              : _loggedIn
-              ? UpgradeAlert(
-                  upgrader: _upgrader,
-                  child: HomeScreen(
+          home: UpgradeAlert(
+            upgrader: _upgrader,
+            child: _checkingSession
+                ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+                : _loggedIn && _auth.serveSceltaCorso && !_sceltaCorsoRimandata
+                // Primo accesso (o nuovo anno accademico): come nell'app campus
+                // si chiedono corso e anno, poi si cambiano da Altro.
+                ? SelezioneCorsoScreen(
+                    authService: _auth,
+                    primoAccesso: true,
+                    onSalvato: () => setState(() => _sceltaCorsoRimandata = true),
+                  )
+                : _loggedIn
+                ? HomeScreen(
                     authService: _auth,
                     onLogout: () => setState(() {
                       _loggedIn = false;
                       _sceltaCorsoRimandata = false;
                     }),
+                  )
+                // Schermata "di ingresso": accesso con SPID/CIE, oppure
+                // consultazione delle aule libere senza autenticarsi.
+                : SpidCieEntryScreen(
+                    authService: _auth,
+                    onLoggedIn: () => setState(() => _loggedIn = true),
                   ),
-                )
-              // Schermata "di ingresso": accesso con SPID/CIE, oppure
-              // consultazione delle aule libere senza autenticarsi.
-              : SpidCieEntryScreen(
-                  authService: _auth,
-                  onLoggedIn: () => setState(() => _loggedIn = true),
-                ),
+          ),
         );
       },
     );

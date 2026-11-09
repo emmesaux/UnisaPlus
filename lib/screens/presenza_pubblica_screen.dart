@@ -7,43 +7,21 @@ import '../services/easybadge_service.dart';
 import '../theme/app_theme.dart';
 import 'presenze_screen.dart';
 
-const kMultiPresenzaCode = '%AMULTIP%A';
-const kMultiPresenzaEasterEgg = '%4ASSENZE%';
-
-bool isMultiPresenzaCode(String value) =>
-    value == kMultiPresenzaCode || value == kMultiPresenzaEasterEgg;
-
-Future<void> mostraEasterEggPresenze(BuildContext context) async {
-  await showDialog<void>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Ti denuncio'),
-      actions: [
-        FilledButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Ok'),
-        ),
-      ],
-    ),
-  );
-}
-
-/// Rilevazione e consultazione presenze senza accesso (tramite matricola),
-/// collegata agli endpoint reali EasyBadge di UNISA (`TimbratureApi.php`,
-/// `corso_iscritti.php` e `timbrature.php`).
+/// Rilevazione e consultazione presenze tramite la propria matricola, collegata
+/// agli endpoint reali EasyBadge di UNISA (`TimbratureApi.php`,
+/// `corso_iscritti.php` e `timbrature.php`). Registra la presenza della
+/// matricola inserita, inquadrando il QR della lezione proiettato in aula.
 class PresenzaPubblicaScreen extends StatefulWidget {
   const PresenzaPubblicaScreen({
     super.key,
     required this.api,
     this.autenticazione = false,
     this.matricolaIniziale,
-    this.multiMatricola = false,
   });
 
   final ApiService api;
   final bool autenticazione;
   final String? matricolaIniziale;
-  final bool multiMatricola;
 
   @override
   State<PresenzaPubblicaScreen> createState() => _PresenzaPubblicaScreenState();
@@ -53,7 +31,6 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
   final _badgeService = EasyBadgeService();
   final _matricolaController = TextEditingController();
   final _codiceController = TextEditingController();
-  final _matricole = <String>[];
 
   bool _scanning = false;
   bool _sending = false;
@@ -95,33 +72,6 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
 
   bool _isValidMatricola(String m) => RegExp(r'^[A-Z0-9]{5,16}$').hasMatch(m);
 
-  void _addMatricola() {
-    final matricola = _matricolaController.text.trim().toUpperCase();
-    if (matricola.isEmpty) return;
-    if (!_isValidMatricola(matricola)) {
-      setState(() {
-        _feedback = 'Inserisci una matricola valida (solo lettere e numeri).';
-        _success = false;
-      });
-      return;
-    }
-    if (_matricole.contains(matricola)) {
-      setState(() {
-        _feedback = 'La matricola $matricola è già presente nella lista.';
-        _success = false;
-      });
-      return;
-    }
-    _badgeService.saveUltimaMatricola(matricola);
-    setState(() {
-      _matricole.add(matricola);
-      _matricolaController.clear();
-      _feedback = null;
-      _matricolaConsultazione = matricola;
-      _corsiFuture = _badgeService.getCorsi(matricola);
-    });
-  }
-
   Future<void> _scan(BarcodeCapture capture) async {
     if (!_scanning) return;
     final value = capture.barcodes.isNotEmpty
@@ -141,43 +91,11 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
 
   Future<void> _submit() async {
     final codice = _codiceController.text.trim();
-    if (!widget.multiMatricola && isMultiPresenzaCode(codice)) {
-      if (codice == kMultiPresenzaEasterEgg) {
-        await mostraEasterEggPresenze(context);
-        if (!mounted) return;
-      }
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => PresenzaPubblicaScreen(
-            api: widget.api,
-            autenticazione: widget.autenticazione,
-            matricolaIniziale: _matricolaController.text,
-            multiMatricola: true,
-          ),
-        ),
-      );
-      return;
-    }
-    // Se l'utente ha scritto la matricola nel campo senza premere "+",
-    // la includiamo automaticamente così basta un solo tocco.
-    final pendingInput = _matricolaController.text.trim().toUpperCase();
-    final targetMatricole = <String>[..._matricole];
-    if (pendingInput.isNotEmpty) {
-      if (!_isValidMatricola(pendingInput)) {
-        setState(() {
-          _feedback = 'La matricola "$pendingInput" non è valida.';
-          _success = false;
-        });
-        return;
-      }
-      if (!targetMatricole.contains(pendingInput)) {
-        targetMatricole.add(pendingInput);
-      }
-    }
+    final matricola = _matricolaController.text.trim().toUpperCase();
 
-    if (targetMatricole.isEmpty) {
+    if (matricola.isEmpty || !_isValidMatricola(matricola)) {
       setState(() {
-        _feedback = 'Inserisci almeno una matricola.';
+        _feedback = 'Inserisci una matricola valida (solo lettere e numeri).';
         _success = false;
       });
       return;
@@ -195,68 +113,47 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
       _sending = true;
       _feedback = null;
     });
+    await _badgeService.saveUltimaMatricola(matricola);
 
-    await _badgeService.saveUltimaMatricola(targetMatricole.first);
-
-    final okMessages = <String>[];
-    final errorMessages = <String>[];
-    final fallite = <String>[];
-
-    for (final matricola in targetMatricole) {
-      try {
-        final msg = await _badgeService.rilevaPresenza(
-          matricola: matricola,
-          codiceLezioneRaw: codice,
-          autenticazione: widget.autenticazione,
-          fromQr: _codeFromQr,
-        );
-        okMessages.add(targetMatricole.length == 1 ? msg : '$matricola: $msg');
-      } on EasyBadgeException catch (e) {
-        fallite.add(matricola);
-        errorMessages.add(
-          targetMatricole.length == 1 ? e.message : '$matricola: ${e.message}',
-        );
-      } catch (_) {
-        fallite.add(matricola);
-        errorMessages.add(
-          '$matricola: impossibile contattare il servizio EasyBadge.',
-        );
-      }
-    }
-
-    if (!mounted) return;
-    final primaMatricola = targetMatricole.first;
-    setState(() {
-      _sending = false;
-      _matricolaConsultazione = primaMatricola;
-      _corsiFuture = _badgeService.getCorsi(primaMatricola);
-      if (fallite.isEmpty) {
-        _feedback = okMessages.join('\n');
-        _matricole.clear();
+    try {
+      final msg = await _badgeService.rilevaPresenza(
+        matricola: matricola,
+        codiceLezioneRaw: codice,
+        autenticazione: widget.autenticazione,
+        fromQr: _codeFromQr,
+      );
+      if (!mounted) return;
+      setState(() {
+        _sending = false;
+        _feedback = msg;
+        _success = true;
         _codiceController.clear();
         _codeFromQr = false;
-        _success = true;
-      } else {
-        final parts = <String>[
-          if (okMessages.isNotEmpty) ...okMessages,
-          ...errorMessages,
-        ];
-        _feedback = parts.join('\n');
-        if (_matricole.isNotEmpty) {
-          _matricole
-            ..clear()
-            ..addAll(fallite);
-        }
+        _matricolaConsultazione = matricola;
+        _corsiFuture = _badgeService.getCorsi(matricola);
+      });
+    } on EasyBadgeException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _sending = false;
+        _feedback = e.message;
         _success = false;
-      }
-    });
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _sending = false;
+        _feedback =
+            'Impossibile contattare il servizio EasyBadge. Riprova più tardi.';
+        _success = false;
+      });
+    }
   }
 
   void _consultaPresenzeMatricola() {
-    final input = _matricolaController.text.trim().toUpperCase();
-    final target = input.isNotEmpty
-        ? input
-        : (_matricole.isNotEmpty ? _matricole.first : _matricolaConsultazione);
+    final target = _matricolaController.text.trim().toUpperCase().isNotEmpty
+        ? _matricolaController.text.trim().toUpperCase()
+        : _matricolaConsultazione;
     if (target.isEmpty) {
       setState(() {
         _feedback = 'Inserisci la tua matricola per consultare le presenze.';
@@ -291,13 +188,13 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
           ),
           const SizedBox(height: 6),
           Text(
-            widget.autenticazione
-                ? 'Puoi rilevare la presenza per una o più matricole. '
-                      'Inquadra il QR proiettato dal docente oppure digita il codice lezione.'
-                : 'Inserisci la tua matricola (es. 0512112345 o NF12100013) e inquadra il QR proiettato dal docente in aula oppure digita il codice lezione.',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
+            'Inserisci la tua matricola (es. 0512112345 o NF12100013) e '
+            'inquadra il QR proiettato dal docente in aula oppure digita il '
+            'codice lezione.',
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: scheme.onSurfaceVariant),
           ),
           const SizedBox(height: 16),
           TextField(
@@ -308,56 +205,17 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
             textInputAction: TextInputAction.done,
             style: AppTheme.codice(size: 15, color: scheme.onSurface),
             decoration: InputDecoration(
-              labelText: 'Matricola studente',
+              labelText: 'La tua matricola',
               hintText: 'Es. 0512112345',
               prefixIcon: const Icon(Icons.badge_outlined),
-              suffixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    tooltip: 'Consulta corsi e presenze di questa matricola',
-                    onPressed: _sending ? null : _consultaPresenzeMatricola,
-                    icon: const Icon(Icons.search),
-                  ),
-                  if (widget.multiMatricola)
-                    IconButton(
-                      tooltip: 'Aggiungi più matricole',
-                      onPressed: _sending ? null : _addMatricola,
-                      icon: const Icon(Icons.person_add_alt_1_outlined),
-                    ),
-                ],
+              suffixIcon: IconButton(
+                tooltip: 'Consulta corsi e presenze di questa matricola',
+                onPressed: _sending ? null : _consultaPresenzeMatricola,
+                icon: const Icon(Icons.search),
               ),
             ),
             onSubmitted: (_) => _consultaPresenzeMatricola(),
           ),
-          if (widget.multiMatricola && _matricole.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Text(
-              'Matricole da registrare (${_matricole.length})',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            const SizedBox(height: 6),
-            Wrap(
-              spacing: 8,
-              runSpacing: 6,
-              children: _matricole
-                  .map(
-                    (matricola) => InputChip(
-                      label: Text(
-                        matricola,
-                        style: AppTheme.codice(
-                          size: 13,
-                          color: scheme.onSurface,
-                        ),
-                      ),
-                      onDeleted: _sending
-                          ? null
-                          : () => setState(() => _matricole.remove(matricola)),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
           const SizedBox(height: 12),
           if (_scanning)
             ClipRRect(
@@ -387,9 +245,9 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
                   onPressed: _sending
                       ? null
                       : () => setState(() {
-                          _scanning = true;
-                          _feedback = null;
-                        }),
+                            _scanning = true;
+                            _feedback = null;
+                          }),
                   icon: const Icon(Icons.qr_code_scanner),
                   label: const Text('Scansiona QR lezione proiettato in aula'),
                 ),
@@ -437,9 +295,8 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
                 children: [
                   Icon(
                     _success ? Icons.check_circle : Icons.error_outline,
-                    color: _success
-                        ? const Color(0xFF2E7D5B)
-                        : AppColors.corallo,
+                    color:
+                        _success ? const Color(0xFF2E7D5B) : AppColors.corallo,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -457,7 +314,7 @@ class _PresenzaPubblicaScreenState extends State<PresenzaPubblicaScreen> {
           Divider(color: scheme.outlineVariant),
           const SizedBox(height: 16),
 
-          // --- Consultazione presenze tramite matricola (senza accesso) ---
+          // --- Consultazione presenze tramite matricola ---
           Row(
             children: [
               Expanded(

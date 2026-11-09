@@ -7,7 +7,7 @@ import '../services/settings_service.dart';
 import '../widgets/app_arrow.dart';
 import '../widgets/app_logo.dart';
 import 'aule_libere_screen.dart';
-import 'mappa_campus_screen.dart';
+import 'mappa_reale_screen.dart';
 import 'presenza_pubblica_screen.dart';
 import 'servizi_utili_screen.dart';
 import 'spid_cie_login_screen.dart';
@@ -67,19 +67,17 @@ class SpidCieEntryScreen extends StatelessWidget {
                       ),
                       IconButton(
                         tooltip: l10n.toggleLanguageTooltip,
+                        // La bandierina riflette la lingua effettivamente mostrata
+                        // (scelta manuale o, se assente, quella di sistema), così
+                        // all'avvio non è mai incoerente con i testi.
                         icon: Text(
-                          SettingsService.instance.locale?.languageCode == 'en'
-                              ? '🇬🇧'
-                              : '🇮🇹',
+                          l10n.isEnglish ? '🇬🇧' : '🇮🇹',
                           style: const TextStyle(fontSize: 20),
                         ),
                         onPressed: () {
-                          final current = SettingsService.instance.locale;
-                          if (current?.languageCode == 'en') {
-                            SettingsService.instance.setLocale(const Locale('it'));
-                          } else {
-                            SettingsService.instance.setLocale(const Locale('en'));
-                          }
+                          SettingsService.instance.setLocale(
+                            Locale(l10n.isEnglish ? 'it' : 'en'),
+                          );
                         },
                       ),
                       IconButton(
@@ -181,7 +179,7 @@ class SpidCieEntryScreen extends StatelessWidget {
                     trailing: const AppArrow(),
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => const MappaCampusScreen(),
+                        builder: (_) => const MappaRealeScreen(),
                       ),
                     ),
                   ),
@@ -209,6 +207,20 @@ class SpidCieEntryScreen extends StatelessWidget {
                       foregroundColor: scheme.onSurfaceVariant,
                       textStyle: Theme.of(context).textTheme.bodySmall,
                     ),
+                  ),
+                  const SizedBox(height: 18),
+                  // Disclaimer: app non ufficiale (copre la Guideline 5.2.3).
+                  Text(
+                    l10n.isEnglish
+                        ? 'Unofficial, independent app — not affiliated with, '
+                            'endorsed by, or developed by the University of Salerno.'
+                        : 'App non ufficiale e indipendente — non affiliata, '
+                            'approvata o sviluppata dall\'Università degli Studi di Salerno.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                          fontSize: 11,
+                        ),
                   ),
                 ],
               ),

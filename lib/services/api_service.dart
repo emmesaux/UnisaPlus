@@ -132,9 +132,17 @@ class ApiService {
     // La partizione a settimane alterne (pari/dispari) può trovarsi nel nome
     // dell'insegnamento o nelle annotazioni: si scandisce l'intera cella.
     final blob = cell.values.map((v) => v?.toString() ?? '').join(' ');
+    // Identificatore univoco della cella: si preferisce quello fornito dal
+    // server (`identifier_cell`/`id`), così due lezioni sovrapposte (stesso
+    // giorno e ora, es. due partizioni o due materie in contemporanea) restano
+    // distinte. Il fallback composto include aula e docente per non collidere.
+    final idCella = (cell['identifier_cell']?.toString().isNotEmpty ?? false)
+        ? cell['identifier_cell'].toString()
+        : (cell['id']?.toString().isNotEmpty ?? false)
+            ? cell['id'].toString()
+            : '${cell['data']}-${cell['ora_inizio']}-${cell['nome_insegnamento']}-${cell['aula']}-${cell['docente']}';
     return {
-      'id':
-          '${cell['data']}-${cell['ora_inizio']}-${cell['nome_insegnamento']}',
+      'id': idCella,
       'insegnamento': cell['nome_insegnamento']?.toString() ?? '',
       'docente': cell['docente']?.toString() ?? '',
       'aula': cell['aula']?.toString() ?? '',
